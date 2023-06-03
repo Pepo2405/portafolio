@@ -1,0 +1,34 @@
+{
+  "proyects": [
+    {
+      "title": "Calculadora",
+      "url": "https://calculadora-two-xi.vercel.app/",
+      "type": "link",
+      "icon": "/static/icons/Calculator.webp"
+    },
+    {
+      "title": "Cartas Clima",
+      "url": "https://cartitasclima.vercel.app/",
+      "type": "link",
+      "icon": "/static/icons/weather.webp"
+    },
+    {
+      "title": "Pokedex",
+      "url": "https://pokedex-app-six-zeta.vercel.app/",
+      "type": "link",
+      "icon": "/static/icons/pokedex.webp"
+    },
+    {
+      "title": "Lista de tareas",
+      "url": "https://lista-de-tareas-rho.vercel.app/",
+      "type": "link",
+      "icon": "/static/icons/task.webp"
+    },
+    {
+      "title": "Mochi Draw",
+      "url": "https://mochidraw.vercel.app/",
+      "type": "link",
+      "icon": "/static/icons/draw.webp"
+    }
+  ]
+}
