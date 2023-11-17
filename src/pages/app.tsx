@@ -33,7 +33,7 @@ export default function App() {
             </div>
           </a>
           <Amongus />
-          <Proyects title='Proyectos' />
+          <Proyects title='Projects' />
           <Socials title='Redes sociales' />
         </section>
         <main>
@@ -41,7 +41,7 @@ export default function App() {
           <FullScreenButton />
           <WindowsContainer />
         </main>
-        <Mochify />
+        {/* <Mochify /> */}
         <TaskBar />
       </div>
     </>
