@@ -1,13 +1,11 @@
-import { BG, } from 'src/images';
-import Proyects from 'src/components/Folder';
-import TaskBar from 'src/components/TaskBar';
-import FullScreenButton from 'src/components/FullScreenButton';
-import WindowsContainer from 'src/components/Windows/WindowsContainer';
-import Image from 'next/image';
 import Head from 'next/head';
-import Socials from 'src/components/Socials';
 import Amongus from 'src/components/Amongus';
-import Mochify from 'src/components/Windows/Mochify';
+import Proyects from 'src/components/Folder';
+import FullScreenButton from 'src/components/FullScreenButton';
+import Socials from 'src/components/Socials';
+import TaskBar from 'src/components/TaskBar';
+import WindowsContainer from 'src/components/Windows/WindowsContainer';
+import { BG, } from 'src/images';
 
 
 export default function App() {
@@ -33,7 +31,7 @@ export default function App() {
             </div>
           </a>
           <Amongus />
-          <Proyects title='Projects' />
+          <Proyects title='Proyectos' />
           <Socials title='Redes sociales' />
         </section>
         <main>

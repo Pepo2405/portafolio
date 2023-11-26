@@ -5,6 +5,7 @@ import TaskItems from "src/lists/proyects.json";
 import DateTime from "./dateTime";
 import Image from "next/image";
 import useWindow from "src/hooks/useWindow";
+import { randomBytes } from "crypto";
 
 type Props = {};
 const folder = {
@@ -24,6 +25,11 @@ const TaskBar = (props: Props) => {
   const { items: Tasks } = list;
   const windows = [socials, folder, ...TaskItems.proyects];
   const { minimizedItems, handleMaximize } = useWindow();
+
+  function uniqueID() {
+    return String(Math.floor(Math.random() * Date.now()));
+  }
+
   return (
     <nav
       style={{
@@ -39,37 +45,35 @@ const TaskBar = (props: Props) => {
               Hablemos
             </header>
             <div className="flex flex-col grow w-full">
-              {Tasks.map(({ title, url, icon }: any) => {
+              {Tasks.map(({ title, href, icon }: any) => {
+                const key = uniqueID();
                 return (
-                  <a
+                  <div
                     className="hover:bg-gray-400/50 gap-x-12 flex justify-start w-full pr-10"
-                    key={url + "" + Math.random()}
                     {...props}
+                    key={key}
                   >
-                    <span className="flex p-4 text-black w-full ">
-                      <Image
-                        alt=""
-                        width={20}
-                        height={20}
-                        src={icon}
-                        className="mx-2"
-                      />
-                      {title}
-                    </span>
-                  </a>
+                    <a href={href} target="_blank">
+                      <span className="flex p-4 text-black w-full ">
+                        <Image
+                          alt=""
+                          width={20}
+                          height={20}
+                          src={icon}
+                          className="mx-2"
+                        />
+                        {title}
+                      </span>
+                    </a>
+                  </div>
                 );
               })}
-              {/* <div className='cursor-pointer hover:bg-gray-400/50 gap-x-12 flex justify-start w-full pr-10'>
-                <span className='flex p-4 text-black w-full text-sm '>
-                  ignacioniglesias@gmail.com
-                </span>
-              </div> */}
             </div>
           </div>
           <Image
             width={20}
             height={20}
-            alt="hola"
+            alt="xpIcon"
             src={xpLogoIcon}
             className="shadow-xl min-w-fit"
           />{" "}
@@ -77,35 +81,32 @@ const TaskBar = (props: Props) => {
         </button>
         <div className="-ml-4 grow flex text-center pl-4  items-center overflow-x-auto h-full">
           {windows.map(({ title, url, icon }) => {
+            if (!minimizedItems[title]) return null;
+            const key = uniqueID();
+      
             return (
-              <>
-                {minimizedItems[title] ? (
-                  <div
-                    title={title}
-                    onClick={handleMaximize as any}
-                    className="relative z-50 hover:bg-blue-600/60 px-4 cursor-pointer grow flex gap-3 text-sm h-full textShadow items-center shadowText"
-                    key={url}
-                  >
-                    <Image
-                      title={title}
-                      onClick={handleMaximize as any}
-                      alt=""
-                      width={20}
-                      height={20}
-                      src={icon}
-                    />
-                    <span
-                      title={title}
-                      onClick={handleMaximize as any}
-                      className="hidden md:block"
-                    >
-                      {title}
-                    </span>
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </>
+              <div
+                title={title}
+                onClick={handleMaximize as any}
+                className="relative z-50 hover:bg-blue-600/60 px-4 cursor-pointer grow flex gap-3 text-sm h-full textShadow items-center shadowText"
+                key={key}
+              >
+                <Image
+                  title={title}
+                  onClick={handleMaximize as any}
+                  alt=""
+                  width={20}
+                  height={20}
+                  src={icon}
+                />
+                <span
+                  title={title}
+                  onClick={handleMaximize as any}
+                  className="hidden md:block"
+                >
+                  {title}
+                </span>
+              </div>
             );
           })}
         </div>

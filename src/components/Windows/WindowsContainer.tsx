@@ -21,15 +21,17 @@ const WindowsContainer = (props: Props) => {
         <DraggableWin title={"Proyectos"} close={handleClose}>
           <main className="px-4 py-4  text-black folderIcons">
             {proyects.map((el: any) => (
-              <div
-                onClick={handleOpen as any}
+              <a
+                // onClick={handleOpen as any}
                 key={el.url}
+                href={el.url}
+                target="_blank"
                 className="cursor-pointer group w-fit h-16 md:w-28 md:h-28 bg-transparen hover:bg-cyan-200/60 rounded-sm flex flex-col justify-between text-center items-center p-1 "
               >
                 <div
                   className="w-16 h-16 group-hover:scale-105 transition-all duration-300"
                   title={el.title}
-                  onClick={handleOpen as any}
+                  // onClick={handleOpen as any}
                   style={{
                     backgroundImage: `url(${el.icon})`,
                     backgroundRepeat: "no-repeat",
@@ -40,7 +42,7 @@ const WindowsContainer = (props: Props) => {
                 <span className="whitespace-nowrap max-w-[14ch] overflow-hidden text-ellipsis text-sm text-black font-medium">
                   {el.title}
                 </span>
-              </div>
+              </a>
             ))}
           </main>
         </DraggableWin>

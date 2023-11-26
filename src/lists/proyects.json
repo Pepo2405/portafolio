@@ -7,6 +7,18 @@
       "icon": "/static/icons/bonitas.jpg"
     },
     {
+      "title": "YT Amogus",
+      "url": "https://yt.pepo.ar/",
+      "type": "link",
+      "icon": "/static/icons/ytPepo.png"
+    },
+    {
+      "title": "Dolar blue",
+      "url": "https://dolar.pepo.ar/",
+      "type": "link",
+      "icon": "/static/icons/dollar.webp"
+    },
+    {
       "title": "Pokedex",
       "url": "https://pokedex-app-six-zeta.vercel.app/",
       "type": "link",

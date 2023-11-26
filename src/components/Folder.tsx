@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import { FolderIcon } from 'src/images'
-import data from 'src/lists/proyects.json'
 import useWindow from 'src/hooks/useWindow';
+import { FolderIcon } from 'src/images';
 
 
 
