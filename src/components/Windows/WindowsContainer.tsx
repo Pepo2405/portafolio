@@ -26,7 +26,7 @@ const WindowsContainer = (props: Props) => {
                 key={el.url}
                 href={el.url}
                 target="_blank"
-                className="cursor-pointer group w-fit h-16 md:w-28 md:h-28 bg-transparen hover:bg-cyan-200/60 rounded-sm flex flex-col justify-between text-center items-center p-1 "
+                className="cursor-pointer group w-fit h-28 md:w-28 md:h-28 bg-transparen hover:bg-cyan-200/60 rounded-sm flex flex-col justify-between text-center items-center p-1 "
               >
                 <div
                   className="w-16 h-16 group-hover:scale-105 transition-all duration-300"
