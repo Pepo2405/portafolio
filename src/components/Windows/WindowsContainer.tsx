@@ -1,55 +1,33 @@
 import React from "react";
-import useWindow from "src/hooks/useWindow";
+import useWindows from "src/hooks/useWindow";
 import DraggableWin from "./draggable";
 import data from "src/lists/proyects.json";
 import DraggableLink from "./DraggableLink";
-import SocialData from "src/lists/taskList.json";
-import Image from "next/image";
+import socials from "src/lists/taskList.json";
 
-type Props = {};
-
-const WindowsContainer = (props: Props) => {
+const WindowsContainer = () => {
   const { proyects } = data;
 
-  const { visibleItems, handleClose, handleOpen } = useWindow();
-
+  const { visibleItems, handleClose, handleOpen } = useWindows();
+  const windows = { Proyectos: true, Sociales: true };
   return (
     <div className="absolute h-1  top-0 left-0 md:left-0 md:top-0 bottom-28 flex w-full">
       {/* <DraggableLink title='Mochify' url='https://pepo2405.github.io/mochifyPlayer.github.io/'></DraggableLink> */}
 
+      {/* Proyects Folder */}
+
       {visibleItems["Proyectos"] && (
         <DraggableWin title={"Proyectos"} close={handleClose}>
-          <main className="px-4 py-4  text-black folderIcons">
+          <main className="px-4 py-4  text-black folderIcons overflow-hidden overflow-y-scroll border border-gray-600 h-full ">
             {proyects.map((el: any) => (
-              <a
-                // onClick={handleOpen as any}
-                key={el.url}
-                href={el.url}
-                target="_blank"
-                className="cursor-pointer group w-fit h-28 md:w-28 md:h-28 bg-transparen hover:bg-cyan-200/60 rounded-sm flex flex-col justify-between text-center items-center p-1 "
-              >
-                <div
-                  className="w-16 h-16 group-hover:scale-105 transition-all duration-300"
-                  title={el.title}
-                  // onClick={handleOpen as any}
-                  style={{
-                    backgroundImage: `url(${el.icon})`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "contain",
-                    backgroundPosition: "center",
-                  }}
-                ></div>
-                <span className="whitespace-nowrap max-w-[14ch] overflow-hidden text-ellipsis text-sm text-black font-medium">
-                  {el.title}
-                </span>
-              </a>
+              <ProjectItem {...el} />
             ))}
           </main>
         </DraggableWin>
       )}
-      {/* Proyects window */}
 
-      <div className="absolute">
+      {/* Proyects window */}
+      {/* <div className="absolute">
         {proyects.map((item: any) => {
           return (
             <div key={item.title}>
@@ -57,7 +35,7 @@ const WindowsContainer = (props: Props) => {
             </div>
           );
         })}
-      </div>
+      </div> */}
 
       {/* Socials window */}
       <div className="absolute">
@@ -67,26 +45,8 @@ const WindowsContainer = (props: Props) => {
               className="flex px-4 py-4 items-center text-black folderIcons "
               style={{ columnGap: "2rem" }}
             >
-              {SocialData.items.map((el: any) => (
-                <a
-                  key={el.url}
-                  className="cursor-pointer w-fit h-16 md:w-28 md:h-28 bg-transparen hover:bg-cyan-200/60 rounded-sm flex flex-col justify-between text-center items-center p-1 "
-                  {...el}
-                >
-                  <div
-                    className="w-16 h-16"
-                    title={el.title}
-                    style={{
-                      backgroundImage: `url(${el.icon})`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundSize: "contain",
-                      backgroundPosition: "center",
-                    }}
-                  ></div>
-                  <span className="whitespace-nowrap text-sm text-black font-medium">
-                    {el.title}
-                  </span>
-                </a>
+              {socials.items.map((el: any) => (
+                <ProjectItem {...el} />
               ))}
             </main>
           </DraggableWin>
@@ -97,3 +57,29 @@ const WindowsContainer = (props: Props) => {
 };
 
 export default WindowsContainer;
+
+const ProjectItem = ({ url, title, icon, ...props }: any) => {
+  return (
+    <a
+      key={url}
+      className="cursor-pointer w-fit h-16 md:w-28 md:h-28 bg-transparen hover:bg-cyan-200/90 rounded-sm flex flex-col justify-between text-center items-center p-1 "
+      {...props}
+    >
+      <div
+        className="w-16 h-16"
+        title={title}
+        style={{
+          backgroundImage: `url(${icon})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+        }}
+      ></div>
+      <span className="whitespace-nowrap text-sm text-black font-medium">
+        {title}
+      </span>
+    </a>
+  );
+};
+
+const Folder = ({ title, icon, ...props }: any) => {};

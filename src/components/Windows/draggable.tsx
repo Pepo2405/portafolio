@@ -6,6 +6,7 @@ import { BsSquare } from "react-icons/bs";
 import { MdOutlineMinimize } from "react-icons/md";
 import useWindow from "src/hooks/useWindow";
 import gsap from "gsap";
+import { idGen } from "src/utils/utils";
 
 interface Props {
   children?: any;
@@ -13,26 +14,11 @@ interface Props {
   title?: string;
 }
 
-function idGen(length = 5) {
-  let result = "";
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
-}
-
 export default function DraggableWin({ children, close, title }: Props) {
-  const [deltaPosition, setDeltaPosition] = useState({ x: 0, y: 0 });
-  const [activeDrags, setActiveDrags] = useState(0);
+  const ref = useRef(null);
   const [full, setFull] = useState(false);
   const { current: id } = useRef(idGen());
-  const ref = useRef(null);
   const { handleMinimize } = useWindow();
-
   const handleDrag = (e: any, ui: any) => {
     const { x, y } = deltaPosition;
     setDeltaPosition({
@@ -41,14 +27,7 @@ export default function DraggableWin({ children, close, title }: Props) {
     });
   };
 
-  const onStart = () => {
-    setActiveDrags((el) => el++);
-  };
-
-  const onStop = () => {
-    setActiveDrags((el) => el - 1);
-  };
-
+  const [deltaPosition, setDeltaPosition] = useState({ x: 50, y: 50 });
   const handleClose = () => {
     close({ target: { title } });
   };
@@ -60,23 +39,24 @@ export default function DraggableWin({ children, close, title }: Props) {
 
   const minimize = (e: any) => {
     if (!e || !handleMinimize || !title) return;
-
     handleMinimize({ target: { title } } as any);
   };
 
   const FullWindow = () => {
     const idRef = useRef(idGen());
     const id = idRef.current;
+
     useEffect(() => {
       gsap.fromTo(`.${id}`, { scale: 0 }, { scale: 1, duration: 0.2 });
     }, []);
+
     return (
       <article
-        className={`bg-white overflow-hidden w-screen h-screen absolute z-[11] full ${id}`}
+        className={`bg-white overflow-hidden w-screen h-screen absolute  z-[11] full ${id}`}
         ref={ref}
       >
         <div className="handle w-full bg-[#045aa5] flex text-white gap-2 p-1 px-2 justify-start">
-            <div className="font-semibold ">{title || "Titulo"}</div>
+          <div className="font-semibold ">{title || "Titulo"}</div>
           <section className="flex px-2 gap-2 min-w-fit justify-self-end grow justify-end">
             <div
               onTouchStart={minimize}
@@ -112,7 +92,7 @@ export default function DraggableWin({ children, close, title }: Props) {
     gsap.fromTo(`.${id}`, { scale: 0 }, { scale: 1, duration: 0.2 });
   }, []);
 
-  // console.log(window.outerWidth)
+  console.log(deltaPosition);
   return (
     <>
       {full ? (
@@ -120,11 +100,9 @@ export default function DraggableWin({ children, close, title }: Props) {
       ) : (
         <Draggable
           handle=".handle"
-          defaultPosition={{ x: 10, y: 10 }}
+          defaultPosition={deltaPosition}
           scale={1}
-          onStart={onStart}
           onDrag={handleDrag}
-          onStop={onStop}
           defaultClassName={`z-10 ${id}`}
           bounds={"body"}
         >
