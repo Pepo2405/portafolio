@@ -20,7 +20,7 @@ const WindowsContainer = () => {
         <DraggableWin title={"Proyectos"} close={handleClose}>
           <main className="px-4 py-4  text-black folderIcons overflow-hidden overflow-y-scroll border border-gray-600 h-full ">
             {proyects.map((el: any) => (
-              <ProjectItem {...el} />
+              <ProjectItem {...el} key={el.url} />
             ))}
           </main>
         </DraggableWin>
@@ -46,7 +46,7 @@ const WindowsContainer = () => {
               style={{ columnGap: "2rem" }}
             >
               {socials.items.map((el: any) => (
-                <ProjectItem {...el} />
+                <ProjectItem {...el} key={el.url} />
               ))}
             </main>
           </DraggableWin>
