@@ -1,11 +1,11 @@
-import Draggable from "react-draggable";
-import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import { Resizable } from "re-resizable";
-import { GiCancel } from "react-icons/gi";
+import { useEffect, useRef, useState } from "react";
+import Draggable from "react-draggable";
 import { BsSquare } from "react-icons/bs";
+import { GiCancel } from "react-icons/gi";
 import { MdOutlineMinimize } from "react-icons/md";
 import useWindow from "src/hooks/useWindow";
-import gsap from "gsap";
 import { idGen } from "src/utils/utils";
 
 interface Props {
@@ -92,7 +92,6 @@ export default function DraggableWin({ children, close, title }: Props) {
     gsap.fromTo(`.${id}`, { scale: 0 }, { scale: 1, duration: 0.2 });
   }, []);
 
-  console.log(deltaPosition);
   return (
     <>
       {full ? (
@@ -107,7 +106,7 @@ export default function DraggableWin({ children, close, title }: Props) {
           bounds={"body"}
         >
           <Resizable
-            defaultSize={{ width: 600, height: 400 }}
+            defaultSize={{ width: 600, height: 430 }}
             className="bg-white rounded-t-md overflow-hidden "
             minHeight={!full ? 300 : "98vh"}
             bounds={"window"}

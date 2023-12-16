@@ -4,6 +4,7 @@ import Proyects from "src/components/Folder";
 import FullScreenButton from "src/components/FullScreenButton";
 import Socials from "src/components/Socials";
 import TaskBar from "src/components/TaskBar";
+import Techs from "src/components/Techs";
 import WindowsContainer from "src/components/Windows/WindowsContainer";
 import { BG } from "src/images";
 
@@ -20,7 +21,7 @@ export default function App() {
         className="h-screen w-screen overflow-hidden flex flex-col relative"
       >
         {/* <Image src={BG} alt='background' className='' fill style={{ zIndex: -500, objectFit: "cover", objectPosition: "center", position: "absolute", top: 0, left: 0 }} ></Image> */}
-        <section className="flex  flex-row items-start gap-x-4 px-8 py-14 md:py-2 ">
+        <section className="folderIcons !overflow-hidden ">
           <a href="/static/Cv Ignacio Iglesias.pdf" target="_blank">
             <div className="bg-white-400/50 w-24 h-24 pt-2 px-8 flex-col text-center flex hover:bg-blue-500/50 items-center  justify-end text-black/80">
               <div
@@ -40,6 +41,7 @@ export default function App() {
           <Amongus />
           <Proyects title="Proyectos" />
           <Socials title="Redes sociales" />
+          <Techs title="Tecnologías" />
         </section>
         <main>
           <h2

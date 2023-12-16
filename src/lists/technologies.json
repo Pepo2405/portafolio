@@ -1,0 +1,194 @@
+{
+  "items": [
+    {
+      "title": "Typescript",
+      "icon": "typescript.svg",
+      "url": "https://www.typescriptlang.org/"
+    },
+    {
+      "title": "Javascript",
+      "icon": "javascript.svg",
+      "url": "https://developer.mozilla.org/docs/Web/JavaScript"
+    },
+    {
+      "title": "Express js",
+      "url": "https://expressjs.com/",
+      "icon": "expressjs.svg"
+    },
+    {
+      "title": "Node js",
+      "icon": "nodejs.svg",
+      "url": "https://nodejs.org/"
+    },
+    {
+      "title": "React",
+      "url": "https://reactjs.org/",
+      "icon": "react.svg"
+    },
+    {
+      "title": "Redux",
+      "url": "https://redux.js.org/",
+      "icon": "redux.svg"
+    },
+    {
+      "title": "Babel",
+      "url": "https://babeljs.io/",
+      "icon": "babel.svg"
+    },
+    {
+      "title": "Bash",
+      "url": "https://www.gnu.org/software/bash/",
+      "icon": "bash.svg"
+    },
+    {
+      "title": "Bootsrap",
+      "url": "https://getbootstrap.com/",
+      "icon": "bootstrap.svg"
+    },
+    {
+      "title": "Bun js",
+      "url": "https://bun.sh/",
+      "icon": "bun.svg"
+    },
+    {
+      "title": "Cloudflare",
+      "url": "https://www.cloudflare.com/",
+      "icon": "cloudflare.svg"
+    },
+    {
+      "title": "Cloudinary",
+      "url": "https://cloudinary.com/",
+      "icon": "cloudinary.svg"
+    },
+    {
+      "title": "CSS",
+      "url": "https://es.wikipedia.org/wiki/CSS",
+      "icon": "css.svg"
+    },
+    {
+      "title": "Deno",
+      "url": "https://deno.land/",
+      "icon": "deno.svg"
+    },
+    {
+      "title": "Docker",
+      "url": "https://www.docker.com/",
+      "icon": "docker.svg"
+    },
+    {
+      "title": "Git",
+      "url": "https://git-scm.com/",
+      "icon": "git.svg"
+    },
+    {
+      "title": "Github",
+      "url": "https://github.com/",
+      "icon": "github.svg"
+    },
+    {
+      "title": "Hoppscotch",
+      "url": "https://hoppscotch.com/",
+      "icon": "hoppscotch.svg"
+    },
+    {
+      "title": "HTML5",
+      "url": "https://es.wikipedia.org/wiki/HTML5",
+      "icon": "html5.svg"
+    },
+    {
+      "title": "JQuery",
+      "url": "https://jquery.com/",
+      "icon": "jquery.svg"
+    },
+    {
+      "title": "Material UI",
+      "url": "https://mui.com/",
+      "icon": "materialui.svg"
+    },
+    {
+      "title": "MySQL",
+      "url": "https://www.mysql.com/",
+      "icon": "mysql.svg"
+    },
+    {
+      "title": "NextJS",
+      "url": "https://nextjs.org/",
+      "icon": "nextjs.svg"
+    },
+    {
+      "title": "NPM",
+      "url": "https://www.npmjs.com/",
+      "icon": "npm.svg"
+    },
+    {
+      "title": "PM2",
+      "url": "https://pm2.io/",
+      "icon": "pm2.svg"
+    },
+    {
+      "title": "Pocketbase",
+      "url": "https://pocketbase.io/",
+      "icon": "pocket-base.svg"
+    },
+    {
+      "title": "PostgreSQL",
+      "url": "https://www.postgresql.org/",
+      "icon": "postgresql.svg"
+    },
+    {
+      "title": "Prisma",
+      "url": "https://prisma.io/",
+      "icon": "prisma.svg"
+    },
+    {
+      "title": "Python",
+      "url": "https://www.python.org/",
+      "icon": "python.svg"
+    },
+    {
+      "title": "React Router",
+      "url": "https://reactrouter.com/en/main",
+      "icon": "reactrouter.svg"
+    },
+    {
+      "title": "SASS",
+      "url": "https://sass-lang.com/",
+      "icon": "sass.svg"
+    },
+    {
+      "title": "Sequelize",
+      "url": "https://sequelize.org/",
+      "icon": "sequelize.svg"
+    },
+    {
+      "title": "SQLITE",
+      "url": "https://www.sqlite.org/",
+      "icon": "sqlite.svg"
+    },
+    {
+      "title": "Strapi",
+      "url": "https://strapi.io/",
+      "icon": "strapi.svg"
+    },
+    {
+      "title": "Svelte",
+      "url": "https://svelte.dev/",
+      "icon": "svelte.svg"
+    },
+    {
+      "title": "Tailwind CSS",
+      "url": "https://tailwindcss.com/",
+      "icon": "tailwindcss.svg"
+    },
+    {
+      "title": "Vite",
+      "url": "https://vitejs.dev/",
+      "icon": "vitejs.svg"
+    },
+    {
+      "title": "Zod",
+      "url": "https://zod.dev/",
+      "icon": "zod.svg"
+    }
+  ]
+}
