@@ -68,6 +68,7 @@ const ProjectItem = ({ url, title, icon, ...props }: any) => {
       {...props}
       href={url ? url : undefined}
       target="_blank"
+      rel='noreferrer'
     >
       <div
         className="w-16 h-16"
