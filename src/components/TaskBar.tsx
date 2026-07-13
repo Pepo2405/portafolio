@@ -1,32 +1,46 @@
 import React from "react";
-import { SocialsICon, TaskBartGradient, xpLogoIcon } from "src/images";
+import { TaskBartGradient, xpLogoIcon } from "src/images";
 import list from "src/lists/taskList.json";
-import TaskItems from "src/lists/proyects.json";
 import DateTime from "./dateTime";
 import useWindow from "src/hooks/useWindow";
 
 type Props = {};
-const folder = {
-  title: "Proyectos",
-  url: "https://github.com/pepo2405",
-  icon: "/static/folderIcon.png",
-  target: "_blank",
-};
-const socials = {
-  title: "Sociales",
-  url: "",
-  icon: `/static/icons/redes.webp`,
-  target: "_blank",
+
+// Ventanas reales del escritorio: las únicas que pueden abrirse/minimizarse.
+// La clave debe coincidir EXACTO con el title que despachan Folder/Socials/Techs.
+const WINDOW_META: Record<string, { icon: string }> = {
+  Proyectos: { icon: "/static/folderIcon.png" },
+  Sociales: { icon: "/static/icons/redes.webp" },
+  Tecnologías: { icon: "/static/folderIcon.png" },
 };
 
 const TaskBar = (props: Props) => {
   const { items: Tasks } = list;
-  const windows = [socials, folder, ...TaskItems.proyects];
-  const { minimizedItems, handleMaximize } = useWindow();
+  const {
+    visibleItems,
+    minimizedItems,
+    focused,
+    handleMaximize,
+    handleMinimize,
+  } = useWindow();
 
   function uniqueID() {
     return String(Math.floor(Math.random() * Date.now()));
   }
+
+  // Una ventana aparece en la taskbar mientras siga abierta (a la vista o minimizada).
+  const openWindows = Object.keys(WINDOW_META).filter(
+    (title) => minimizedItems[title]
+  );
+
+  const onTaskClick = (title: string) => {
+    // Enfocada y a la vista → minimizar; en cualquier otro caso restaurar + enfocar.
+    if (visibleItems[title] && focused === title) {
+      handleMinimize({ target: { title } });
+    } else {
+      handleMaximize({ target: { title } });
+    }
+  };
 
   return (
     <nav
@@ -34,7 +48,7 @@ const TaskBar = (props: Props) => {
         backgroundImage: TaskBartGradient,
         backgroundRepeat: "repeat-x",
       }}
-      className="w-screen md:w-full h-8 fixed bottom-0 flex z-30 justify-between pr-8"
+      className="fixed inset-x-0 bottom-0 z-30 flex h-8 w-full justify-between pr-8"
     >
       <section className="h-full flex items-center">
         <button className="px-2 h-full  z-50 flex items-center bg-[#52911e] gap-2  pr-4 relative group rounded-r-md  hover:bg-[#52911e]">
@@ -77,34 +91,30 @@ const TaskBar = (props: Props) => {
           />{" "}
           Inicio
         </button>
-        <div className="-ml-4 grow flex text-center pl-4  items-center overflow-x-auto h-full">
-          {windows.map(({ title, url, icon }) => {
-            if (!minimizedItems[title]) return null;
-            const key = uniqueID();
-      
+        <div className="flex h-full min-w-0 grow items-center gap-1 overflow-x-auto pl-2">
+          {openWindows.map((title) => {
+            const active = focused === title;
             return (
-              <div
+              <button
+                type="button"
+                key={title}
                 title={title}
-                onClick={handleMaximize as any}
-                className="relative z-50 hover:bg-blue-600/60 px-4 cursor-pointer grow flex gap-3 text-sm h-full textShadow items-center shadowText"
-                key={key}
+                aria-label={title}
+                aria-pressed={active}
+                onClick={() => onTaskClick(title)}
+                className={`shadowText relative z-50 flex h-full w-auto shrink-0 items-center justify-center gap-2 px-3 text-sm text-white transition-colors md:w-40 md:max-w-[40vw] md:justify-start ${
+                  active ? "bg-blue-800/70 shadow-inner" : "hover:bg-blue-600/60"
+                }`}
               >
                 <img
-                  title={title}
-                  onClick={handleMaximize as any}
                   alt=""
-                  width={20}
-                  height={20}
-                  src={icon}
+                  width={18}
+                  height={18}
+                  src={WINDOW_META[title].icon}
+                  className="shrink-0"
                 />
-                <span
-                  title={title}
-                  onClick={handleMaximize as any}
-                  className="hidden md:block"
-                >
-                  {title}
-                </span>
-              </div>
+                <span className="hidden truncate md:block">{title}</span>
+              </button>
             );
           })}
         </div>
