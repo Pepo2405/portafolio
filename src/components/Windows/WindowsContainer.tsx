@@ -17,7 +17,7 @@ const WindowsContainer = () => {
     <div className="absolute h-1  top-0 left-0 md:left-0 md:top-0 bottom-28 flex w-full">
       {visibleItems["Proyectos"] && (
         <DraggableWin title={"Proyectos"} close={handleClose}>
-          <main className="px-4 py-4 text-black folderIcons overflow-y-scroll">
+          <main className="px-4 py-4 text-black overflow-y-scroll h-full">
             {featured.length > 0 && (
               <>
                 <div className="text-[11px] font-bold uppercase tracking-wide text-[#045aa5] border-b border-slate-300 mb-2">
@@ -33,7 +33,7 @@ const WindowsContainer = () => {
             <div className="text-[11px] font-bold uppercase tracking-wide text-[#045aa5] border-b border-slate-300 mb-2">
               Más proyectos
             </div>
-            <div className="flex flex-wrap">
+            <div className="folderIcons">
               {rest.map((el) => (
                 <ProjectItem {...el} key={el.url} />
               ))}
