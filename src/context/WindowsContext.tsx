@@ -4,27 +4,43 @@ import {
   ReactNode,
   SetStateAction,
   createContext,
+  useCallback,
+  useMemo,
   useState,
 } from "react";
 
-interface ContextType {
-  visibleItems: any;
-  minimizedItems: any;
-  setVisibleItems?: Dispatch<SetStateAction<any>>;
-  setMinimizedItems?: Dispatch<SetStateAction<any>>;
-  handleClose?: Dispatch<SetStateAction<boolean>>;
-  handleOpen?: Dispatch<SetStateAction<boolean>>;
-  handleMaximize?: Dispatch<SetStateAction<boolean>>;
-  handleMinimize?: Dispatch<SetStateAction<boolean>>;
+type Flags = Record<string, boolean>;
+type WinEvent = { target: { title: string } };
+
+export interface WindowsContextValue {
+  visibleItems: Flags;
+  minimizedItems: Flags;
+  setVisibleItems: Dispatch<SetStateAction<Flags>>;
+  setMinimizedItems: Dispatch<SetStateAction<Flags>>;
+  handleClose: (e: WinEvent) => void;
+  handleOpen: (e: WinEvent) => void;
+  handleMaximize: (e: WinEvent) => void;
+  handleMinimize: (e: WinEvent) => void;
+  focused: string | null;
+  focusWindow: (title: string) => void;
+  zIndexOf: (title: string) => number;
 }
-const WindowsContext = createContext<ContextType>({
-  minimizedItems: {},
+
+const noop = () => {};
+const Z_BASE = 10;
+
+const WindowsContext = createContext<WindowsContextValue>({
   visibleItems: {},
-  setVisibleItems: () => {},
-  handleClose: () => {},
-  handleOpen: () => {},
-  handleMaximize: () => {},
-  handleMinimize: () => {},
+  minimizedItems: {},
+  setVisibleItems: noop,
+  setMinimizedItems: noop,
+  handleClose: noop,
+  handleOpen: noop,
+  handleMaximize: noop,
+  handleMinimize: noop,
+  focused: null,
+  focusWindow: noop,
+  zIndexOf: () => Z_BASE,
 });
 
 interface Props {
@@ -32,52 +48,99 @@ interface Props {
 }
 
 export const WindowsProvider: FC<Props> = ({ children }) => {
-  const [visibleItems, setVisibleItems] = useState({
+  const [visibleItems, setVisibleItems] = useState<Flags>({
     Proyectos: false,
     Mochify: true,
   });
-  const [minimizedItems, setMinimizedItems] = useState({
+  const [minimizedItems, setMinimizedItems] = useState<Flags>({
     Proyectos: false,
     "Mochi Draw": false,
     Mochify: true,
   });
-  const handleClose = ({ target }: any) => {
-    const { title } = target;
-    setVisibleItems((prev) => ({ ...prev, [title]: false }));
-    setMinimizedItems((prev) => ({ ...prev, [title]: false }));
-  };
-  const handleOpen = ({ target }: any) => {
-    const { title } = target;
-    setVisibleItems((prev) => ({ ...prev, [title]: true }));
-    setMinimizedItems((prev) => ({ ...prev, [title]: true }));
-  };
+  // Stacking order, last entry is topmost.
+  const [order, setOrder] = useState<string[]>([]);
+  const [focused, setFocused] = useState<string | null>(null);
 
-  const handleMinimize = ({ target }: any) => {
-    const { title } = target;
-    setVisibleItems((prev) => ({ ...prev, [title]: false }));
-    setMinimizedItems((prev) => ({ ...prev, [title]: true }));
-  };
+  const focusWindow = useCallback((title: string) => {
+    setOrder((prev) =>
+      prev[prev.length - 1] === title
+        ? prev
+        : [...prev.filter((t) => t !== title), title]
+    );
+    setFocused(title);
+  }, []);
 
-  const handleMaximize = ({ target }: any) => {
+  const zIndexOf = useCallback(
+    (title: string) => {
+      const i = order.indexOf(title);
+      return Z_BASE + (i < 0 ? 0 : i);
+    },
+    [order]
+  );
+
+  const handleClose = useCallback(({ target }: WinEvent) => {
     const { title } = target;
-    setVisibleItems((prev) => ({ ...prev, [title]: true }));
-  };
+    setVisibleItems((p) => ({ ...p, [title]: false }));
+    setMinimizedItems((p) => ({ ...p, [title]: false }));
+    setOrder((prev) => prev.filter((t) => t !== title));
+    setFocused((f) => (f === title ? null : f));
+  }, []);
+
+  const handleOpen = useCallback(
+    ({ target }: WinEvent) => {
+      const { title } = target;
+      setVisibleItems((p) => ({ ...p, [title]: true }));
+      setMinimizedItems((p) => ({ ...p, [title]: true }));
+      focusWindow(title);
+    },
+    [focusWindow]
+  );
+
+  const handleMinimize = useCallback(({ target }: WinEvent) => {
+    const { title } = target;
+    setVisibleItems((p) => ({ ...p, [title]: false }));
+    setMinimizedItems((p) => ({ ...p, [title]: true }));
+    setFocused((f) => (f === title ? null : f));
+  }, []);
+
+  const handleMaximize = useCallback(
+    ({ target }: WinEvent) => {
+      const { title } = target;
+      setVisibleItems((p) => ({ ...p, [title]: true }));
+      focusWindow(title);
+    },
+    [focusWindow]
+  );
+
+  const value = useMemo<WindowsContextValue>(
+    () => ({
+      visibleItems,
+      minimizedItems,
+      setVisibleItems,
+      setMinimizedItems,
+      handleClose,
+      handleOpen,
+      handleMaximize,
+      handleMinimize,
+      focused,
+      focusWindow,
+      zIndexOf,
+    }),
+    [
+      visibleItems,
+      minimizedItems,
+      focused,
+      handleClose,
+      handleOpen,
+      handleMaximize,
+      handleMinimize,
+      focusWindow,
+      zIndexOf,
+    ]
+  );
 
   return (
-    <WindowsContext.Provider
-      value={{
-        minimizedItems,
-        visibleItems,
-        setVisibleItems,
-        handleClose,
-        handleOpen,
-        setMinimizedItems,
-        handleMaximize,
-        handleMinimize,
-      }}
-    >
-      {children}
-    </WindowsContext.Provider>
+    <WindowsContext.Provider value={value}>{children}</WindowsContext.Provider>
   );
 };
 

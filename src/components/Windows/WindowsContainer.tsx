@@ -6,33 +6,47 @@ import DraggableWin from "./draggable";
 
 const techs = techsJson.items;
 
+type ItemProps = {
+  title: string;
+  icon: string;
+  url?: string;
+  href?: string;
+  target?: string;
+  featured?: boolean;
+  description?: string;
+  stack?: string[];
+  type?: string;
+};
+
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+  <div className="mb-2 border-b border-slate-300 text-[11px] font-bold uppercase tracking-wide text-window-brand">
+    {children}
+  </div>
+);
+
 const WindowsContainer = () => {
   const proyects = data.proyects as Project[];
   const featured = proyects.filter((p) => p.featured);
   const rest = proyects.filter((p) => !p.featured);
 
-  const { visibleItems, handleClose, handleOpen } = useWindows();
-  const windows = { Proyectos: true, Sociales: true };
+  const { visibleItems, handleClose } = useWindows();
+
   return (
-    <div className="absolute h-1  top-0 left-0 md:left-0 md:top-0 bottom-28 flex w-full">
+    <>
       {visibleItems["Proyectos"] && (
-        <DraggableWin title={"Proyectos"} close={handleClose}>
-          <main className="px-4 py-4 text-black overflow-y-scroll h-full">
+        <DraggableWin title="Proyectos" close={handleClose}>
+          <main className="h-full overflow-y-auto px-4 py-4 text-black">
             {featured.length > 0 && (
               <>
-                <div className="text-[11px] font-bold uppercase tracking-wide text-[#045aa5] border-b border-slate-300 mb-2">
-                  ★ Destacados
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+                <SectionLabel>★ Destacados</SectionLabel>
+                <div className="mb-3 grid grid-cols-1 gap-2 md:grid-cols-2">
                   {featured.map((el) => (
                     <FeaturedCard {...el} key={el.url} />
                   ))}
                 </div>
               </>
             )}
-            <div className="text-[11px] font-bold uppercase tracking-wide text-[#045aa5] border-b border-slate-300 mb-2">
-              Más proyectos
-            </div>
+            <SectionLabel>Más proyectos</SectionLabel>
             <div className="folderIcons">
               {rest.map((el) => (
                 <ProjectItem {...el} key={el.url} />
@@ -41,56 +55,62 @@ const WindowsContainer = () => {
           </main>
         </DraggableWin>
       )}
-      <div className="absolute">
-        {visibleItems["Sociales"] && (
-          <DraggableWin title={"Sociales"} close={handleClose}>
-            <main
-              className=" px-4 py-4  text-black folderIcons overflow-y-auto "
-              style={{ columnGap: "2rem" }}
-            >
-              {socials.items.map((el: any) => (
-                <ProjectItem {...el} key={el.url} />
-              ))}
-            </main>
-          </DraggableWin>
-        )}
-      </div>
-      <div className="absolute">
-        {visibleItems["Tecnologías"] && (
-          <DraggableWin title={"Tecnologías"} close={handleClose}>
-            <main
-              className="flex px-4 py-4 items-center text-black h-full folderIcons overflow-y-auto "
-              style={{ columnGap: "2rem" }}
-            >
-              {techs.map((el: any) => (
-                <ProjectItem
-                  {...el}
-                  key={el.url}
-                  icon={`/static/icons/techs/${el.icon}`}
-                />
-              ))}
-            </main>
-          </DraggableWin>
-        )}
-      </div>
-    </div>
+
+      {visibleItems["Sociales"] && (
+        <DraggableWin title="Sociales" close={handleClose}>
+          <main
+            className="folderIcons h-full overflow-y-auto px-4 py-4 text-black"
+            style={{ columnGap: "2rem" }}
+          >
+            {socials.items.map((el) => (
+              <ProjectItem {...el} key={el.title} />
+            ))}
+          </main>
+        </DraggableWin>
+      )}
+
+      {visibleItems["Tecnologías"] && (
+        <DraggableWin title="Tecnologías" close={handleClose}>
+          <main
+            className="folderIcons flex h-full items-center overflow-y-auto px-4 py-4 text-black"
+            style={{ columnGap: "2rem" }}
+          >
+            {techs.map((el) => (
+              <ProjectItem
+                {...el}
+                key={el.url}
+                icon={`/static/icons/techs/${el.icon}`}
+              />
+            ))}
+          </main>
+        </DraggableWin>
+      )}
+    </>
   );
 };
 
 export default WindowsContainer;
 
-const ProjectItem = ({ url, title, icon, featured, description, stack, type, ...props }: any) => {
+const ProjectItem = ({
+  url,
+  title,
+  icon,
+  featured,
+  description,
+  stack,
+  type,
+  ...rest
+}: ItemProps) => {
   return (
     <a
-      key={url}
-      className="cursor-pointer w-fit h-16 md:w-28 md:h-28 bg-transparen hover:bg-cyan-200/90 rounded-sm flex flex-col justify-between text-center items-center p-1 "
-      {...props}
+      className="flex h-16 w-fit flex-col items-center justify-between rounded-sm p-1 text-center hover:bg-cyan-200/90 md:h-28 md:w-28"
+      {...rest}
       href={url ? url : undefined}
       target="_blank"
-      rel='noreferrer'
+      rel="noreferrer"
     >
       <div
-        className="w-16 h-16"
+        className="h-16 w-16"
         title={title}
         style={{
           backgroundImage: `url(${icon})`,
@@ -99,14 +119,12 @@ const ProjectItem = ({ url, title, icon, featured, description, stack, type, ...
           backgroundPosition: "center",
         }}
       ></div>
-      <span className="whitespace-nowrap text-sm text-black font-medium">
+      <span className="whitespace-nowrap text-sm font-medium text-black">
         {title}
       </span>
     </a>
   );
 };
-
-const Folder = ({ title, icon, ...props }: any) => {};
 
 const FeaturedCard = ({ url, title, icon, description, stack }: Project) => {
   return (
@@ -114,26 +132,24 @@ const FeaturedCard = ({ url, title, icon, description, stack }: Project) => {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="flex gap-3 border border-slate-300 bg-slate-50 rounded-md p-2 hover:bg-cyan-200/60 transition-colors"
+      className="flex gap-3 rounded-md border border-slate-300 bg-slate-50 p-2 transition-colors hover:bg-cyan-200/60"
     >
       <div
-        className="w-24 h-16 flex-none rounded bg-slate-200 bg-cover bg-center"
+        className="h-16 w-24 flex-none rounded bg-slate-200 bg-cover bg-center"
         style={{ backgroundImage: `url(${icon})` }}
         title={title}
       ></div>
       <div className="min-w-0">
-        <h4 className="font-semibold text-sm text-black">{title}</h4>
-        {description && (
-          <p className="text-xs text-slate-600">{description}</p>
-        )}
+        <h4 className="text-sm font-semibold text-black">{title}</h4>
+        {description && <p className="text-xs text-slate-600">{description}</p>}
         {stack && (
-          <div className="flex flex-wrap gap-1 mt-1">
-            {stack.map((t) => (
+          <div className="mt-1 flex flex-wrap gap-1">
+            {stack.map((tech) => (
               <span
-                key={t}
-                className="bg-indigo-100 text-indigo-800 rounded-full px-2 py-0.5 text-[10px]"
+                key={tech}
+                className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] text-indigo-800"
               >
-                {t}
+                {tech}
               </span>
             ))}
           </div>
