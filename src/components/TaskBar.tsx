@@ -3,9 +3,7 @@ import { SocialsICon, TaskBartGradient, xpLogoIcon } from "src/images";
 import list from "src/lists/taskList.json";
 import TaskItems from "src/lists/proyects.json";
 import DateTime from "./dateTime";
-import Image from "next/image";
 import useWindow from "src/hooks/useWindow";
-import { randomBytes } from "crypto";
 
 type Props = {};
 const folder = {
@@ -55,7 +53,7 @@ const TaskBar = (props: Props) => {
                   >
                     <a href={href} target="_blank">
                       <span className="flex p-4 text-black w-full ">
-                        <Image
+                        <img
                           alt=""
                           width={20}
                           height={20}
@@ -70,7 +68,7 @@ const TaskBar = (props: Props) => {
               })}
             </div>
           </div>
-          <Image
+          <img
             width={20}
             height={20}
             alt="xpIcon"
@@ -91,7 +89,7 @@ const TaskBar = (props: Props) => {
                 className="relative z-50 hover:bg-blue-600/60 px-4 cursor-pointer grow flex gap-3 text-sm h-full textShadow items-center shadowText"
                 key={key}
               >
-                <Image
+                <img
                   title={title}
                   onClick={handleMaximize as any}
                   alt=""
