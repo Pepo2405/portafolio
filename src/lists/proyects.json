@@ -1,10 +1,22 @@
 {
   "proyects": [
     {
+      "title": "Gym Admin",
+      "url": "https://gym-admin.com.ar",
+      "type": "link",
+      "icon": "/static/screenshots/gym-admin.webp",
+      "featured": true,
+      "description": "SaaS de gestión de gimnasios con app móvil y lector de huella.",
+      "stack": ["Next.js", "Node", "Prisma"]
+    },
+    {
       "title": "Bonitas Ayelen",
       "url": "https://bonitasayelen.com.ar/",
       "type": "link",
-      "icon": "/static/icons/bonitas.jpg"
+      "icon": "/static/screenshots/bonitas.webp",
+      "featured": true,
+      "description": "Sitio real de cliente en producción.",
+      "stack": ["React", "Vercel"]
     },
     {
       "title": "YT Amogus",
@@ -47,6 +59,12 @@
       "url": "https://lista-de-tareas-rho.vercel.app/",
       "type": "link",
       "icon": "/static/icons/task.webp"
+    },
+    {
+      "title": "Peliculas React",
+      "url": "https://peliculas-react-blond.vercel.app/",
+      "type": "link",
+      "icon": "/static/icons/peliculas.webp"
     }
   ]
 }
