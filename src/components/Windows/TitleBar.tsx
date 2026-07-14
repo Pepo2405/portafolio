@@ -23,8 +23,8 @@ function WinBtn({ label, onClick, danger, children }: WinBtnProps) {
       onPointerDown={(e) => e.stopPropagation()}
       onDoubleClick={(e) => e.stopPropagation()}
       onClick={onClick}
-      className={`flex h-7 w-9 items-center justify-center rounded text-white/90 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/80 ${
-        danger ? "hover:bg-red-600" : "hover:bg-white/25"
+      className={`xp-caption flex h-[21px] w-[21px] items-center justify-center text-white outline-none transition-[filter] hover:brightness-110 focus-visible:ring-2 focus-visible:ring-white/80 ${
+        danger ? "xp-caption-close" : "xp-caption-blue"
       }`}
     >
       {children}
@@ -34,6 +34,7 @@ function WinBtn({ label, onClick, danger, children }: WinBtnProps) {
 
 interface Props {
   title: string;
+  icon?: string;
   active: boolean;
   dragging: boolean;
   draggable: boolean;
@@ -47,6 +48,7 @@ interface Props {
 
 export default function TitleBar({
   title,
+  icon,
   active,
   dragging,
   draggable,
@@ -63,12 +65,17 @@ export default function TitleBar({
       onDoubleClick={onToggleFull}
       style={{ touchAction: "none" }}
       className={`handle flex h-9 shrink-0 select-none items-center justify-between gap-2 px-2 text-white transition-colors ${
-        active ? "bg-window-bar" : "bg-window-barMuted"
+        active ? "xp-titlebar" : "xp-titlebar--inactive"
       } ${
         !draggable ? "cursor-default" : dragging ? "cursor-grabbing" : "cursor-grab"
       }`}
     >
-      <span className="truncate pl-1 text-sm font-medium">{title}</span>
+      <div className="flex min-w-0 items-center gap-1.5 pl-1">
+        {icon && <img src={icon} alt="" width={16} height={16} className="shrink-0" />}
+        <span className="truncate text-sm font-bold [text-shadow:1px_1px_1px_rgba(0,0,0,0.4)]">
+          {title}
+        </span>
+      </div>
       <div className="flex items-center gap-1">
         <WinBtn label="Minimizar" onClick={onMinimize}>
           <TbMinus className="h-4 w-4" />

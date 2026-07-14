@@ -3,14 +3,7 @@ import { TaskBartGradient, xpLogoIcon } from "src/images";
 import list from "src/lists/taskList.json";
 import DateTime from "./dateTime";
 import useWindow from "src/hooks/useWindow";
-
-// Ventanas reales del escritorio: las únicas que pueden abrirse/minimizarse.
-// La clave debe coincidir EXACTO con el title que despachan Folder/Socials/Techs.
-const WINDOW_META: Record<string, { icon: string }> = {
-  Proyectos: { icon: "/static/folderIcon.png" },
-  Sociales: { icon: "/static/icons/redes.webp" },
-  Tecnologías: { icon: "/static/folderIcon.png" },
-};
+import { WINDOW_META } from "src/lists/windows";
 
 const TaskBar = () => {
   const { items: Tasks } = list;

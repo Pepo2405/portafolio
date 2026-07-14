@@ -5,6 +5,7 @@ import useDragMove, { Pos } from "src/hooks/useDragMove";
 import useIsMobile from "src/hooks/useIsMobile";
 import useWindow from "src/hooks/useWindow";
 import TitleBar from "./TitleBar";
+import { WINDOW_META } from "src/lists/windows";
 
 interface Props {
   children?: ReactNode;
@@ -170,6 +171,7 @@ export default function DraggableWin({ children, close, title }: Props) {
       >
         <TitleBar
           title={t}
+          icon={WINDOW_META[t]?.icon}
           active={active}
           dragging={dragging}
           draggable={!isFull}
