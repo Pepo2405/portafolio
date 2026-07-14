@@ -138,7 +138,7 @@ export default function DraggableWin({ children, close, title }: Props) {
           ? { position: "fixed", inset: 0, zIndex: z }
           : { position: "fixed", left: pos.x, top: pos.y, zIndex: z }
       }
-      className={isFull ? "" : `rounded-lg ${active ? "shadow-2xl" : "shadow-lg"}`}
+      className={isFull ? "" : `rounded-t-[8px] ${active ? "shadow-2xl" : "shadow-lg"}`}
     >
       <Resizable
         size={isFull ? { width: "100%", height: "100%" } : size}
@@ -148,7 +148,7 @@ export default function DraggableWin({ children, close, title }: Props) {
         maxWidth="95vw"
         maxHeight="95vh"
         className={`flex h-full w-full flex-col overflow-hidden bg-white ${
-          isFull ? "" : "rounded-lg ring-1 ring-black/10"
+          isFull ? "" : "rounded-t-[8px] border-x-[3px] border-b-[3px] border-luna-frame"
         }`}
         onResizeStart={() => {
           resizeOrigin.current = { x: pos.x, y: pos.y };
