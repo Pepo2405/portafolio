@@ -11,7 +11,7 @@ export default function App() {
   return (
     <div
       style={{ background: BG, backgroundSize: "cover" }}
-      className="h-screen w-screen overflow-hidden flex flex-col relative"
+      className="font-xp h-screen w-screen overflow-hidden flex flex-col relative"
     >
       <section className="folderIcons !overflow-hidden ">
         <a href="/static/Cv Ignacio Iglesias.pdf" target="_blank">

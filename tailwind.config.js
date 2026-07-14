@@ -12,6 +12,12 @@ module.exports = {
           barMuted: '#5b7488',
           brand: '#045aa5',
         },
+        luna: {
+          frame: '#0831d9',
+        },
+      },
+      fontFamily: {
+        xp: ['Tahoma', '"Trebuchet MS"', 'Verdana', '"DejaVu Sans"', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
