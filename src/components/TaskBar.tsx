@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { TaskBartGradient, xpLogoIcon } from "src/images";
+import { xpLogoIcon } from "src/images";
 import list from "src/lists/taskList.json";
 import DateTime from "./dateTime";
 import useWindow from "src/hooks/useWindow";
@@ -51,13 +51,7 @@ const TaskBar = () => {
   };
 
   return (
-    <nav
-      style={{
-        backgroundImage: TaskBartGradient,
-        backgroundRepeat: "repeat-x",
-      }}
-      className="fixed inset-x-0 bottom-0 z-30 flex h-8 w-full justify-between pr-8"
-    >
+    <nav className="xp-taskbar fixed inset-x-0 bottom-0 z-30 flex h-8 w-full justify-between">
       <section className="flex h-full min-w-0 items-center">
         <div ref={startRef} className="relative h-full">
           <button
@@ -65,7 +59,7 @@ const TaskBar = () => {
             aria-haspopup="menu"
             aria-expanded={startOpen}
             onClick={() => setStartOpen((v) => !v)}
-            className="z-50 flex h-full items-center gap-2 rounded-r-md bg-[#52911e] px-2 pr-4 hover:brightness-110"
+            className="xp-start z-50 flex h-full items-center gap-2 px-2 pr-4"
           >
             <img
               width={20}
@@ -74,7 +68,7 @@ const TaskBar = () => {
               src={xpLogoIcon}
               className="min-w-fit shadow-xl"
             />{" "}
-            Inicio
+            <span className="font-bold italic">Inicio</span>
           </button>
 
           {startOpen && (
@@ -142,7 +136,7 @@ const TaskBar = () => {
         </div>
       </section>
 
-      <span className="flex shrink-0 items-center justify-center text-sm md:px-2">
+      <span className="xp-tray flex shrink-0 items-center justify-center px-3 text-sm text-white">
         <DateTime />
       </span>
     </nav>
