@@ -132,7 +132,7 @@ const FeaturedCard = ({ url, title, icon, description, stack }: Project) => {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="flex gap-3 rounded-md border border-slate-300 bg-slate-50 p-2 transition-colors xp-select"
+      className="flex gap-3 rounded-md border border-slate-300 bg-slate-50 p-2 transition-colors hover:bg-luna-menuRight"
     >
       <div
         className="h-16 w-24 flex-none rounded bg-slate-200 bg-cover bg-center"
