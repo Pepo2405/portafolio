@@ -1,6 +1,7 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Amongus from "src/components/Amongus";
 import DesktopIcon from "src/components/DesktopIcon";
+import DesktopContextMenu from "src/components/DesktopContextMenu";
 import FullScreenButton from "src/components/FullScreenButton";
 import TaskBar from "src/components/TaskBar";
 import WindowsContainer from "src/components/Windows/WindowsContainer";
@@ -13,6 +14,7 @@ export default function App() {
   const { handleOpen } = useWindow();
   const containerRef = useRef<HTMLElement>(null);
   const desktop = useDesktopIcons(containerRef);
+  const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
 
   const activate = (def: DesktopIconDef) => {
     switch (def.kind.type) {
@@ -37,6 +39,10 @@ export default function App() {
         ref={containerRef}
         className="xp-desktop"
         onClick={desktop.clearSelection}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          setMenu({ x: e.clientX, y: e.clientY });
+        }}
       >
         {DESKTOP_ICONS.map((def) => {
           const pos = desktop.getPos(def.id);
@@ -87,6 +93,21 @@ export default function App() {
         <WindowsContainer />
       </main>
       <TaskBar />
+      {menu && (
+        <DesktopContextMenu
+          x={menu.x}
+          y={menu.y}
+          onClose={() => setMenu(null)}
+          items={[
+            { type: "disabled", label: "Ver" },
+            { type: "separator" },
+            { type: "action", label: "Organizar íconos", onSelect: desktop.resetLayout },
+            { type: "action", label: "Actualizar", onSelect: desktop.clearSelection },
+            { type: "separator" },
+            { type: "disabled", label: "Propiedades" },
+          ]}
+        />
+      )}
     </div>
   );
 }

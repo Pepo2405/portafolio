@@ -140,6 +140,36 @@ body {
     background-color: theme(colors.luna.selection);
     color: #fff;
   }
+  .xp-menu {
+    background: #fff;
+    border: 1px solid #808080;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.35);
+    padding: 2px;
+    font-size: 12px;
+  }
+  .xp-menu-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 3px 20px 3px 24px;
+    color: #000;
+    background: transparent;
+    cursor: default;
+  }
+  .xp-menu-item:not(.xp-menu-item--disabled):hover,
+  .xp-menu-item:not(.xp-menu-item--disabled):focus-visible {
+    background-color: theme(colors.luna.selection);
+    color: #fff;
+    outline: none;
+  }
+  .xp-menu-item--disabled {
+    color: #a0a0a0;
+  }
+  .xp-menu-sep {
+    height: 1px;
+    margin: 3px 2px;
+    background: #d4d0c8;
+  }
   .xp-startmenu {
     border: 1px solid #0831d9;
     border-radius: 8px 8px 2px 2px;
