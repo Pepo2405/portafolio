@@ -14,6 +14,9 @@ module.exports = {
         },
         luna: {
           frame: '#0831d9',
+          selection: '#316ac5',
+          menuHeader: '#0a5ad4',
+          menuRight: '#d3e5fa',
         },
       },
       fontFamily: {

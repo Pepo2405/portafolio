@@ -129,4 +129,9 @@ body {
   .xp-start:hover {
     filter: brightness(1.06);
   }
+  .xp-select:hover,
+  .xp-select.is-active {
+    background-color: theme(colors.luna.selection);
+    color: #fff;
+  }
 }
