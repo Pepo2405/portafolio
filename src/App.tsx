@@ -35,7 +35,7 @@ export default function App() {
     >
       <section
         ref={containerRef}
-        className="folderIcons !overflow-hidden"
+        className="xp-desktop"
         onClick={desktop.clearSelection}
       >
         {DESKTOP_ICONS.map((def) => {
