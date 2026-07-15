@@ -14,7 +14,7 @@ Meta: acercar el look al tema **"Luna" (azul)** real de XP mediante 3 tiers incr
 
 - **Tier 1** (chrome base): fuente Tahoma, gradiente de barra de título + botones de caption glossy, frame de ventana Luna, taskbar con gradiente CSS + área de notificación, start button "orbe" verde.
 - **Tier 2** (piezas icónicas): menú Inicio de 2 columnas, resaltado de selección azul XP en menús/listas, selección de íconos del escritorio.
-- **Tier 3** (flavor, opcional): menú contextual del escritorio, sonidos XP, pantalla de boot/login, cursores XP, globos de notificación.
+- **Tier 3** (flavor, opcional): menú contextual del escritorio, sonidos XP, pantalla de boot/login, cursores XP, globos de notificación, arrastre/posición libre de íconos del escritorio con persistencia.
 
 ### Fuera de alcance
 
@@ -172,6 +172,17 @@ Cada uno es independiente y opcional; ninguno bloquea el resto.
 - **3.3 Pantalla de boot/login:** overlay inicial con la barra de progreso XP + logo, luego la pantalla de bienvenida (avatar + nombre) que al click entra al escritorio. Componente nuevo montado antes del desktop, con `sessionStorage` para no repetir en cada navegación. Puro visual/animación (GSAP ya está en deps).
 - **3.4 Cursores XP:** set de cursores `.cur`/`.ani` (o PNG) aplicados via `cursor: url(...)`. Assets propios/libres. Bajo impacto/fidelidad; opcional.
 - **3.5 Globos de notificación:** tooltip amarillo estilo XP (balloon) para hints (ej. "Hacé click en Inicio"). Componente pequeño; puramente decorativo.
+- **3.6 Arrastrar y reordenar íconos del escritorio (posición libre XP):** los íconos del escritorio dejan de ser JSX hardcodeado en un CSS grid por flujo y pasan a **posicionarse libremente** en coordenadas de grilla, arrastrables con mouse y touch, snap a una grilla invisible al soltar, y con la posición **persistida en localStorage por visitante** (fiel a XP). Enfoque: hook propio + Pointer Events reutilizando el patrón de `useDragMove`, **sin dependencia nueva** (dnd-kit se descartó: su modelo sortable/droppable pelea con el posicionamiento libre + snap, pesa ~40kb y rompe la convención de drag ya existente en el repo).
+  - **Modelo de datos:** nueva lista `src/lists/desktopIcons.ts` — cada ícono es `{ id, icon, label, kind }`, donde `kind` describe la acción: `open-window` (con `title` para `handleOpen`), `open-url` (con `href`, ej. Curriculum → PDF) y `easter-egg` (Amongus). Elimina el JSX repetido de los `DesktopIcon` en `App.tsx`; el registry de ventanas (`WINDOW_META`/`src/lists/windows.ts`) sigue siendo la fuente de títulos+íconos de ventana (no duplicar).
+  - **Estado y persistencia:** hook `src/hooks/useDesktopIcons.ts` con `Record<id, { col: number; row: number }>` (celda de grilla, no pixel). Hidrata de `localStorage["xp-desktop-icons@1"]` (**clave versionada**; si el schema cambia se ignora y cae al layout default). Layout default = orden actual en columna izquierda. `setIconCell(id, col, row)` persiste en cada drop; `resetLayout()` borra la clave y vuelve al default. IDs desconocidos en storage se descartan; íconos sin celda guardada usan su celda default (robusto ante agregar/quitar íconos).
+  - **Layout:** `.folderIcons` pasa de `display: grid` a `position: relative`; cada ícono `position: absolute` en `left = col*CELL_W, top = row*CELL_H`. Constantes `CELL_W`/`CELL_H` (~80×92px: tamaño del `DesktopIcon` + gap) definen la "grilla invisible" de XP.
+  - **Arrastre (Pointer Events, patrón `useDragMove`):** `onPointerDown` registra el grab sin capturar; `onPointerMove` sólo entra en modo drag al superar `MOVE_THRESHOLD` (así el click/dblclick nativo sigue seleccionando/abriendo). Durante el drag el ícono sigue el cursor (translate) con `z-index` alto, opacidad leve y clase `.xp-icon-dragging`. Al soltar: **snap a la celda más cercana**; si está ocupada, busca la celda libre más próxima (evita solapamiento); clamp a los límites del contenedor. `moved=false` (fue click) → dispara `onSelect`/`onOpen`; el easter-egg de Amongus (matar+sonido) sólo se dispara si `moved=false`, igual que la ventana no maximiza al arrastrar.
+  - **Touch:** Pointer Events cubre mouse y dedo con una sola API; `touch-action: none` en el ícono durante el drag para no pelear con el scroll del layout mobile.
+  - **Reset:** `resetLayout()` se expone para que **"Organizar íconos" del menú contextual (3.1)** lo invoque. Si 3.1 aún no está implementado, el hook lo expone igual y queda listo (los dos ítems son independientes; 3.6 no bloquea a 3.1 ni viceversa).
+  - **Selección:** reutiliza/absorbe el estado de "ícono seleccionado" del escritorio (Tier 2.3) — la selección vive en el mismo hook/estado que las posiciones, no se duplica.
+  - **Accesibilidad:** el drag es mejora progresiva; se mantienen `onClick`/`onDoubleClick`/`aria-pressed` y el foco. Sin drag por teclado (fuera de alcance; XP tampoco lo tiene).
+  - **Fuera de alcance:** drag por teclado, multi-selección por marquee, "Auto organizar"/"Alinear a la grilla" como toggles persistidos (sólo el reset), y arrastrar íconos a la papelera/taskbar.
+  - **Assets:** ninguno nuevo (reutiliza los íconos existentes).
 
 ---
 
@@ -220,6 +231,10 @@ No hay framework de tests en el repo. Gates por tier:
 - Context menu aparece con click derecho en el fondo y se cierra con click-afuera/`Escape`.
 - Sonidos suenan en el evento correcto, con mute funcional (si se implementa).
 - Boot/login se muestra una vez por sesión y entra al escritorio al click.
+- Se puede **arrastrar cada ícono del escritorio** (los 4 folders + Amongus) con mouse y touch; al soltar hace **snap a la grilla** sin solaparse con otro.
+- Un **click** sigue seleccionando y el **doble-click** sigue abriendo (el arrastre no los rompe); el easter-egg de Amongus dispara sólo en click, no al arrastrar.
+- Las posiciones **persisten al recargar** (localStorage); "Organizar íconos" (si 3.1 está) resetea al layout default.
+- Sin regresiones: consola 0 errores; en mobile el arrastre no rompe el scroll.
 
 ## Orden de implementación sugerido
 
@@ -230,4 +245,4 @@ Cada tier debería convertirse en su propio **plan de implementación** (skill `
 ## Notas de mantenimiento
 
 - Un cambio de paleta (ej. tema "Plata"/"Verde oliva" de XP) se hace tocando solo los tokens `luna.*` en `tailwind.config.js` — no los componentes.
-- El registry de ventanas/íconos (`WINDOW_META` en `TaskBar.tsx`) es la fuente de títulos+íconos; el ícono del título de ventana (Tier 1.2) y el menú Inicio (Tier 2.1) deben consumir el mismo mapa para no duplicar.
+- El registry de ventanas (`WINDOW_META` en `src/lists/windows.ts`) es la fuente de títulos+íconos de ventana; el ícono del título de ventana (Tier 1.2), el menú Inicio (Tier 2.1) y la lista de íconos del escritorio (Tier 3.6) deben consumir el mismo mapa para no duplicar.
