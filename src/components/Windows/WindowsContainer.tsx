@@ -103,7 +103,7 @@ const ProjectItem = ({
 }: ItemProps) => {
   return (
     <a
-      className="flex h-16 w-fit flex-col items-center justify-between rounded-sm p-1 text-center hover:bg-cyan-200/90 md:h-28 md:w-28"
+      className="flex h-16 w-fit flex-col items-center justify-between rounded-sm p-1 text-center text-black xp-select md:h-28 md:w-28"
       {...rest}
       href={url ? url : undefined}
       target="_blank"
@@ -119,7 +119,7 @@ const ProjectItem = ({
           backgroundPosition: "center",
         }}
       ></div>
-      <span className="whitespace-nowrap text-sm font-medium text-black">
+      <span className="whitespace-nowrap text-sm font-medium text-inherit">
         {title}
       </span>
     </a>
@@ -132,7 +132,7 @@ const FeaturedCard = ({ url, title, icon, description, stack }: Project) => {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="flex gap-3 rounded-md border border-slate-300 bg-slate-50 p-2 transition-colors hover:bg-cyan-200/60"
+      className="flex gap-3 rounded-md border border-slate-300 bg-slate-50 p-2 transition-colors xp-select"
     >
       <div
         className="h-16 w-24 flex-none rounded bg-slate-200 bg-cover bg-center"
