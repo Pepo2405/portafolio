@@ -129,8 +129,7 @@ body {
   .xp-start:hover {
     filter: brightness(1.06);
   }
-  .xp-select:hover,
-  .xp-select.is-active {
+  .xp-select:hover {
     background-color: theme(colors.luna.selection);
     color: #fff;
   }
@@ -139,7 +138,7 @@ body {
     border-radius: 8px 8px 2px 2px;
   }
   .xp-startmenu-header {
-    background: linear-gradient(to bottom, #1f6fe0 0%, #0a5ad4 60%, #08409e 100%);
+    background: linear-gradient(to bottom, #1f6fe0 0%, theme(colors.luna.menuHeader) 60%, #08409e 100%);
     border-bottom: 2px solid #f0b400;
     border-radius: 7px 7px 0 0;
   }

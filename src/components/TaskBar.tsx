@@ -68,7 +68,7 @@ const TaskBar = () => {
           <button
             ref={startBtnRef}
             type="button"
-            aria-haspopup="menu"
+            aria-haspopup="dialog"
             aria-expanded={startOpen}
             onClick={() => setStartOpen((v) => !v)}
             className="xp-start z-50 flex h-full items-center gap-2 px-2 pr-4"
