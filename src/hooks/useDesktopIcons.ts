@@ -55,6 +55,7 @@ export interface DesktopIconsApi {
     onPointerDown: (e: ReactPointerEvent) => void;
     onPointerMove: (e: ReactPointerEvent) => void;
     onPointerUp: (e: ReactPointerEvent) => void;
+    onPointerCancel: () => void;
   };
   resetLayout: () => void;
 }
@@ -178,6 +179,14 @@ export default function useDesktopIcons(
         };
         const dest = nearestFreeCell(target, id);
         setLayout((prev) => ({ ...prev, [id]: dest }));
+      },
+      onPointerCancel() {
+        // El stream de puntero se interrumpió (cancel táctil, gesto del sistema):
+        // limpiamos el estado de drag sin commitear; el ícono vuelve a su celda.
+        start.current = null;
+        moved.current = false;
+        setDragId(null);
+        setOffset({ dx: 0, dy: 0 });
       },
     }),
     [layout, nearestFreeCell]

@@ -6,7 +6,8 @@ type DragHandlers = {
   onPointerDown: (e: ReactPointerEvent) => void;
   onPointerMove: (e: ReactPointerEvent) => void;
   onPointerUp: (e: ReactPointerEvent) => void;
-};
+  onPointerCancel: () => void;
+}
 
 type AmongusProps = {
   style: CSSProperties;
