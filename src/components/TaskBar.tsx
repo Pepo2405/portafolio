@@ -11,11 +11,14 @@ const TaskBar = () => {
     visibleItems,
     minimizedItems,
     focused,
+    handleOpen,
     handleMaximize,
     handleMinimize,
   } = useWindow();
   const [startOpen, setStartOpen] = useState(false);
   const startRef = useRef<HTMLDivElement>(null);
+  const firstItemRef = useRef<HTMLButtonElement>(null);
+  const startBtnRef = useRef<HTMLButtonElement>(null);
 
   // Cerrar el menú Inicio al clickear afuera o presionar Escape.
   useEffect(() => {
@@ -26,7 +29,10 @@ const TaskBar = () => {
       }
     };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setStartOpen(false);
+      if (e.key === "Escape") {
+        setStartOpen(false);
+        startBtnRef.current?.focus();
+      }
     };
     document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
@@ -34,6 +40,11 @@ const TaskBar = () => {
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
+  }, [startOpen]);
+
+  // Al abrir el menú, enfocar el primer ítem.
+  useEffect(() => {
+    if (startOpen) firstItemRef.current?.focus();
   }, [startOpen]);
 
   // Una ventana aparece en la taskbar mientras siga abierta (a la vista o minimizada).
@@ -55,6 +66,7 @@ const TaskBar = () => {
       <section className="flex h-full min-w-0 items-center">
         <div ref={startRef} className="relative h-full">
           <button
+            ref={startBtnRef}
             type="button"
             aria-haspopup="menu"
             aria-expanded={startOpen}
@@ -73,36 +85,85 @@ const TaskBar = () => {
 
           {startOpen && (
             <div
-              role="menu"
-              className="absolute bottom-full left-0 flex h-80 w-72 flex-col items-start justify-between rounded-t-sm bg-white shadow-2xl"
+              role="dialog"
+              aria-label="Menú Inicio"
+              className="xp-startmenu absolute bottom-full left-0 w-[380px] overflow-hidden bg-white shadow-2xl"
             >
-              <header className="flex h-8 w-full items-center rounded-t-sm bg-blue-500 pl-4 text-left font-semibold text-white">
-                Hablemos
+              <header className="xp-startmenu-header flex items-center gap-3 px-4 py-2 text-white">
+                <img
+                  src="/kirby.webp"
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="rounded-md border border-white/60 bg-white/20"
+                />
+                <span className="text-base font-bold [text-shadow:1px_1px_1px_rgba(0,0,0,0.4)]">
+                  Ignacio Iglesias
+                </span>
               </header>
-              <div className="flex w-full grow flex-col">
-                {Tasks.map(({ title, href, icon }) => (
+
+              <div className="flex">
+                <div className="flex w-1/2 flex-col bg-white py-2">
+                  {Object.entries(WINDOW_META).map(([title, meta], i) => (
+                    <button
+                      key={title}
+                      type="button"
+                      ref={i === 0 ? firstItemRef : undefined}
+                      onClick={() => {
+                        handleOpen({ target: { title } });
+                        setStartOpen(false);
+                      }}
+                      className="xp-select flex items-center gap-3 px-3 py-2 text-left text-black"
+                    >
+                      <img src={meta.icon} alt="" width={24} height={24} />
+                      <span className="text-sm font-bold">{meta.label}</span>
+                    </button>
+                  ))}
                   <a
-                    key={title}
-                    role="menuitem"
-                    href={href}
+                    href="/static/Cv Ignacio Iglesias.pdf"
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => setStartOpen(false)}
-                    className="flex w-full justify-start hover:bg-gray-400/50"
+                    className="xp-select flex items-center gap-3 px-3 py-2 text-left text-black"
                   >
-                    <span className="flex w-full items-center p-4 text-black">
-                      <img
-                        alt=""
-                        width={20}
-                        height={20}
-                        src={icon}
-                        className="mx-2"
-                      />
-                      {title}
-                    </span>
+                    <img src="/static/icons/chrome.svg" alt="" width={24} height={24} />
+                    <span className="text-sm font-bold">Curriculum</span>
                   </a>
-                ))}
+                </div>
+
+                <div className="flex w-1/2 flex-col bg-luna-menuRight py-2">
+                  {Tasks.map(({ title, href, icon }) => (
+                    <a
+                      key={title}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => setStartOpen(false)}
+                      className="xp-select flex items-center gap-3 px-3 py-2 text-left text-black"
+                    >
+                      <img src={icon} alt="" width={22} height={22} />
+                      <span className="text-sm">{title}</span>
+                    </a>
+                  ))}
+                </div>
               </div>
+
+              <footer className="xp-startmenu-footer flex items-center justify-end gap-4 px-4 py-2 text-white">
+                <button
+                  type="button"
+                  onClick={() => setStartOpen(false)}
+                  className="flex items-center gap-2 text-sm font-semibold hover:brightness-110"
+                >
+                  <span aria-hidden>🔑</span> Cerrar sesión
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStartOpen(false)}
+                  className="flex items-center gap-2 text-sm font-semibold hover:brightness-110"
+                >
+                  <span aria-hidden>⏻</span> Apagar
+                </button>
+              </footer>
             </div>
           )}
         </div>
