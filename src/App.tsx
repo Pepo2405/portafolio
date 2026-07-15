@@ -1,39 +1,55 @@
+import { useState } from "react";
 import Amongus from "src/components/Amongus";
-import Proyects from "src/components/Folder";
+import DesktopIcon from "src/components/DesktopIcon";
 import FullScreenButton from "src/components/FullScreenButton";
-import Socials from "src/components/Socials";
 import TaskBar from "src/components/TaskBar";
-import Techs from "src/components/Techs";
 import WindowsContainer from "src/components/Windows/WindowsContainer";
+import useWindow from "src/hooks/useWindow";
 import { BG } from "src/images";
 
 export default function App() {
+  const [selected, setSelected] = useState<string | null>(null);
+  const { handleOpen } = useWindow();
+
   return (
     <div
       style={{ background: BG, backgroundSize: "cover" }}
       className="font-xp h-screen w-screen overflow-hidden flex flex-col relative"
+      onClick={() => setSelected(null)}
     >
-      <section className="folderIcons !overflow-hidden ">
-        <a href="/static/Cv Ignacio Iglesias.pdf" target="_blank">
-          <div className="bg-white-400/50 w-24 h-24 pt-2 px-8 flex-col text-center flex hover:bg-blue-500/50 items-center  justify-end text-black/80">
-            <div
-              className="grow w-11"
-              style={{
-                backgroundImage: "url(/static/icons/chrome.svg)",
-                backgroundSize: "contain",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }}
-            ></div>
-            <span className="font-bold text-sm text-white shadowText">
-              Curriculum
-            </span>
-          </div>
-        </a>
+      <section
+        className="folderIcons !overflow-hidden "
+        onClick={() => setSelected(null)}
+      >
+        <DesktopIcon
+          icon="/static/icons/chrome.svg"
+          label="Curriculum"
+          selected={selected === "cv"}
+          onSelect={() => setSelected("cv")}
+          onOpen={() => window.open("/static/Cv Ignacio Iglesias.pdf", "_blank")}
+        />
+        <DesktopIcon
+          icon="/static/folderIcon.png"
+          label="Proyectos"
+          selected={selected === "Proyectos"}
+          onSelect={() => setSelected("Proyectos")}
+          onOpen={() => handleOpen({ target: { title: "Proyectos" } })}
+        />
+        <DesktopIcon
+          icon="/static/icons/redes.webp"
+          label="Redes sociales"
+          selected={selected === "Sociales"}
+          onSelect={() => setSelected("Sociales")}
+          onOpen={() => handleOpen({ target: { title: "Sociales" } })}
+        />
+        <DesktopIcon
+          icon="/static/folderIcon.png"
+          label="Tecnologías"
+          selected={selected === "Tecnologías"}
+          onSelect={() => setSelected("Tecnologías")}
+          onOpen={() => handleOpen({ target: { title: "Tecnologías" } })}
+        />
         <Amongus />
-        <Proyects title="Proyectos" />
-        <Socials title="Redes sociales" />
-        <Techs title="Tecnologías" />
       </section>
       <main>
         <h2

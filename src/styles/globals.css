@@ -147,4 +147,13 @@ body {
     background: linear-gradient(to bottom, #2f7ce8 0%, #1257c6 100%);
     border-top: 1px solid #f0b400;
   }
+  .xp-icon-selected .xp-icon-thumb {
+    background-color: rgba(49, 106, 197, 0.4);
+    outline: 1px dotted rgba(255, 255, 255, 0.7);
+    outline-offset: -2px;
+  }
+  .xp-icon-selected .xp-icon-label {
+    background-color: theme(colors.luna.selection);
+    color: #fff;
+  }
 }
