@@ -1,55 +1,73 @@
-import { useState } from "react";
+import { useRef } from "react";
 import Amongus from "src/components/Amongus";
 import DesktopIcon from "src/components/DesktopIcon";
 import FullScreenButton from "src/components/FullScreenButton";
 import TaskBar from "src/components/TaskBar";
 import WindowsContainer from "src/components/Windows/WindowsContainer";
+import useDesktopIcons from "src/hooks/useDesktopIcons";
 import useWindow from "src/hooks/useWindow";
+import { DESKTOP_ICONS, DesktopIconDef } from "src/lists/desktopIcons";
 import { BG } from "src/images";
 
 export default function App() {
-  const [selected, setSelected] = useState<string | null>(null);
   const { handleOpen } = useWindow();
+  const containerRef = useRef<HTMLElement>(null);
+  const desktop = useDesktopIcons(containerRef);
+
+  const activate = (def: DesktopIconDef) => {
+    switch (def.kind.type) {
+      case "open-window":
+        handleOpen({ target: { title: def.kind.title } });
+        break;
+      case "open-url":
+        window.open(def.kind.href, "_blank");
+        break;
+      case "easter-egg":
+        break; // el easter-egg se maneja dentro de <Amongus/>
+    }
+  };
 
   return (
     <div
       style={{ background: BG, backgroundSize: "cover" }}
-      className="font-xp h-screen w-screen overflow-hidden flex flex-col relative"
-      onClick={() => setSelected(null)}
+      className="font-xp relative flex h-screen w-screen flex-col overflow-hidden"
+      onClick={desktop.clearSelection}
     >
       <section
-        className="folderIcons !overflow-hidden "
-        onClick={() => setSelected(null)}
+        ref={containerRef}
+        className="folderIcons !overflow-hidden"
+        onClick={desktop.clearSelection}
       >
-        <DesktopIcon
-          icon="/static/icons/chrome.svg"
-          label="Curriculum"
-          selected={selected === "cv"}
-          onSelect={() => setSelected("cv")}
-          onOpen={() => window.open("/static/Cv Ignacio Iglesias.pdf", "_blank")}
-        />
-        <DesktopIcon
-          icon="/static/folderIcon.png"
-          label="Proyectos"
-          selected={selected === "Proyectos"}
-          onSelect={() => setSelected("Proyectos")}
-          onOpen={() => handleOpen({ target: { title: "Proyectos" } })}
-        />
-        <DesktopIcon
-          icon="/static/icons/redes.webp"
-          label="Redes sociales"
-          selected={selected === "Sociales"}
-          onSelect={() => setSelected("Sociales")}
-          onOpen={() => handleOpen({ target: { title: "Sociales" } })}
-        />
-        <DesktopIcon
-          icon="/static/folderIcon.png"
-          label="Tecnologías"
-          selected={selected === "Tecnologías"}
-          onSelect={() => setSelected("Tecnologías")}
-          onOpen={() => handleOpen({ target: { title: "Tecnologías" } })}
-        />
-        <Amongus />
+        {DESKTOP_ICONS.map((def) => {
+          const pos = desktop.getPos(def.id);
+          const style = { left: pos.x, top: pos.y };
+          const handlers = desktop.dragHandlers(def.id);
+          const dragging = desktop.dragId === def.id;
+          if (def.kind.type === "easter-egg") {
+            return (
+              <Amongus
+                key={def.id}
+                style={style}
+                dragging={dragging}
+                handlers={handlers}
+                onSelect={() => desktop.select(def.id)}
+              />
+            );
+          }
+          return (
+            <DesktopIcon
+              key={def.id}
+              icon={def.icon}
+              label={def.label}
+              selected={desktop.selected === def.id}
+              dragging={dragging}
+              style={style}
+              handlers={handlers}
+              onSelect={() => desktop.select(def.id)}
+              onOpen={() => activate(def)}
+            />
+          );
+        })}
       </section>
       <main>
         <h2

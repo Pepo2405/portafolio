@@ -1,15 +1,37 @@
+import { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
+
+type DragHandlers = {
+  onPointerDown: (e: ReactPointerEvent) => void;
+  onPointerMove: (e: ReactPointerEvent) => void;
+  onPointerUp: (e: ReactPointerEvent) => void;
+};
+
 type DesktopIconProps = {
   icon: string;
   label: string;
   selected: boolean;
+  dragging: boolean;
+  style: CSSProperties;
+  handlers: DragHandlers;
   onSelect: () => void;
   onOpen: () => void;
 };
 
-const DesktopIcon = ({ icon, label, selected, onSelect, onOpen }: DesktopIconProps) => {
+const DesktopIcon = ({
+  icon,
+  label,
+  selected,
+  dragging,
+  style,
+  handlers,
+  onSelect,
+  onOpen,
+}: DesktopIconProps) => {
   return (
     <button
       type="button"
+      style={style}
+      {...handlers}
       onClick={(e) => {
         e.stopPropagation();
         onSelect();
@@ -19,9 +41,9 @@ const DesktopIcon = ({ icon, label, selected, onSelect, onOpen }: DesktopIconPro
         onOpen();
       }}
       aria-pressed={selected}
-      className={`flex w-24 flex-col items-center gap-1 rounded-sm p-2 text-center ${
+      className={`xp-icon flex w-24 flex-col items-center gap-1 rounded-sm p-2 text-center ${
         selected ? "xp-icon-selected" : ""
-      }`}
+      } ${dragging ? "xp-icon-dragging" : ""}`}
     >
       <div
         className="xp-icon-thumb h-12 w-12 rounded-sm"

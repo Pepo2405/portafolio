@@ -31,19 +31,10 @@ body {
 }
 
 .folderIcons {
-  display: grid;
-
-  /* grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 76px), 1fr));
-  text-align: center;
-  align-items: start;
-  grid-template-rows: repeat(auto-fill, minmax(min(100px, 50%), 1fr));
-  justify-items: center;
-  column-gap: min(2rem, 10%);
-  padding: 1rem;
-  row-gap: 1rem;
+  position: relative;
   height: 90%;
-  overflow-y: auto;
+  padding: 1rem;
+  overflow: hidden;
 }
 
 .musicPlayer {
@@ -154,5 +145,14 @@ body {
   .xp-icon-selected .xp-icon-label {
     background-color: theme(colors.luna.selection);
     color: #fff;
+  }
+  .xp-icon {
+    position: absolute;
+    touch-action: none;
+    user-select: none;
+  }
+  .xp-icon-dragging {
+    z-index: 50;
+    opacity: 0.7;
   }
 }

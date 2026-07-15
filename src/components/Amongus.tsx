@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import { CSSProperties, PointerEvent as ReactPointerEvent, useState } from "react";
 import { Howl } from "howler";
 import { AmogusIcon, DeadIcon } from "src/images";
 
+type DragHandlers = {
+  onPointerDown: (e: ReactPointerEvent) => void;
+  onPointerMove: (e: ReactPointerEvent) => void;
+  onPointerUp: (e: ReactPointerEvent) => void;
+};
 
-const Amongus = ( ) => {
+type AmongusProps = {
+  style: CSSProperties;
+  dragging: boolean;
+  handlers: DragHandlers;
+  onSelect: () => void;
+};
+
+const Amongus = ({ style, dragging, handlers, onSelect }: AmongusProps) => {
   const [dead, setDead] = useState(false);
   const [clickCount, setCount] = useState(0);
-  const handleCLick = () => {
+
+  const handleClick = () => {
+    onSelect();
     setCount((prev) => prev + 1);
     setDead(true);
     if (clickCount > 9) return alert("Para emocion ya lo hiciste pelota");
@@ -19,20 +33,28 @@ const Amongus = ( ) => {
   };
 
   return (
-    <div className="w-20 h-20 flex justify-center items-center mt-3 absolute bottom-16 left-2">
+    <button
+      type="button"
+      style={style}
+      {...handlers}
+      onClick={(e) => {
+        e.stopPropagation();
+        handleClick();
+      }}
+      className={`xp-icon flex h-24 w-24 items-center justify-center ${
+        dragging ? "xp-icon-dragging" : ""
+      }`}
+    >
       <div
-        onClick={handleCLick}
-        className="w-20 h-20"
+        className="h-20 w-20"
         style={{
-          width: "96px",
-          height: "96px",
           backgroundImage: `${dead ? DeadIcon : AmogusIcon}`,
           backgroundSize: "5rem",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
-      ></div>
-    </div>
+      />
+    </button>
   );
 };
 
