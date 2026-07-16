@@ -16,6 +16,7 @@ interface Props {
 export default function Visualizer({ accent }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  const masterRef = useRef<GainNode | null>(null);
   const rafRef = useRef<number | null>(null);
   const accentRef = useRef(accent);
   accentRef.current = accent;
@@ -47,6 +48,7 @@ export default function Visualizer({ accent }: Props) {
           analyser.fftSize = 256;
           master.connect(analyser); // tap only; master stays connected to destination
           analyserRef.current = analyser;
+          masterRef.current = master;
         }
       }
 
@@ -91,8 +93,10 @@ export default function Visualizer({ accent }: Props) {
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
       ro.disconnect();
       if (analyserRef.current) {
+        masterRef.current?.disconnect(analyserRef.current);
         analyserRef.current.disconnect();
         analyserRef.current = null;
+        masterRef.current = null;
       }
     };
   }, []);
