@@ -10,8 +10,11 @@ import Controls from "./Controls";
 import NavPanel from "./NavPanel";
 import useAudioPlayer from "./useAudioPlayer";
 import { Accent } from "./Visualizer";
+import XpDialog from "./XpDialog";
 import Library from "./views/Library";
+import MediaGuide from "./views/MediaGuide";
 import NowPlaying from "./views/NowPlaying";
+import Visualizations from "./views/Visualizations";
 
 export type View = "nowplaying" | "library" | "guide" | "visualizations";
 export type Dialog = "cd" | "radio" | null;
@@ -198,25 +201,25 @@ export default function MediaPlayer({ close }: Props) {
           <div className="wmp-stage relative min-w-0 flex-1">
             {view === "nowplaying" && <NowPlaying player={player} accent={accent} />}
             {view === "library" && <Library player={player} />}
-            {(view === "guide" || view === "visualizations") && (
-              <div className="flex h-full items-center justify-center text-sm text-white/50">
-                {view}
-              </div>
+            {view === "guide" && <MediaGuide />}
+            {view === "visualizations" && (
+              <Visualizations accent={accent} onAccentChange={setAccent} />
             )}
           </div>
         </div>
 
         <Controls player={player} />
 
-        {/* dialog placeholder; XpDialog mounted in Task 6 */}
         {dialog && (
-          <button
-            type="button"
-            onClick={() => setDialog(null)}
-            className="absolute inset-0 bg-black/30 text-white"
-          >
-            {dialog}
-          </button>
+          <XpDialog
+            title={dialog === "cd" ? "Copiar desde CD" : "Radio"}
+            message={
+              dialog === "cd"
+                ? "No se detectó ninguna unidad de CD."
+                : "Sin conexión a Internet."
+            }
+            onClose={() => setDialog(null)}
+          />
         )}
       </Resizable>
     </div>
