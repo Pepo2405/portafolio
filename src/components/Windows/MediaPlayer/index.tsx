@@ -9,6 +9,7 @@ import { WINDOW_META } from "src/lists/windows";
 import Controls from "./Controls";
 import NavPanel from "./NavPanel";
 import useAudioPlayer from "./useAudioPlayer";
+import Visualizer, { Accent } from "./Visualizer";
 
 export type View = "nowplaying" | "library" | "guide" | "visualizations";
 export type Dialog = "cd" | "radio" | null;
@@ -44,6 +45,7 @@ export default function MediaPlayer({ close }: Props) {
 
   const [view, setView] = useState<View>("nowplaying");
   const [dialog, setDialog] = useState<Dialog>(null);
+  const [accent, setAccent] = useState<Accent>("blue");
 
   const player = useAudioPlayer();
 
@@ -193,9 +195,7 @@ export default function MediaPlayer({ close }: Props) {
           <NavPanel view={view} onSelectView={setView} onOpenDialog={setDialog} />
           <div className="wmp-stage relative min-w-0 flex-1">
             {/* views mounted here in Task 5/6 */}
-            <div className="flex h-full items-center justify-center text-sm text-white/60">
-              {view}
-            </div>
+            <Visualizer accent={accent} />
           </div>
         </div>
 
