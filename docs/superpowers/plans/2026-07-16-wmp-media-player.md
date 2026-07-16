@@ -36,7 +36,7 @@ Reference spec: `docs/superpowers/specs/2026-07-16-wmp-media-player-design.md`.
 - `src/components/Windows/MediaPlayer/views/MediaGuide.tsx` — static "acerca de" page.
 - `src/components/Windows/MediaPlayer/views/Visualizations.tsx` — accent-color selector.
 - `public/static/music/` — local placeholder audio files.
-- `public/static/icons/wmp.png` — WMP icon (taskbar / start / desktop / titlebar).
+- `public/static/icons/wmp.svg` — WMP icon (taskbar / start / desktop / titlebar). SVG to match the repo's existing icon convention (`chrome.svg`, `github.svg`) and avoid binary tooling.
 
 **Modified:**
 - `src/lists/music.json` — new per-track schema, local placeholder URLs.
@@ -58,7 +58,7 @@ Establishes the data model, dev audio, the icon asset, and removes the dead `Moc
 **Files:**
 - Modify: `src/lists/music.json`
 - Create: `public/static/music/` (2 placeholder audio files)
-- Create: `public/static/icons/wmp.png`
+- Create: `public/static/icons/wmp.svg`
 - Delete: `src/components/Windows/Mochify.tsx`
 - Modify: `src/context/WindowsContext.tsx:51-59` (remove `Mochify` keys)
 
@@ -100,7 +100,22 @@ If `ffmpeg` is not available, drop any two short royalty-free `.mp3` clips with 
 
 - [ ] **Step 3: Add the WMP icon asset**
 
-Add `public/static/icons/wmp.png` — a small (≈32×32 or larger square) Windows Media Player XP icon. Any WMP-style PNG works; it is referenced as the bare URL `/static/icons/wmp.png`.
+Create `public/static/icons/wmp.svg` with this content — a WMP-style orb with a white play triangle (referenced as the bare URL `/static/icons/wmp.svg`):
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <radialGradient id="wmp-orb" cx="38%" cy="32%" r="75%">
+      <stop offset="0%" stop-color="#7fd0ff"/>
+      <stop offset="45%" stop-color="#2b8fe0"/>
+      <stop offset="100%" stop-color="#0b3f7a"/>
+    </radialGradient>
+  </defs>
+  <circle cx="24" cy="24" r="22" fill="url(#wmp-orb)" stroke="#eaf6ff" stroke-width="2"/>
+  <circle cx="24" cy="24" r="22" fill="none" stroke="#0a2c55" stroke-width="1" opacity="0.5"/>
+  <path d="M19 15 L34 24 L19 33 Z" fill="#ff8a1e" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/>
+</svg>
+```
 
 - [ ] **Step 4: Delete the orphaned Mochify component**
 
@@ -139,7 +154,7 @@ Run: `bun dev` and open the app. Expected: desktop loads normally; nothing visib
 - [ ] **Step 9: Commit**
 
 ```bash
-git add src/lists/music.json public/static/music public/static/icons/wmp.png src/context/WindowsContext.tsx
+git add src/lists/music.json public/static/music public/static/icons/wmp.svg src/context/WindowsContext.tsx
 git commit -m "chore(media-player): music schema, placeholder audio, wmp icon; remove Mochify
 
 Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
@@ -503,7 +518,7 @@ export const WINDOW_META: Record<string, WindowMeta> = {
   Proyectos: { icon: "/static/folderIcon.png", label: "Proyectos" },
   Sociales: { icon: "/static/icons/redes.webp", label: "Redes sociales" },
   Tecnologías: { icon: "/static/folderIcon.png", label: "Tecnologías" },
-  Reproductor: { icon: "/static/icons/wmp.png", label: "Reproductor multimedia" },
+  Reproductor: { icon: "/static/icons/wmp.svg", label: "Reproductor multimedia" },
 };
 ```
 
@@ -514,7 +529,7 @@ Insert into `DESKTOP_ICONS` (before the `amongus` easter-egg entry):
 ```ts
   {
     id: "Reproductor",
-    icon: "/static/icons/wmp.png",
+    icon: "/static/icons/wmp.svg",
     label: "Reproductor multimedia",
     kind: { type: "open-window", title: "Reproductor" },
     defaultCell: { col: 0, row: 4 },
