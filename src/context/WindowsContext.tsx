@@ -50,12 +50,10 @@ interface Props {
 export const WindowsProvider: FC<Props> = ({ children }) => {
   const [visibleItems, setVisibleItems] = useState<Flags>({
     Proyectos: false,
-    Mochify: true,
   });
   const [minimizedItems, setMinimizedItems] = useState<Flags>({
     Proyectos: false,
     "Mochi Draw": false,
-    Mochify: true,
   });
   // Stacking order, last entry is topmost.
   const [order, setOrder] = useState<string[]>([]);
