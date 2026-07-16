@@ -6,7 +6,9 @@ import useDragMove, { Pos } from "src/hooks/useDragMove";
 import useIsMobile from "src/hooks/useIsMobile";
 import useWindow from "src/hooks/useWindow";
 import { WINDOW_META } from "src/lists/windows";
+import Controls from "./Controls";
 import NavPanel from "./NavPanel";
+import useAudioPlayer from "./useAudioPlayer";
 
 export type View = "nowplaying" | "library" | "guide" | "visualizations";
 export type Dialog = "cd" | "radio" | null;
@@ -15,7 +17,6 @@ export const WMP_TITLE = "Reproductor";
 
 type Size = { width: number; height: number };
 
-const TASKBAR = 32;
 const RESIZE_ENABLE = {
   top: true, right: true, bottom: true, left: true,
   topRight: true, bottomRight: true, bottomLeft: true, topLeft: true,
@@ -43,6 +44,8 @@ export default function MediaPlayer({ close }: Props) {
 
   const [view, setView] = useState<View>("nowplaying");
   const [dialog, setDialog] = useState<Dialog>(null);
+
+  const player = useAudioPlayer();
 
   const spawn = useMemo<Pos>(() => {
     const i = spawnCounter++ % 6;
@@ -196,12 +199,7 @@ export default function MediaPlayer({ close }: Props) {
           </div>
         </div>
 
-        {/* bottom pod (static placeholder; wired in Task 3) */}
-        <div className="wmp-body shrink-0 px-4 pb-3 pt-1">
-          <div className="wmp-pod mx-auto flex max-w-md items-center justify-center gap-4 py-2">
-            <span className="text-xs text-white/90">controles</span>
-          </div>
-        </div>
+        <Controls player={player} />
 
         {/* dialog placeholder; XpDialog mounted in Task 6 */}
         {dialog && (
