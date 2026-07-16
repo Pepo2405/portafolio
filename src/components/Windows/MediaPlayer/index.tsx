@@ -9,7 +9,9 @@ import { WINDOW_META } from "src/lists/windows";
 import Controls from "./Controls";
 import NavPanel from "./NavPanel";
 import useAudioPlayer from "./useAudioPlayer";
-import Visualizer, { Accent } from "./Visualizer";
+import { Accent } from "./Visualizer";
+import Library from "./views/Library";
+import NowPlaying from "./views/NowPlaying";
 
 export type View = "nowplaying" | "library" | "guide" | "visualizations";
 export type Dialog = "cd" | "radio" | null;
@@ -194,8 +196,13 @@ export default function MediaPlayer({ close }: Props) {
         <div className="wmp-body flex min-h-0 flex-1">
           <NavPanel view={view} onSelectView={setView} onOpenDialog={setDialog} />
           <div className="wmp-stage relative min-w-0 flex-1">
-            {/* views mounted here in Task 5/6 */}
-            <Visualizer accent={accent} />
+            {view === "nowplaying" && <NowPlaying player={player} accent={accent} />}
+            {view === "library" && <Library player={player} />}
+            {(view === "guide" || view === "visualizations") && (
+              <div className="flex h-full items-center justify-center text-sm text-white/50">
+                {view}
+              </div>
+            )}
           </div>
         </div>
 
