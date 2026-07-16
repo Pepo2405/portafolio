@@ -50,6 +50,7 @@ interface Props {
 export const WindowsProvider: FC<Props> = ({ children }) => {
   const [visibleItems, setVisibleItems] = useState<Flags>({
     Proyectos: false,
+    Reproductor: false,
   });
   const [minimizedItems, setMinimizedItems] = useState<Flags>({
     Proyectos: false,

@@ -4,6 +4,7 @@ import DesktopIcon from "src/components/DesktopIcon";
 import DesktopContextMenu from "src/components/DesktopContextMenu";
 import FullScreenButton from "src/components/FullScreenButton";
 import TaskBar from "src/components/TaskBar";
+import MediaPlayer from "src/components/Windows/MediaPlayer";
 import WindowsContainer from "src/components/Windows/WindowsContainer";
 import useDesktopIcons from "src/hooks/useDesktopIcons";
 import useWindow from "src/hooks/useWindow";
@@ -11,7 +12,7 @@ import { DESKTOP_ICONS, DesktopIconDef } from "src/lists/desktopIcons";
 import { BG } from "src/images";
 
 export default function App() {
-  const { handleOpen } = useWindow();
+  const { handleOpen, visibleItems, handleClose } = useWindow();
   const containerRef = useRef<HTMLElement>(null);
   const desktop = useDesktopIcons(containerRef);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
@@ -91,6 +92,7 @@ export default function App() {
         </h2>
         <FullScreenButton />
         <WindowsContainer />
+        {visibleItems["Reproductor"] && <MediaPlayer close={handleClose} />}
       </main>
       <TaskBar />
       {menu && (

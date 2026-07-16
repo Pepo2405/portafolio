@@ -53,6 +53,13 @@ export const DESKTOP_ICONS: DesktopIconDef[] = [
     defaultCell: { col: 0, row: 3 },
   },
   {
+    id: "Reproductor",
+    icon: "/static/icons/wmp.svg",
+    label: "Reproductor multimedia",
+    kind: { type: "open-window", title: "Reproductor" },
+    defaultCell: { col: 0, row: 4 },
+  },
+  {
     id: "amongus",
     icon: "/static/icons/amogus.webp",
     label: "",

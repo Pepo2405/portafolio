@@ -6,4 +6,5 @@ export const WINDOW_META: Record<string, WindowMeta> = {
   Proyectos: { icon: "/static/folderIcon.png", label: "Proyectos" },
   Sociales: { icon: "/static/icons/redes.webp", label: "Redes sociales" },
   Tecnologías: { icon: "/static/folderIcon.png", label: "Tecnologías" },
+  Reproductor: { icon: "/static/icons/wmp.svg", label: "Reproductor multimedia" },
 };
