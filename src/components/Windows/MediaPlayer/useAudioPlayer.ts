@@ -91,12 +91,11 @@ export default function useAudioPlayer(): AudioPlayer {
   const playIndex = useCallback(
     (i: number) => {
       const clamped = ((i % TRACKS.length) + TRACKS.length) % TRACKS.length;
-      howlsRef.current.forEach((h, idx) => {
-        if (h && idx !== clamped) h.stop();
+      howlsRef.current.forEach((h) => {
+        if (h) h.stop();
       });
       const howl = getHowl(clamped);
       howl.volume(volumeRef.current);
-      howl.seek(0);
       howl.play();
       setCurrentIndex(clamped);
       setDuration(howl.state() === "loaded" ? howl.duration() : 0);
