@@ -1,5 +1,5 @@
 import { TbPlayerPause, TbPlayerPlay, TbPlayerSkipBack, TbPlayerSkipForward, TbPlayerStop, TbVolume } from "react-icons/tb";
-import { AudioPlayer } from "./useAudioPlayer";
+import type { AudioPlayer } from "./useAudioPlayer";
 
 function fmt(sec: number): string {
   if (!isFinite(sec) || sec < 0) sec = 0;

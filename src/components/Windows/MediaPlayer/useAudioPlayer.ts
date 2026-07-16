@@ -40,18 +40,19 @@ export default function useAudioPlayer(): AudioPlayer {
   const [duration, setDuration] = useState(0);
   const [volume, setVolumeState] = useState(INITIAL_VOLUME);
 
-  // Lazily build one Howl per track in Web Audio mode (needed for the analyser).
-  const getHowl = useCallback((i: number): Howl => {
-    let howl = howlsRef.current[i];
-    if (!howl) {
-      howl = new Howl({
-        src: [TRACKS[i].url],
-        html5: false,
-        volume: INITIAL_VOLUME,
-      });
-      howlsRef.current[i] = howl;
+  // Refs mirror state so Howl callbacks wired once at construction read live
+  // values instead of capturing stale ones.
+  const indexRef = useRef(currentIndex);
+  indexRef.current = currentIndex;
+  const volumeRef = useRef(volume);
+  volumeRef.current = volume;
+  const playIndexRef = useRef<(i: number) => void>(() => {});
+
+  const stopRaf = useCallback(() => {
+    if (rafRef.current != null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
     }
-    return howl;
   }, []);
 
   const startRaf = useCallback((howl: Howl) => {
@@ -63,82 +64,90 @@ export default function useAudioPlayer(): AudioPlayer {
     rafRef.current = requestAnimationFrame(tick);
   }, []);
 
-  const stopRaf = useCallback(() => {
-    if (rafRef.current != null) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
+  // Build one Howl per track (Web Audio mode, needed for the analyser tap).
+  // onload backfills duration (Howler loads async); onend autoplays the next
+  // track. Both read live state through refs.
+  const getHowl = useCallback((i: number): Howl => {
+    let howl = howlsRef.current[i];
+    if (!howl) {
+      howl = new Howl({
+        src: [TRACKS[i].url],
+        html5: false,
+        volume: volumeRef.current,
+        onload: () => {
+          if (i === indexRef.current) setDuration(howl.duration());
+        },
+        onend: () => {
+          setPlaying(false);
+          setPosition(0);
+          playIndexRef.current(i + 1);
+        },
+      });
+      howlsRef.current[i] = howl;
     }
+    return howl;
   }, []);
 
   const playIndex = useCallback(
     (i: number) => {
       const clamped = ((i % TRACKS.length) + TRACKS.length) % TRACKS.length;
-      // Stop everything currently sounding.
-      howlsRef.current.forEach((h) => h && h.stop());
-      const howl = getHowl(clamped);
-      howl.volume(volume);
-      howl.off("end");
-      howl.once("end", () => {
-        setPlaying(false);
-        setPosition(0);
-        playIndex(clamped + 1); // autoplay next
+      howlsRef.current.forEach((h, idx) => {
+        if (h && idx !== clamped) h.stop();
       });
+      const howl = getHowl(clamped);
+      howl.volume(volumeRef.current);
+      howl.seek(0);
       howl.play();
       setCurrentIndex(clamped);
-      setDuration(howl.duration());
+      setDuration(howl.state() === "loaded" ? howl.duration() : 0);
       setPlaying(true);
       startRaf(howl);
     },
-    [getHowl, startRaf, volume]
+    [getHowl, startRaf]
   );
+  playIndexRef.current = playIndex;
 
   const togglePlay = useCallback(() => {
-    const howl = getHowl(currentIndex);
-    if (playing) {
+    const howl = getHowl(indexRef.current);
+    if (howl.playing()) {
       howl.pause();
       setPlaying(false);
       stopRaf();
     } else {
-      howl.volume(volume);
-      if (!howl.playing()) {
-        // fresh play wires the end handler + duration
-        playIndex(currentIndex);
-        return;
-      }
+      // Resumes from the paused position, or plays from 0 after a stop.
+      howl.volume(volumeRef.current);
       howl.play();
+      if (howl.state() === "loaded") setDuration(howl.duration());
       setPlaying(true);
       startRaf(howl);
     }
-  }, [currentIndex, getHowl, playIndex, playing, startRaf, stopRaf, volume]);
+  }, [getHowl, startRaf, stopRaf]);
 
-  const next = useCallback(() => playIndex(currentIndex + 1), [currentIndex, playIndex]);
-  const prev = useCallback(() => playIndex(currentIndex - 1), [currentIndex, playIndex]);
+  const next = useCallback(() => playIndex(indexRef.current + 1), [playIndex]);
+  const prev = useCallback(() => playIndex(indexRef.current - 1), [playIndex]);
 
   const stop = useCallback(() => {
-    getHowl(currentIndex).stop();
+    getHowl(indexRef.current).stop();
     setPlaying(false);
     setPosition(0);
     stopRaf();
-  }, [currentIndex, getHowl, stopRaf]);
+  }, [getHowl, stopRaf]);
 
   const seek = useCallback(
     (sec: number) => {
-      getHowl(currentIndex).seek(sec);
+      getHowl(indexRef.current).seek(sec);
       setPosition(sec);
     },
-    [currentIndex, getHowl]
+    [getHowl]
   );
 
-  const setVolume = useCallback(
-    (v: number) => {
-      setVolumeState(v);
-      const howl = howlsRef.current[currentIndex];
-      if (howl) howl.volume(v);
-    },
-    [currentIndex]
-  );
+  const setVolume = useCallback((v: number) => {
+    setVolumeState(v);
+    const howl = howlsRef.current[indexRef.current];
+    if (howl) howl.volume(v);
+  }, []);
 
-  // Cleanup on unmount: stop raf and unload all howls.
+  // Cleanup on unmount: stop the rAF and unload all Howls.
   useEffect(() => {
     const howls = howlsRef.current;
     return () => {
