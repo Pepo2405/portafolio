@@ -1,12 +1,33 @@
 {
   "proyects": [
     {
+      "title": "Huésped+",
+      "type": "link",
+      "icon": "/static/icons/huesped-plus.svg",
+      "featured": true,
+      "badge": "En PXSOL",
+      "description": "El primer hotel agéntico con IA de Argentina: la PWA del huésped, personalizable por hotel.",
+      "details": [
+        "Cada hotel la publica con su propio dominio, su marca y su contenido: el mismo producto se ve distinto en cada propiedad, sin un deploy por cliente.",
+        "El huésped hace el check-in y el check-out desde el celular, pide room service, paga in-app y deja la encuesta post-estadía, sin instalar nada.",
+        "El concierge con IA responde 24/7 sobre el hotel —servicios, horarios, políticas, turismo local— y sobre la estadía concreta. Multilingüe, con guardrails anti-alucinación y derivación a recepción cuando no sabe.",
+        "En producción en hoteles reales de Argentina."
+      ],
+      "noDemoNote": "Huésped+ es un producto de PXSOL y no tiene demo pública. Si querés, escribime y te cuento cuál fue mi rol en el equipo.",
+      "stack": ["Next.js", "Fastify", "Prisma", "PostgreSQL", "LLM"]
+    },
+    {
       "title": "Gym Admin",
       "url": "https://gym-admin.com.ar",
       "type": "link",
       "icon": "/static/screenshots/gym-admin.webp",
       "featured": true,
       "description": "SaaS multi-tenant de gestión de gimnasios: clientes, membresías, caja y rutinas.",
+      "details": [
+        "Cada gimnasio entra con su propio dominio y ve solo sus datos: un solo deploy, muchos clientes.",
+        "Cubre el día a día del mostrador: alta de socios, cobros, membresías que vencen, caja y rutinas.",
+        "Es la base sobre la que se apoyan la app móvil y el control de acceso por huella."
+      ],
       "stack": ["Next.js", "Hono", "Prisma"]
     },
     {
@@ -14,7 +35,13 @@
       "type": "link",
       "icon": "/static/screenshots/gym-admin.webp",
       "featured": true,
-      "description": "App white-label del sistema: check-in, ventas y deudas desde mostrador.",
+      "badge": "Privado",
+      "description": "App white-label del sistema: check-in, ventas y deudas desde el mostrador del gimnasio.",
+      "details": [
+        "App white-label: cada gimnasio la publica con su propia marca e ícono.",
+        "Resuelve el check-in por DNI, la venta de pases y el cobro de deudas en el momento, sin PC.",
+        "Comparte los contratos de la API con el backend, así que un cambio de esquema rompe el build en vez de romper en producción."
+      ],
       "stack": ["Expo", "React Native", "TanStack Query"]
     },
     {
@@ -22,7 +49,13 @@
       "type": "link",
       "icon": "/static/icons/task.webp",
       "featured": true,
-      "description": "Control de acceso por huella con lectores ZKTeco, integrado a gym-admin por WebSocket.",
+      "badge": "Privado",
+      "description": "Control de acceso por huella con lectores ZKTeco, integrado a gym-admin en tiempo real.",
+      "details": [
+        "Servicio nativo en Rust + Tauri que habla directo con los lectores ZKTeco de la red local.",
+        "Empuja cada fichaje a gym-admin por WebSocket, así el mostrador lo ve al instante.",
+        "Si se corta la red, encola los eventos en disco y los reintenta cuando vuelve."
+      ],
       "stack": ["Tauri", "Rust", "React"]
     },
     {
@@ -30,7 +63,14 @@
       "type": "link",
       "icon": "/static/icons/ytPepo.png",
       "featured": true,
+      "badge": "Proyecto personal",
       "description": "App de streaming nativa con MPV, addons Stremio, torrents y debrid.",
+      "details": [
+        "App de escritorio hecha en Tauri + Rust para ver contenido por streaming.",
+        "Compatible con addons de Stremio, torrents y servicios debrid.",
+        "El playback lo hace MPV embebido: reproduce cualquier códec sin pelear con las limitaciones del navegador."
+      ],
+      "noDemoNote": "Es un proyecto personal y todavía no tiene demo pública. Si querés, te muestro cómo está hecho por dentro.",
       "stack": ["Tauri", "Rust", "Svelte", "MPV"]
     },
     {
@@ -40,6 +80,11 @@
       "icon": "/static/screenshots/slop.webp",
       "featured": true,
       "description": "Juego de doblaje colaborativo estilo Jackbox: host + celulares por código, sin instalar nada.",
+      "details": [
+        "Un host abre la partida en la compu y el resto se suma desde el celular con un código, sin instalar nada.",
+        "Cada ronda reparte un video y todos le ponen voz; después se vota el mejor doblaje.",
+        "Toda la sincronización en vivo va por WebSockets."
+      ],
       "stack": ["Bun", "React", "Tailwind"]
     },
     {
@@ -49,6 +94,11 @@
       "icon": "/static/screenshots/mecanica.webp",
       "featured": true,
       "description": "Landing de cliente real: mecánica a domicilio en Pilar, orientada a WhatsApp.",
+      "details": [
+        "Sitio de un mecánico a domicilio en Pilar: el objetivo del negocio es que lo escriban por WhatsApp.",
+        "Cada sección empuja a esa acción —los servicios, la zona de cobertura y la garantía están escritas para responder las dudas antes de que las pregunten.",
+        "En producción y generando consultas reales."
+      ],
       "stack": ["React", "Vite", "Tailwind"]
     },
     {
@@ -56,7 +106,13 @@
       "type": "link",
       "icon": "/static/icons/dollar.webp",
       "featured": true,
-      "description": "Scrapers de Día/VTEX y Mercado Libre sin navegador + front de seguimiento de precios.",
+      "badge": "Privado",
+      "description": "Seguimiento de precios con scrapers de Día/VTEX y Mercado Libre, sin navegador headless.",
+      "details": [
+        "Los scrapers pegan directo contra las APIs internas de Día/VTEX y Mercado Libre, sin abrir un navegador headless.",
+        "Guarda el histórico en SQLite para ver cómo evoluciona cada precio en el tiempo.",
+        "Un front en React muestra los productos que seguís y te avisa cuando se mueven."
+      ],
       "stack": ["Bun", "Hono", "SQLite", "React"]
     },
     {
@@ -65,7 +121,12 @@
       "type": "link",
       "icon": "/static/screenshots/bonitas.webp",
       "featured": true,
-      "description": "Sitio real de cliente en producción.",
+      "description": "Turnos online para un estudio de belleza en Garín: servicios, profesionales y seña.",
+      "details": [
+        "Los turnos se reservan 100% online: la clienta elige el servicio, suma varios al mismo turno, elige profesional, día y horario.",
+        "Cobra la seña en el momento de reservar y manda la confirmación al instante.",
+        "También resuelve el alquiler de equipos con requisitos y combos de insumos para profesionales."
+      ],
       "stack": ["React", "Vercel"]
     },
     {

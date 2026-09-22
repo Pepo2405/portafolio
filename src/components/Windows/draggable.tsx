@@ -5,12 +5,16 @@ import useDragMove, { Pos } from "src/hooks/useDragMove";
 import useIsMobile from "src/hooks/useIsMobile";
 import useWindow from "src/hooks/useWindow";
 import TitleBar from "./TitleBar";
-import { WINDOW_META } from "src/lists/windows";
+import { WINDOW_META, windowIcon } from "src/lists/windows";
 
 interface Props {
   children?: ReactNode;
   close: (e: { target: { title: string } }) => void;
   title?: string;
+  /** Override del ícono de la barra de título (para ventanas fuera de WINDOW_META). */
+  icon?: string;
+  /** Override del tamaño inicial. Si falta, se usa el de WINDOW_META o el default. */
+  defaultSize?: Size;
 }
 
 type Size = { width: number; height: number };
@@ -41,7 +45,20 @@ const RESIZE_DISABLED = {
 // Cascade successive windows so they never spawn perfectly stacked.
 let spawnCounter = 0;
 
-export default function DraggableWin({ children, close, title }: Props) {
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+export default function DraggableWin({
+  children,
+  close,
+  title,
+  icon,
+  defaultSize,
+}: Props) {
   const t = title ?? "Titulo";
   const isMobile = useIsMobile();
   const { focusWindow, zIndexOf, handleMinimize, focused } = useWindow();
@@ -49,7 +66,9 @@ export default function DraggableWin({ children, close, title }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
   const resizeOrigin = useRef<Pos>({ x: 0, y: 0 });
   const [full, setFull] = useState(false);
-  const [size, setSize] = useState<Size>({ width: 600, height: 430 });
+  const [size, setSize] = useState<Size>(
+    () => defaultSize ?? WINDOW_META[t]?.size ?? { width: 600, height: 430 }
+  );
 
   const spawn = useMemo<Pos>(() => {
     const i = spawnCounter++ % 6;
@@ -89,7 +108,7 @@ export default function DraggableWin({ children, close, title }: Props) {
 
   const requestClose = useCallback(() => {
     const node = rootRef.current;
-    if (!node) {
+    if (!node || prefersReducedMotion()) {
       close({ target: { title: t } });
       return;
     }
@@ -106,7 +125,7 @@ export default function DraggableWin({ children, close, title }: Props) {
   useEffect(() => {
     focusWindow(t);
     const node = rootRef.current;
-    if (node) {
+    if (node && !prefersReducedMotion()) {
       gsap.fromTo(
         node,
         { scale: 0.9, opacity: 0 },
@@ -171,7 +190,7 @@ export default function DraggableWin({ children, close, title }: Props) {
       >
         <TitleBar
           title={t}
-          icon={WINDOW_META[t]?.icon}
+          icon={icon ?? windowIcon(t)}
           active={active}
           dragging={dragging}
           draggable={!isFull}

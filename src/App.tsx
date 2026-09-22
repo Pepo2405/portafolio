@@ -1,8 +1,10 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Amongus from "src/components/Amongus";
 import DesktopIcon from "src/components/DesktopIcon";
 import DesktopContextMenu from "src/components/DesktopContextMenu";
+import DesktopHint from "src/components/DesktopHint";
 import FullScreenButton from "src/components/FullScreenButton";
+import ShutdownScreen from "src/components/ShutdownScreen";
 import TaskBar from "src/components/TaskBar";
 import MediaPlayer from "src/components/Windows/MediaPlayer";
 import WindowsContainer from "src/components/Windows/WindowsContainer";
@@ -11,13 +13,43 @@ import useWindow from "src/hooks/useWindow";
 import { DESKTOP_ICONS, DesktopIconDef } from "src/lists/desktopIcons";
 import { BG } from "src/images";
 
+const HINT_KEY = "xp-hint-seen@1";
+
+function readHintSeen(): boolean {
+  try {
+    return localStorage.getItem(HINT_KEY) === "1";
+  } catch {
+    return true;
+  }
+}
+
 export default function App() {
-  const { handleOpen, visibleItems, minimizedItems, handleClose } = useWindow();
+  const { handleOpen, visibleItems, minimizedItems, handleClose, closeAll } =
+    useWindow();
   const containerRef = useRef<HTMLElement>(null);
   const desktop = useDesktopIcons(containerRef);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
+  const [poweredOff, setPoweredOff] = useState(false);
+  const [hintSeen, setHintSeen] = useState(readHintSeen);
+
+  const dismissHint = useCallback(() => {
+    setHintSeen(true);
+    try {
+      localStorage.setItem(HINT_KEY, "1");
+    } catch {
+      // storage no disponible: el hint se vuelve a mostrar la próxima visita
+    }
+  }, []);
+
+  // Cerrar sesión: se cierra todo y el escritorio vuelve a su layout original.
+  const logOff = useCallback(() => {
+    closeAll();
+    desktop.resetLayout();
+    handleOpen({ target: { title: "Sobre mí" } });
+  }, [closeAll, desktop, handleOpen]);
 
   const activate = (def: DesktopIconDef) => {
+    dismissHint();
     switch (def.kind.type) {
       case "open-window":
         handleOpen({ target: { title: def.kind.title } });
@@ -29,6 +61,10 @@ export default function App() {
         break; // el easter-egg se maneja dentro de <Amongus/>
     }
   };
+
+  if (poweredOff) {
+    return <ShutdownScreen onWake={() => setPoweredOff(false)} />;
+  }
 
   return (
     <div
@@ -75,10 +111,10 @@ export default function App() {
             />
           );
         })}
+        {!hintSeen && <DesktopHint onDismiss={dismissHint} />}
       </section>
       <main>
-        <h2
-          unselectable="on"
+        <h1
           className="select-none 
              md:text-4xl shadowText 
              absolute top-1/2 left-1/2
@@ -89,7 +125,7 @@ export default function App() {
              "
         >
           Iglesias Ignacio
-        </h2>
+        </h1>
         <FullScreenButton />
         <WindowsContainer />
         {(visibleItems["Reproductor"] || minimizedItems["Reproductor"]) && (
@@ -99,7 +135,10 @@ export default function App() {
           />
         )}
       </main>
-      <TaskBar />
+      <TaskBar
+        onLogOff={logOff}
+        onShutdown={() => setPoweredOff(true)}
+      />
       {menu && (
         <DesktopContextMenu
           x={menu.x}

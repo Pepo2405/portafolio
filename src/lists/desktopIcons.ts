@@ -26,23 +26,23 @@ export const CELL_H = 100;
 export const DESKTOP_ICONS: DesktopIconDef[] = [
   {
     id: "cv",
-    icon: "/static/icons/chrome.svg",
+    icon: "/static/icons/cv.svg",
     label: "Curriculum",
-    kind: { type: "open-url", href: "/static/Cv Ignacio Iglesias.pdf" },
+    kind: { type: "open-window", title: "Curriculum" },
     defaultCell: { col: 0, row: 0 },
+  },
+  {
+    id: "Sobre mí",
+    icon: "/kirby.webp",
+    label: "Sobre mí",
+    kind: { type: "open-window", title: "Sobre mí" },
+    defaultCell: { col: 0, row: 1 },
   },
   {
     id: "Proyectos",
     icon: "/static/folderIcon.png",
     label: "Proyectos",
     kind: { type: "open-window", title: "Proyectos" },
-    defaultCell: { col: 0, row: 1 },
-  },
-  {
-    id: "Sociales",
-    icon: "/static/icons/redes.webp",
-    label: "Redes sociales",
-    kind: { type: "open-window", title: "Sociales" },
     defaultCell: { col: 0, row: 2 },
   },
   {
@@ -53,17 +53,31 @@ export const DESKTOP_ICONS: DesktopIconDef[] = [
     defaultCell: { col: 0, row: 3 },
   },
   {
+    id: "Sociales",
+    icon: "/static/icons/redes.webp",
+    label: "Redes sociales",
+    kind: { type: "open-window", title: "Sociales" },
+    defaultCell: { col: 0, row: 4 },
+  },
+  {
+    id: "Terminal",
+    icon: "/static/icons/terminal.svg",
+    label: "Terminal",
+    kind: { type: "open-window", title: "Terminal" },
+    defaultCell: { col: 0, row: 5 },
+  },
+  {
     id: "Reproductor",
     icon: "/static/icons/wmp.svg",
     label: "Reproductor multimedia",
     kind: { type: "open-window", title: "Reproductor" },
-    defaultCell: { col: 0, row: 4 },
+    defaultCell: { col: 0, row: 6 },
   },
   {
     id: "amongus",
     icon: "/static/icons/amogus.webp",
     label: "",
     kind: { type: "easter-egg" },
-    defaultCell: { col: 0, row: 5 },
+    defaultCell: { col: 0, row: 7 },
   },
 ];

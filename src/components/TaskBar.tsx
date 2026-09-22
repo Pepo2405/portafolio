@@ -3,9 +3,17 @@ import { xpLogoIcon } from "src/images";
 import list from "src/lists/taskList.json";
 import DateTime from "./dateTime";
 import useWindow from "src/hooks/useWindow";
-import { WINDOW_META } from "src/lists/windows";
+import useFocusTrap from "src/hooks/useFocusTrap";
+import { WINDOW_META, windowIcon, windowLabel } from "src/lists/windows";
 
-const TaskBar = () => {
+interface Props {
+  /** Cierra todas las ventanas y resetea el layout de íconos. */
+  onLogOff: () => void;
+  /** Muestra la pantalla de apagado. */
+  onShutdown: () => void;
+}
+
+const TaskBar = ({ onLogOff, onShutdown }: Props) => {
   const { items: Tasks } = list;
   const {
     visibleItems,
@@ -17,8 +25,9 @@ const TaskBar = () => {
   } = useWindow();
   const [startOpen, setStartOpen] = useState(false);
   const startRef = useRef<HTMLDivElement>(null);
-  const firstItemRef = useRef<HTMLButtonElement>(null);
   const startBtnRef = useRef<HTMLButtonElement>(null);
+
+  useFocusTrap(startRef, startOpen);
 
   // Cerrar el menú Inicio al clickear afuera o presionar Escape.
   useEffect(() => {
@@ -42,13 +51,10 @@ const TaskBar = () => {
     };
   }, [startOpen]);
 
-  // Al abrir el menú, enfocar el primer ítem.
-  useEffect(() => {
-    if (startOpen) firstItemRef.current?.focus();
-  }, [startOpen]);
-
-  // Una ventana aparece en la taskbar mientras siga abierta (a la vista o minimizada).
-  const openWindows = Object.keys(WINDOW_META).filter(
+  // Al abrir el menú, el foco entra al panel (lo maneja useFocusTrap).
+  // Las ventanas abiertas salen del contexto, no de WINDOW_META: así las fichas
+  // de proyecto también aparecen en la taskbar.
+  const openWindows = Object.keys(minimizedItems).filter(
     (title) => minimizedItems[title]
   );
 
@@ -104,11 +110,10 @@ const TaskBar = () => {
 
               <div className="flex">
                 <div className="flex w-1/2 flex-col bg-white py-2">
-                  {Object.entries(WINDOW_META).map(([title, meta], i) => (
+                  {Object.entries(WINDOW_META).map(([title, meta]) => (
                     <button
                       key={title}
                       type="button"
-                      ref={i === 0 ? firstItemRef : undefined}
                       onClick={() => {
                         handleOpen({ target: { title } });
                         setStartOpen(false);
@@ -119,16 +124,17 @@ const TaskBar = () => {
                       <span className="text-sm font-bold">{meta.label}</span>
                     </button>
                   ))}
-                  <a
-                    href="/static/Cv Ignacio Iglesias.pdf"
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => setStartOpen(false)}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleOpen({ target: { title: "Curriculum" } });
+                      setStartOpen(false);
+                    }}
                     className="xp-select flex items-center gap-3 px-3 py-2 text-left text-black"
                   >
-                    <img src="/static/icons/chrome.svg" alt="" width={24} height={24} />
+                    <img src="/static/icons/cv.svg" alt="" width={24} height={24} />
                     <span className="text-sm font-bold">Curriculum</span>
-                  </a>
+                  </button>
                 </div>
 
                 <div className="flex w-1/2 flex-col bg-luna-menuRight py-2">
@@ -151,14 +157,20 @@ const TaskBar = () => {
               <footer className="xp-startmenu-footer flex items-center justify-end gap-4 px-4 py-2 text-white">
                 <button
                   type="button"
-                  onClick={() => setStartOpen(false)}
+                  onClick={() => {
+                    setStartOpen(false);
+                    onLogOff();
+                  }}
                   className="flex items-center gap-2 text-sm font-semibold hover:brightness-110"
                 >
                   <span aria-hidden>🔑</span> Cerrar sesión
                 </button>
                 <button
                   type="button"
-                  onClick={() => setStartOpen(false)}
+                  onClick={() => {
+                    setStartOpen(false);
+                    onShutdown();
+                  }}
                   className="flex items-center gap-2 text-sm font-semibold hover:brightness-110"
                 >
                   <span aria-hidden>⏻</span> Apagar
@@ -171,6 +183,7 @@ const TaskBar = () => {
         <div className="flex h-full min-w-0 grow items-center gap-1 overflow-x-auto pl-2">
           {openWindows.map((title) => {
             const active = focused === title;
+            const icon = windowIcon(title);
             return (
               <button
                 type="button"
@@ -183,14 +196,10 @@ const TaskBar = () => {
                   active ? "bg-blue-800/70 shadow-inner" : "hover:bg-blue-600/60"
                 }`}
               >
-                <img
-                  alt=""
-                  width={18}
-                  height={18}
-                  src={WINDOW_META[title].icon}
-                  className="shrink-0"
-                />
-                <span className="hidden truncate md:block">{title}</span>
+                {icon && (
+                  <img alt="" width={18} height={18} src={icon} className="shrink-0" />
+                )}
+                <span className="hidden truncate md:block">{windowLabel(title)}</span>
               </button>
             );
           })}

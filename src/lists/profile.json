@@ -1,0 +1,45 @@
+{
+  "name": "Ignacio Iglesias",
+  "handle": "pepo2405",
+  "role": "Senior Full-Stack Engineer",
+  "tagline": "Web · Mobile · Desktop nativo · IA",
+  "location": "Garín, Buenos Aires · Argentina",
+  "bio": [
+    "Ingeniero full-stack senior con ownership end-to-end de productos: diseño de sistemas, arquitectura de datos, frontend, app mobile nativa, integración con hardware y deploy en producción.",
+    "Construí Huésped+, el primer hotel agéntico con IA de Argentina —la PWA del huésped con check-in digital, pagos in-app y un concierge LLM que responde sobre el hotel y sobre la propia estadía.",
+    "Amplitud poco común —React/Next.js, React Native/Expo, Rust/Tauri, backends en Node/Bun— con fuerte especialización en ingeniería asistida por IA: servidores MCP propios, agentes y LLMs en producción con guardrails."
+  ],
+  "stack": [
+    "TypeScript",
+    "React",
+    "Next.js",
+    "React Native",
+    "Expo",
+    "Rust",
+    "Tauri",
+    "Bun",
+    "Node.js",
+    "PostgreSQL",
+    "Prisma",
+    "Docker",
+    "MCP / LLMs"
+  ],
+  "current": "Huésped+ en producción con hoteles reales, y GymAdmin —mi SaaS para gimnasios en LATAM— de punta a punta.",
+  "links": [
+    {
+      "title": "Github",
+      "href": "https://github.com/pepo2405",
+      "icon": "/static/icons/github.svg"
+    },
+    {
+      "title": "Linkedin",
+      "href": "https://www.linkedin.com/in/ignacioniglesias2405/",
+      "icon": "/static/icons/linkedin.svg"
+    },
+    {
+      "title": "Correo",
+      "href": "https://mail.google.com/mail/?view=cm&fs=1&to=ignacioniglesias@gmail.com&su=Contacto",
+      "icon": "/static/icons/gmail.svg"
+    }
+  ]
+}

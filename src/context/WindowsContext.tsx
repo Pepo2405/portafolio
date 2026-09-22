@@ -21,6 +21,7 @@ export interface WindowsContextValue {
   handleOpen: (e: WinEvent) => void;
   handleMaximize: (e: WinEvent) => void;
   handleMinimize: (e: WinEvent) => void;
+  closeAll: () => void;
   focused: string | null;
   focusWindow: (title: string) => void;
   zIndexOf: (title: string) => number;
@@ -38,6 +39,7 @@ const WindowsContext = createContext<WindowsContextValue>({
   handleOpen: noop,
   handleMaximize: noop,
   handleMinimize: noop,
+  closeAll: noop,
   focused: null,
   focusWindow: noop,
   zIndexOf: () => Z_BASE,
@@ -48,13 +50,14 @@ interface Props {
 }
 
 export const WindowsProvider: FC<Props> = ({ children }) => {
+  // "Sobre mí" arranca abierto: un visitante nuevo ve contenido sin tener que
+  // descubrir que los íconos se abren con doble clic.
   const [visibleItems, setVisibleItems] = useState<Flags>({
-    Proyectos: false,
-    Reproductor: false,
+    "Sobre mí": true,
   });
+  // Ojo: acá "minimized" significa "está abierta" (vive en la taskbar), no minimizada.
   const [minimizedItems, setMinimizedItems] = useState<Flags>({
-    Proyectos: false,
-    "Mochi Draw": false,
+    "Sobre mí": true,
   });
   // Stacking order, last entry is topmost.
   const [order, setOrder] = useState<string[]>([]);
@@ -111,6 +114,14 @@ export const WindowsProvider: FC<Props> = ({ children }) => {
     [focusWindow]
   );
 
+  // "Cerrar sesión" y "Apagar" dejan el escritorio limpio.
+  const closeAll = useCallback(() => {
+    setVisibleItems({});
+    setMinimizedItems({});
+    setOrder([]);
+    setFocused(null);
+  }, []);
+
   const value = useMemo<WindowsContextValue>(
     () => ({
       visibleItems,
@@ -121,6 +132,7 @@ export const WindowsProvider: FC<Props> = ({ children }) => {
       handleOpen,
       handleMaximize,
       handleMinimize,
+      closeAll,
       focused,
       focusWindow,
       zIndexOf,
@@ -133,6 +145,7 @@ export const WindowsProvider: FC<Props> = ({ children }) => {
       handleOpen,
       handleMaximize,
       handleMinimize,
+      closeAll,
       focusWindow,
       zIndexOf,
     ]

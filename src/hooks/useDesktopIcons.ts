@@ -8,7 +8,7 @@ import {
 } from "react";
 import { Cell, CELL_H, CELL_W, DESKTOP_ICONS } from "src/lists/desktopIcons";
 
-const STORAGE_KEY = "xp-desktop-icons@1";
+const STORAGE_KEY = "xp-desktop-icons@2";
 const MOVE_THRESHOLD = 3;
 
 type Layout = Record<string, Cell>;
@@ -136,6 +136,53 @@ export default function useDesktopIcons(
     },
     [layout, bounds]
   );
+
+  // Reubica los íconos que quedaron fuera del área visible (pantalla chica,
+  // layout guardado en otro monitor) y resuelve superposiciones. Sin esto, los
+  // íconos pueden quedar inalcanzables fuera del viewport.
+  const normalize = useCallback(() => {
+    setLayout((prev) => {
+      const { maxCol, maxRow } = bounds();
+      const next: Layout = {};
+      const occupied = new Set<string>();
+      let changed = false;
+
+      for (const def of DESKTOP_ICONS) {
+        const want = prev[def.id] ?? def.defaultCell;
+        let cell = {
+          col: Math.min(Math.max(0, want.col), maxCol),
+          row: Math.min(Math.max(0, want.row), maxRow),
+        };
+
+        if (occupied.has(`${cell.col},${cell.row}`)) {
+          // Primer hueco libre, recorriendo por columna: así los íconos siguen
+          // bajando por la izquierda antes de saltar a la columna siguiente.
+          let found = false;
+          for (let col = 0; col <= maxCol && !found; col++) {
+            for (let row = 0; row <= maxRow && !found; row++) {
+              if (!occupied.has(`${col},${row}`)) {
+                cell = { col, row };
+                found = true;
+              }
+            }
+          }
+        }
+
+        occupied.add(`${cell.col},${cell.row}`);
+        if (cell.col !== want.col || cell.row !== want.row) changed = true;
+        next[def.id] = cell;
+      }
+
+      return changed ? next : prev;
+    });
+  }, [bounds]);
+
+  // Al montar y cada vez que cambia el tamaño de la ventana.
+  useEffect(() => {
+    normalize();
+    window.addEventListener("resize", normalize);
+    return () => window.removeEventListener("resize", normalize);
+  }, [normalize]);
 
   const dragHandlers = useCallback(
     (id: string) => ({
