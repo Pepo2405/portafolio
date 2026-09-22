@@ -4,18 +4,6 @@
       "title": "We Are The People",
       "artist": "Empire of the Sun",
       "url": "/static/music/we-are-the-people.mp3"
-    },
-    {
-      "title": "Tono de prueba A",
-      "artist": "Placeholder",
-      "album": "Dev",
-      "url": "/static/music/placeholder-a.mp3"
-    },
-    {
-      "title": "Tono de prueba B",
-      "artist": "Placeholder",
-      "album": "Dev",
-      "url": "/static/music/placeholder-b.mp3"
     }
   ]
 }

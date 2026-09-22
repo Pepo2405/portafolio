@@ -161,13 +161,24 @@ export default function useAudioPlayer(): AudioPlayer {
   }, []);
 
   // Cleanup on unmount: stop the rAF and unload all Howls.
+  // Hay que vaciar el cache además de descargar: si el reproductor se vuelve a
+  // montar (cerrar y reabrir la ventana), reusar un Howl descargado deja el
+  // audio muerto y la duración en cero.
   useEffect(() => {
     const howls = howlsRef.current;
     return () => {
       stopRaf();
       howls.forEach((h) => h && h.unload());
+      if (howlsRef.current === howls) howlsRef.current = [];
     };
   }, [stopRaf]);
+
+  // La duración solo se conoce cuando Howler terminó de decodificar el archivo.
+  // Cargamos la pista actual al abrir el reproductor para que la barra muestre
+  // el tiempo real sin obligar a apretar play.
+  useEffect(() => {
+    getHowl(indexRef.current);
+  }, [getHowl]);
 
   return {
     tracks: TRACKS,

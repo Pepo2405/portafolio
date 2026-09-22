@@ -2,7 +2,7 @@ import { TbPlayerPause, TbPlayerPlay, TbPlayerSkipBack, TbPlayerSkipForward, TbP
 import type { AudioPlayer } from "./useAudioPlayer";
 
 function fmt(sec: number): string {
-  if (!isFinite(sec) || sec < 0) sec = 0;
+  if (!isFinite(sec) || sec <= 0) return "--:--";
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
   return `${m}:${s.toString().padStart(2, "0")}`;
@@ -31,7 +31,7 @@ export default function Controls({ player }: Props) {
           aria-label="Progreso"
           style={{ background: `linear-gradient(90deg, #4a7fd0 ${pct}%, #223 ${pct}%)` }}
         />
-        <span className="tabular-nums">
+        <span className="tabular-nums" title={duration > 0 ? undefined : "Cargando duración…"}>
           {fmt(position)} / {fmt(duration)}
         </span>
       </div>
