@@ -1,38 +1,109 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Portafolio — Ignacio Iglesias
 
-## Getting Started
+Portafolio personal con forma de escritorio de Windows XP: íconos arrastrables,
+ventanas redimensionables, menú Inicio, reproductor multimedia y una terminal.
 
-First, run the development server:
+Hecho con **React 18 + TypeScript + Vite + Tailwind + GSAP**. El audio usa
+**Howler** y las ventanas **re-resizable**.
+
+## Levantarlo
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+bun install
+bun run dev      # http://localhost:5173
+bun run build    # tsc + vite build  -> dist/
+bun run preview  # sirve el build
+bun run lint     # eslint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Requiere Node 22 (ver `.nvmrc`).
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Cómo está organizado
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```
+src/
+  App.tsx                    Escritorio: íconos, hint, pantalla de apagado
+  lists/                     Datos del sitio (única fuente de verdad)
+    profile.json             Nombre, bio, stack y links de contacto
+    proyects.json            16 proyectos; los destacados tienen `details`
+    technologies.json        38 tecnologías con ícono y doc oficial
+    taskList.json            Redes del menú Inicio
+    windows.ts               Metadata de cada ventana (ícono, label, tamaño)
+    desktopIcons.ts          Íconos del escritorio y sus celdas por defecto
+    music.json               Playlist del reproductor
+  components/
+    Windows/                 Sistema de ventanas
+      draggable.tsx          Ventana genérica: drag, resize, snap, animaciones
+      WindowsContainer.tsx   Renderiza cada ventana + las fichas de proyecto
+      SobreMi.tsx            Ventana "Sobre mí"
+      Terminal.tsx           Ventana "Terminal" (comandos)
+      MediaPlayer/           Reproductor estilo Windows Media Player
+    TaskBar.tsx              Barra de tareas + menú Inicio
+    DesktopIcon.tsx          Ícono del escritorio
+    DesktopHint.tsx          Globo de ayuda de la primera visita
+    ShutdownScreen.tsx       Pantalla de "Apagar"
+  context/WindowsContext.tsx Estado global de ventanas (foco, z-index, visibilidad)
+  hooks/                     Drag, layout de íconos, media queries, focus trap
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Agregar o editar contenido
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Casi todo el contenido vive en `src/lists/` y no hace falta tocar componentes.
 
-## Learn More
+- **Proyecto nuevo**: sumá una entrada a `proyects.json`. Con `featured: true`
+  aparece como tarjeta; `details` son los bullets de su ficha; `badge` sirve
+  para marcar los que no tienen demo pública.
+- **Ventana nueva**: agregala a `WINDOW_META` (`src/lists/windows.ts`) con su
+  ícono y tamaño, sumá el ícono de escritorio en `desktopIcons.ts` y renderizala
+  en `WindowsContainer.tsx`.
+- **Tamaño de una ventana**: campo `size` en `WINDOW_META`. Si no está, usa
+  600x430.
+- **Bio y contacto**: `profile.json`. Lo comparten la ventana "Sobre mí", la
+  Terminal y la pantalla de apagado.
 
-To learn more about Next.js, take a look at the following resources:
+### La terminal
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Abre comandos útiles: `help`, `whoami`, `ls`, `open <proyecto>`, `stack`,
+`contact`, `cv`, `proyectos`, `clear`, `exit` y algún easter egg.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Notas de comportamiento
 
-## Deploy on Vercel
+- Las ventanas se abren con **doble clic** en el ícono (o **Enter** con teclado).
+- "Sobre mí" arranca abierta para que la primera visita vea contenido sin tener
+  que descubrir la interacción. El globo de ayuda se muestra una sola vez
+  (`localStorage`).
+- El layout de los íconos se persiste en `localStorage`
+  (`xp-desktop-icons@2`) y se reacomoda si la pantalla es chica. "Organizar
+  íconos" o "Cerrar sesión" lo resetean.
+- En mobile las ventanas van a pantalla completa y se oculta el drag/resize.
+- Se respeta `prefers-reduced-motion` en las animaciones y en el visualizador.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Actualizar el CV
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Los PDF no se editan acá: viven en el vault **Personal** de Bridges
+(`~/Documents/Vaults/Personal`) como Markdown, y de ahí salen los PDFs.
+
+1. Editá `CV - Ignacio Iglesias (ES).md` o `(EN).md` en el vault.
+2. Generá los PDFs con el script del vault:
+   ```bash
+   cd ~/Documents/Vaults/Personal
+   ./md2pdf.sh "CV - Ignacio Iglesias (ES).md" "CV - Ignacio Iglesias (EN).md"
+   ```
+3. Copiá el resultado a `public/static/`:
+   ```bash
+   cp "$HOME/Documents/Vaults/Personal/CV - Ignacio Iglesias (ES).pdf" \
+      public/static/"Cv Ignacio Iglesias.pdf"
+   cp "$HOME/Documents/Vaults/Personal/CV - Ignacio Iglesias (EN).pdf" \
+      public/static/"Cv Ignacio Iglesias (EN).pdf"
+   ```
+
+El ícono **Curriculum** del escritorio abre una ventana con las dos versiones.
+Si el CV cambia de nombre, actualizá `src/components/Windows/Curriculum.tsx`.
+
+El texto del sitio (rol, bio, stack, contacto) sale de `src/lists/profile.json`
+y debería seguir diciendo lo mismo que el CV.
+
+## Deploy
+
+El build es estático (`dist/`) y se sirve desde cualquier host estático
+(Vercel, Cloudflare Pages, etc.). No hay variables de entorno ni backend.
