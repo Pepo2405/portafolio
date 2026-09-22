@@ -12,7 +12,7 @@ import { DESKTOP_ICONS, DesktopIconDef } from "src/lists/desktopIcons";
 import { BG } from "src/images";
 
 export default function App() {
-  const { handleOpen, visibleItems, handleClose } = useWindow();
+  const { handleOpen, visibleItems, minimizedItems, handleClose } = useWindow();
   const containerRef = useRef<HTMLElement>(null);
   const desktop = useDesktopIcons(containerRef);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
@@ -92,7 +92,12 @@ export default function App() {
         </h2>
         <FullScreenButton />
         <WindowsContainer />
-        {visibleItems["Reproductor"] && <MediaPlayer close={handleClose} />}
+        {(visibleItems["Reproductor"] || minimizedItems["Reproductor"]) && (
+          <MediaPlayer
+            close={handleClose}
+            hidden={!visibleItems["Reproductor"]}
+          />
+        )}
       </main>
       <TaskBar />
       {menu && (

@@ -1,89 +1,131 @@
 import { Howler } from "howler";
 import { useEffect, useRef } from "react";
+import {
+  createVizState,
+  drawViz,
+  fillSynth,
+  fmt,
+  realLevels,
+  synthLevels,
+} from "./viz/engine";
+import type { Levels, VizId, VizState } from "./viz/engine";
 
-export type Accent = "blue" | "red" | "green";
-
-export const ACCENT_COLORS: Record<Accent, string> = {
-  blue: "#4a9bff",
-  red: "#ff5a5a",
-  green: "#4ade80",
-};
+export type { VizId };
+export { VIZ_LIST } from "./viz/engine";
 
 interface Props {
-  accent: Accent;
+  viz: VizId;
+  playing: boolean;
+  volume: number;
+  position: number;
+  duration: number;
 }
 
-export default function Visualizer({ accent }: Props) {
+interface Live {
+  viz: VizId;
+  playing: boolean;
+  volume: number;
+  position: number;
+  duration: number;
+}
+
+export default function Visualizer({
+  viz,
+  playing,
+  volume,
+  position,
+  duration,
+}: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const masterRef = useRef<GainNode | null>(null);
   const rafRef = useRef<number | null>(null);
-  const accentRef = useRef(accent);
-  accentRef.current = accent;
+  const liveRef = useRef<Live>({ viz, playing, volume, position, duration });
+  liveRef.current = { viz, playing, volume, position, duration };
+  const stateRef = useRef<VizState | null>(null);
+  if (!stateRef.current) stateRef.current = createVizState();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx2d = canvas.getContext("2d");
     if (!ctx2d) return;
+    const state = stateRef.current as VizState;
+    const reduced =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Size the canvas to its container.
+    // Backing store con DPR capado para nitidez sin costo extra.
     const resize = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
-      canvas.width = parent.clientWidth;
-      canvas.height = parent.clientHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = Math.max(1, parent.clientWidth);
+      const h = Math.max(1, parent.clientHeight);
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     const ro = new ResizeObserver(resize);
     if (canvas.parentElement) ro.observe(canvas.parentElement);
 
+    // Buffers de idle hasta que exista el contexto de audio.
+    let freq: Uint8Array = new Uint8Array(512);
+    let time: Uint8Array = new Uint8Array(1024);
+
     const draw = () => {
-      // Lazily create the analyser once the Web Audio context exists.
+      // Tap al master de Howler (solo lectura; sigue conectado a destino).
       if (!analyserRef.current) {
         const audioCtx = Howler.ctx as AudioContext | undefined;
-        const master = (Howler as unknown as { masterGain?: GainNode }).masterGain;
+        const master = (Howler as unknown as { masterGain?: GainNode })
+          .masterGain;
         if (audioCtx && master) {
           const analyser = audioCtx.createAnalyser();
-          analyser.fftSize = 256;
-          master.connect(analyser); // tap only; master stays connected to destination
+          analyser.fftSize = 1024;
+          analyser.smoothingTimeConstant = 0.78;
+          master.connect(analyser);
           analyserRef.current = analyser;
           masterRef.current = master;
+          freq = new Uint8Array(analyser.frequencyBinCount);
+          time = new Uint8Array(analyser.fftSize);
         }
       }
 
-      const w = canvas.width;
-      const h = canvas.height;
-      ctx2d.clearRect(0, 0, w, h);
-      ctx2d.fillStyle = "rgba(0,0,0,0.25)";
-      ctx2d.fillRect(0, 0, w, h);
+      const live = liveRef.current;
+      const parent = canvas.parentElement;
+      const W = parent ? Math.max(1, parent.clientWidth) : canvas.width;
+      const H = parent ? Math.max(1, parent.clientHeight) : canvas.height;
+      const t = performance.now() / 1000;
 
-      const color = ACCENT_COLORS[accentRef.current];
+      let lv: Levels;
       const analyser = analyserRef.current;
-
-      if (analyser) {
-        const data = new Uint8Array(analyser.frequencyBinCount);
-        analyser.getByteFrequencyData(data);
-        const cx = w / 2;
-        const cy = h / 2;
-        const bins = data.length;
-
-        // Radial starburst.
-        ctx2d.strokeStyle = color;
-        ctx2d.lineWidth = 2;
-        for (let i = 0; i < bins; i++) {
-          const amp = data[i] / 255;
-          const angle = (i / bins) * Math.PI * 2;
-          const r0 = 20;
-          const r1 = r0 + amp * Math.min(w, h) * 0.42;
-          ctx2d.globalAlpha = 0.35 + amp * 0.65;
-          ctx2d.beginPath();
-          ctx2d.moveTo(cx + Math.cos(angle) * r0, cy + Math.sin(angle) * r0);
-          ctx2d.lineTo(cx + Math.cos(angle) * r1, cy + Math.sin(angle) * r1);
-          ctx2d.stroke();
-        }
-        ctx2d.globalAlpha = 1;
+      if (analyser && live.playing) {
+        analyser.getByteFrequencyData(freq);
+        analyser.getByteTimeDomainData(time);
+        lv = realLevels(freq);
+      } else {
+        lv = synthLevels(reduced, t);
+        fillSynth(freq, time, reduced, t);
       }
+
+      drawViz(
+        {
+          g: ctx2d,
+          W,
+          H,
+          lv,
+          freq,
+          time,
+          t,
+          reduced,
+          volumePct: Math.round(live.volume * 100),
+          posText: fmt(live.position),
+          durText: fmt(live.duration),
+          state,
+        },
+        live.viz
+      );
 
       rafRef.current = requestAnimationFrame(draw);
     };

@@ -9,7 +9,13 @@ import { WINDOW_META } from "src/lists/windows";
 import Controls from "./Controls";
 import NavPanel from "./NavPanel";
 import useAudioPlayer from "./useAudioPlayer";
-import { Accent } from "./Visualizer";
+import { VIZ_KEY, readStored, writeStored } from "./storage";
+import { VIZ_LIST } from "./viz/engine";
+import type { VizId } from "./Visualizer";
+
+function parseViz(raw: string): VizId | null {
+  return VIZ_LIST.some((v) => v.id === raw) ? (raw as VizId) : null;
+}
 import XpDialog from "./XpDialog";
 import Library from "./views/Library";
 import MediaGuide from "./views/MediaGuide";
@@ -36,9 +42,10 @@ let spawnCounter = 0;
 
 interface Props {
   close: (e: { target: { title: string } }) => void;
+  hidden?: boolean;
 }
 
-export default function MediaPlayer({ close }: Props) {
+export default function MediaPlayer({ close, hidden }: Props) {
   const t = WMP_TITLE;
   const isMobile = useIsMobile();
   const { focusWindow, zIndexOf, handleMinimize, focused } = useWindow();
@@ -50,7 +57,14 @@ export default function MediaPlayer({ close }: Props) {
 
   const [view, setView] = useState<View>("nowplaying");
   const [dialog, setDialog] = useState<Dialog>(null);
-  const [accent, setAccent] = useState<Accent>("blue");
+  const [viz, setViz] = useState<VizId>(() =>
+    readStored(VIZ_KEY, "winamp", parseViz)
+  );
+
+  // Persiste el visualizador elegido para la próxima visita.
+  useEffect(() => {
+    writeStored(VIZ_KEY, viz);
+  }, [viz]);
 
   const player = useAudioPlayer();
 
@@ -113,8 +127,19 @@ export default function MediaPlayer({ close }: Props) {
       onPointerDown={() => focusWindow(t)}
       style={
         isFull
-          ? { position: "fixed", inset: 0, zIndex: z }
-          : { position: "fixed", left: pos.x, top: pos.y, zIndex: z }
+          ? {
+              position: "fixed",
+              inset: 0,
+              zIndex: z,
+              display: hidden ? "none" : undefined,
+            }
+          : {
+              position: "fixed",
+              left: pos.x,
+              top: pos.y,
+              zIndex: z,
+              display: hidden ? "none" : undefined,
+            }
       }
       className={isFull ? "" : `rounded-t-[8px] ${active ? "shadow-2xl" : "shadow-lg"}`}
     >
@@ -199,11 +224,11 @@ export default function MediaPlayer({ close }: Props) {
         <div className="wmp-body flex min-h-0 flex-1">
           <NavPanel view={view} onSelectView={setView} onOpenDialog={setDialog} />
           <div className="wmp-stage relative min-w-0 flex-1">
-            {view === "nowplaying" && <NowPlaying player={player} accent={accent} />}
+            {view === "nowplaying" && <NowPlaying player={player} viz={viz} />}
             {view === "library" && <Library player={player} />}
             {view === "guide" && <MediaGuide />}
             {view === "visualizations" && (
-              <Visualizations accent={accent} onAccentChange={setAccent} />
+              <Visualizations viz={viz} onVizChange={setViz} />
             )}
           </div>
         </div>

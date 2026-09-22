@@ -1,6 +1,7 @@
 import { Howl } from "howler";
 import { useCallback, useEffect, useRef, useState } from "react";
 import songList from "src/lists/music.json";
+import { VOLUME_KEY, readStored, writeStored } from "./storage";
 
 export interface Track {
   title: string;
@@ -30,6 +31,12 @@ export interface AudioPlayer {
 const TRACKS = songList.songs as Track[];
 const INITIAL_VOLUME = 0.5;
 
+function parseVolume(raw: string): number | null {
+  const v = Number(raw);
+  if (!isFinite(v) || v < 0 || v > 1) return null;
+  return v;
+}
+
 export default function useAudioPlayer(): AudioPlayer {
   const howlsRef = useRef<Howl[]>([]);
   const rafRef = useRef<number | null>(null);
@@ -38,7 +45,14 @@ export default function useAudioPlayer(): AudioPlayer {
   const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolumeState] = useState(INITIAL_VOLUME);
+  const [volume, setVolumeState] = useState(() =>
+    readStored(VOLUME_KEY, INITIAL_VOLUME, parseVolume)
+  );
+
+  // Persiste el volumen para la próxima visita.
+  useEffect(() => {
+    writeStored(VOLUME_KEY, String(volume));
+  }, [volume]);
 
   // Refs mirror state so Howl callbacks wired once at construction read live
   // values instead of capturing stale ones.
