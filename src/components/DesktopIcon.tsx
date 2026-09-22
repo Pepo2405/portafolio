@@ -41,6 +41,14 @@ const DesktopIcon = ({
         e.stopPropagation();
         onOpen();
       }}
+      onKeyDown={(e) => {
+        // En el escritorio se abre con doble clic; con teclado, Enter alcanza.
+        if (e.key === "Enter") {
+          e.stopPropagation();
+          onOpen();
+        }
+      }}
+      aria-label={label || "Ícono del escritorio"}
       aria-pressed={selected}
       className={`xp-icon flex w-24 flex-col items-center gap-1 rounded-sm p-2 text-center ${
         selected ? "xp-icon-selected" : ""

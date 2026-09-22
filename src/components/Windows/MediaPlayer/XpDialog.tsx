@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 interface Props {
   title: string;
   message: string;
@@ -5,9 +7,29 @@ interface Props {
 }
 
 export default function XpDialog({ title, message, onClose }: Props) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Escape cierra el diálogo, como en Windows de verdad.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
+  }, [onClose]);
+
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40">
-      <div className="w-72 overflow-hidden rounded-t-[6px] border border-luna-frame bg-white text-black shadow-2xl">
+      <div
+        ref={dialogRef}
+        role="alertdialog"
+        aria-modal="true"
+        aria-label={title}
+        className="w-72 overflow-hidden rounded-t-[6px] border border-luna-frame bg-white text-black shadow-2xl"
+      >
         <div className="xp-titlebar flex h-7 items-center px-2 text-sm font-bold text-white [text-shadow:1px_1px_1px_rgba(0,0,0,0.4)]">
           {title}
         </div>
@@ -17,7 +39,7 @@ export default function XpDialog({ title, message, onClose }: Props) {
             type="button"
             autoFocus
             onClick={onClose}
-            className="min-w-[72px] rounded-sm border border-slate-400 bg-slate-100 px-3 py-1 text-sm hover:bg-slate-200"
+            className="min-w-[72px] rounded-sm border border-slate-400 bg-slate-100 px-3 py-1 text-sm hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-luna-selection"
           >
             Aceptar
           </button>

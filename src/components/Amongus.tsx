@@ -38,6 +38,7 @@ const Amongus = ({ style, dragging, handlers, onSelect }: AmongusProps) => {
       type="button"
       style={style}
       {...handlers}
+      aria-label="Amogus (easter egg): clic para lastimarlo"
       onClick={(e) => {
         e.stopPropagation();
         handleClick();

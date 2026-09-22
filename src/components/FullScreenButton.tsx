@@ -1,24 +1,32 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BsFullscreen, BsFullscreenExit } from 'react-icons/bs'
 
-type Props = {}
-
-const FullScreenButton = (props: Props) => {
+const FullScreenButton = () => {
   const [fullScreen, setFullScreen] = useState(false)
 
+  // Mantiene el ícono en sync cuando se sale con Escape o F11.
+  useEffect(() => {
+    const onChange = () => setFullScreen(Boolean(document.fullscreenElement))
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+
   const handleFull = () => {
-    if (!fullScreen) {
-      setFullScreen(true)
-      document.body.requestFullscreen()
+    if (!document.fullscreenElement) {
+      document.body.requestFullscreen().catch((error) => console.error(error))
     } else {
-      document.exitFullscreen()
-        .then(() => setFullScreen(false))
-        .catch((error) => console.error(error))
+      document.exitFullscreen().catch((error) => console.error(error))
     }
   }
 
   return (
-    <button className='absolute  select-none hover:-translate-y-1 transition-all duration-300 top-7 right-2 text-2xl md:text-4xl md:right-12 shadowText' onClick={handleFull}>
+    <button
+      type="button"
+      aria-label={fullScreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
+      title={fullScreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
+      className='absolute select-none hover:-translate-y-1 transition-all duration-300 top-7 right-2 text-2xl md:text-4xl md:right-12 shadowText focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
+      onClick={handleFull}
+    >
       {!fullScreen ? <BsFullscreen /> : <BsFullscreenExit />}
     </button>
   )
