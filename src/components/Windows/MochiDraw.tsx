@@ -1,8 +1,6 @@
 import React from 'react'
 
-type Props = any
-
-const MochiDraw = (props: Props) => {
+const MochiDraw = () => {
   return (
     <div>MochiDraw</div>
   )

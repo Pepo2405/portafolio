@@ -12,14 +12,11 @@
     "lint": "eslint . --ext ts,tsx"
   },
   "dependencies": {
-    "dayjs": "^1.11.10",
     "gsap": "^3.12.2",
     "howler": "^2.2.3",
     "re-resizable": "^6.9.9",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-draggable": "^4.4.5",
-    "react-frame-component": "^5.2.6",
     "react-icons": "^4.8.0"
   },
   "devDependencies": {
