@@ -41,7 +41,7 @@ const WindowsContainer = () => {
                 <SectionLabel>★ Destacados</SectionLabel>
                 <div className="mb-3 grid grid-cols-1 gap-2 md:grid-cols-2">
                   {featured.map((el) => (
-                    <FeaturedCard {...el} key={el.url} />
+                    <FeaturedCard {...el} key={el.url ?? el.title} />
                   ))}
                 </div>
               </>
@@ -49,7 +49,7 @@ const WindowsContainer = () => {
             <SectionLabel>Más proyectos</SectionLabel>
             <div className="folderIcons">
               {rest.map((el) => (
-                <ProjectItem {...el} key={el.url} />
+                <ProjectItem {...el} key={el.url ?? el.title} />
               ))}
             </div>
           </main>

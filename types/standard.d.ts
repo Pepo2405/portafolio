@@ -13,7 +13,7 @@ interface LinkDrag {
 
 interface Project {
   title: string;
-  url: string;
+  url?: string;
   type?: string;
   icon: string;
   featured?: boolean;

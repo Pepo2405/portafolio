@@ -6,8 +6,58 @@
       "type": "link",
       "icon": "/static/screenshots/gym-admin.webp",
       "featured": true,
-      "description": "SaaS de gestión de gimnasios con app móvil y lector de huella.",
-      "stack": ["Next.js", "Node", "Prisma"]
+      "description": "SaaS multi-tenant de gestión de gimnasios: clientes, membresías, caja y rutinas.",
+      "stack": ["Next.js", "Hono", "Prisma"]
+    },
+    {
+      "title": "Gym App Móvil",
+      "type": "link",
+      "icon": "/static/screenshots/gym-admin.webp",
+      "featured": true,
+      "description": "App white-label del sistema: check-in, ventas y deudas desde mostrador.",
+      "stack": ["Expo", "React Native", "TanStack Query"]
+    },
+    {
+      "title": "Lector de Huellas",
+      "type": "link",
+      "icon": "/static/icons/task.webp",
+      "featured": true,
+      "description": "Control de acceso por huella con lectores ZKTeco, integrado a gym-admin por WebSocket.",
+      "stack": ["Tauri", "Rust", "React"]
+    },
+    {
+      "title": "Goblin",
+      "type": "link",
+      "icon": "/static/icons/ytPepo.png",
+      "featured": true,
+      "description": "App de streaming nativa con MPV, addons Stremio, torrents y debrid.",
+      "stack": ["Tauri", "Rust", "Svelte", "MPV"]
+    },
+    {
+      "title": "Slop Together",
+      "url": "https://slop.pepo.ar/",
+      "type": "link",
+      "icon": "/static/screenshots/slop.webp",
+      "featured": true,
+      "description": "Juego de doblaje colaborativo estilo Jackbox: host + celulares por código, sin instalar nada.",
+      "stack": ["Bun", "React", "Tailwind"]
+    },
+    {
+      "title": "Mecánica Torres",
+      "url": "https://www.mecanicatorres.com.ar/",
+      "type": "link",
+      "icon": "/static/screenshots/mecanica.webp",
+      "featured": true,
+      "description": "Landing de cliente real: mecánica a domicilio en Pilar, orientada a WhatsApp.",
+      "stack": ["React", "Vite", "Tailwind"]
+    },
+    {
+      "title": "Scrappers de precios",
+      "type": "link",
+      "icon": "/static/icons/dollar.webp",
+      "featured": true,
+      "description": "Scrapers de Día/VTEX y Mercado Libre sin navegador + front de seguimiento de precios.",
+      "stack": ["Bun", "Hono", "SQLite", "React"]
     },
     {
       "title": "Bonitas Ayelen",
