@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dbe3ee"/>
+    </linearGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8564a"/>
+      <stop offset="1" stop-color="#b81f18"/>
+    </linearGradient>
+  </defs>
+  <path d="M9 3h20l10 10v32a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+        fill="url(#page)" stroke="#64748b" stroke-width="1.5"/>
+  <path d="M29 3l10 10h-8a2 2 0 0 1-2-2V3z" fill="#b9c4d4" stroke="#64748b" stroke-width="1.5"/>
+  <rect x="13" y="19" width="22" height="2.4" rx="1.2" fill="#94a3b8"/>
+  <rect x="13" y="25" width="22" height="2.4" rx="1.2" fill="#94a3b8"/>
+  <rect x="13" y="31" width="14" height="2.4" rx="1.2" fill="#94a3b8"/>
+  <rect x="7" y="33" width="23" height="11" rx="2" fill="url(#band)" stroke="#8f1710" stroke-width="1"/>
+  <text x="18.5" y="41.4" font-family="Arial, Helvetica, sans-serif" font-size="7.4"
+        font-weight="bold" fill="#fff" text-anchor="middle">PDF</text>
+</svg>
