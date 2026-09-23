@@ -1,6 +1,7 @@
 import { CSSProperties, PointerEvent as ReactPointerEvent, useState } from "react";
 import { Howl } from "howler";
 import { AmogusIcon, DeadIcon } from "src/images";
+import { useT } from "src/i18n";
 
 type DragHandlers = {
   onPointerDown: (e: ReactPointerEvent) => void;
@@ -17,6 +18,7 @@ type AmongusProps = {
 };
 
 const Amongus = ({ style, dragging, handlers, onSelect }: AmongusProps) => {
+  const t = useT();
   const [dead, setDead] = useState(false);
   const [clickCount, setCount] = useState(0);
 
@@ -24,7 +26,7 @@ const Amongus = ({ style, dragging, handlers, onSelect }: AmongusProps) => {
     onSelect();
     setCount((prev) => prev + 1);
     setDead(true);
-    if (clickCount > 9) return alert("Para emocion ya lo hiciste pelota");
+    if (clickCount > 9) return alert(t("amongus.alert"));
     const sound = new Howl({
       src: ["/static/sounds/killSoundEffect.mp3"],
       html5: true,
@@ -38,7 +40,7 @@ const Amongus = ({ style, dragging, handlers, onSelect }: AmongusProps) => {
       type="button"
       style={style}
       {...handlers}
-      aria-label="Amogus (easter egg): clic para lastimarlo"
+      aria-label={t("amongus.label")}
       onClick={(e) => {
         e.stopPropagation();
         handleClick();

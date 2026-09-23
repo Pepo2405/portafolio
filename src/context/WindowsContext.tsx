@@ -47,18 +47,29 @@ const WindowsContext = createContext<WindowsContextValue>({
 
 interface Props {
   children: ReactNode;
+  /** Ventanas abiertas al arrancar (vienen de la URL). Default: ["Sobre mí"]. */
+  initialWindows?: string[];
 }
 
-export const WindowsProvider: FC<Props> = ({ children }) => {
-  // "Sobre mí" arranca abierto: un visitante nuevo ve contenido sin tener que
-  // descubrir que los íconos se abren con doble clic.
-  const [visibleItems, setVisibleItems] = useState<Flags>({
-    "Sobre mí": true,
-  });
+function flagsFor(titles: string[]): Flags {
+  const flags: Flags = {};
+  for (const title of titles) flags[title] = true;
+  return flags;
+}
+
+export const WindowsProvider: FC<Props> = ({
+  children,
+  initialWindows = ["Sobre mí"],
+}) => {
+  // El seed viene de la URL: /proyectos/<slug>/ arranca con "Proyectos" + la
+  // ficha abierta; el resto del comportamiento no cambia.
+  const [visibleItems, setVisibleItems] = useState<Flags>(() =>
+    flagsFor(initialWindows)
+  );
   // Ojo: acá "minimized" significa "está abierta" (vive en la taskbar), no minimizada.
-  const [minimizedItems, setMinimizedItems] = useState<Flags>({
-    "Sobre mí": true,
-  });
+  const [minimizedItems, setMinimizedItems] = useState<Flags>(() =>
+    flagsFor(initialWindows)
+  );
   // Stacking order, last entry is topmost.
   const [order, setOrder] = useState<string[]>([]);
   const [focused, setFocused] = useState<string | null>(null);

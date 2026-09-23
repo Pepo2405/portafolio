@@ -1,19 +1,19 @@
 {
   "items": [
     {
-      "title": "Github",
+      "title": { "es": "Github", "en": "Github" },
       "href": "https://github.com/pepo2405",
       "icon": "/static/icons/github.svg",
       "target": "_blank"
     },
     {
-      "title": "Linkedin",
+      "title": { "es": "Linkedin", "en": "Linkedin" },
       "href": "https://www.linkedin.com/in/ignacioniglesias2405/",
       "icon": "/static/icons/linkedin.svg",
       "target": "_blank"
     },
     {
-      "title": "Correo",
+      "title": { "es": "Correo", "en": "Email" },
       "href": "https://mail.google.com/mail/?view=cm&fs=1&to=ignacioniglesias@gmail.com&su=Contacto",
       "icon": "/static/icons/gmail.svg",
       "target": "_blank"

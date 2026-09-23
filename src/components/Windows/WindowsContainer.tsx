@@ -1,4 +1,5 @@
 import useWindows from "src/hooks/useWindow";
+import { fmt, useT } from "src/i18n";
 import data from "src/lists/proyects.json";
 import socials from "src/lists/taskList.json";
 import techsJson from "src/lists/technologies.json";
@@ -24,6 +25,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 const WindowsContainer = () => {
+  const t = useT();
   const proyects = data.proyects as Project[];
   const featured = proyects.filter((p) => p.featured);
   const rest = proyects.filter((p) => !p.featured);
@@ -49,7 +51,7 @@ const WindowsContainer = () => {
           <main className="h-full overflow-y-auto px-4 py-4 text-black">
             {featured.length > 0 && (
               <>
-                <SectionLabel>★ Destacados</SectionLabel>
+                <SectionLabel>{t("projects.featured")}</SectionLabel>
                 <div className="mb-3 grid grid-cols-1 gap-2 md:grid-cols-2">
                   {featured.map((el) => (
                     <FeaturedCard
@@ -63,7 +65,7 @@ const WindowsContainer = () => {
                 </div>
               </>
             )}
-            <SectionLabel>Más proyectos</SectionLabel>
+            <SectionLabel>{t("projects.more")}</SectionLabel>
             <div className="folderIcons">
               {rest.map((el) => (
                 <ProjectItem
@@ -84,8 +86,8 @@ const WindowsContainer = () => {
             <div className="folderIcons" style={{ columnGap: "2rem" }}>
               {socials.items.map((el) => (
                 <ProjectItem
-                  key={el.title}
-                  title={el.title}
+                  key={t(el.title)}
+                  title={t(el.title)}
                   icon={el.icon}
                   href={el.href}
                 />
@@ -178,6 +180,7 @@ const FeaturedCard = ({
   badge,
   onOpen,
 }: Project & { onOpen: () => void }) => {
+  const t = useT();
   return (
     <button
       type="button"
@@ -189,16 +192,16 @@ const FeaturedCard = ({
         style={{ backgroundImage: `url(${icon})` }}
       ></div>
       <div className="min-w-0">
-        <h4 className="flex items-center gap-1.5 text-sm font-semibold text-black">
+        <h2 className="flex items-center gap-1.5 text-sm font-semibold text-black">
           <span className="truncate">{title}</span>
           {badge && (
             <span className="flex-none rounded-full border border-slate-300 bg-white px-1.5 py-px text-[9px] font-bold uppercase tracking-wide text-slate-500">
-              {badge}
+              {t(badge)}
             </span>
           )}
-        </h4>
+        </h2>
         {description && (
-          <p className="text-xs text-slate-600">{description}</p>
+          <p className="text-xs text-slate-600">{t(description)}</p>
         )}
         {stack && (
           <div className="mt-1 flex flex-wrap gap-1">
@@ -213,7 +216,7 @@ const FeaturedCard = ({
           </div>
         )}
         <span className="mt-1 inline-block text-[10px] font-semibold text-luna-selection">
-          Ver ficha{url ? " y sitio ↗" : ""}
+          {url ? t("projects.seeDetailsSite") : t("projects.seeDetails")}
         </span>
       </div>
     </button>
@@ -221,13 +224,17 @@ const FeaturedCard = ({
 };
 
 const ProjectDetail = ({ project }: { project: Project }) => {
+  const t = useT();
   const { title, icon, description, details, stack, url, badge, noDemoNote } =
     project;
 
   // Default neutro: no promete detalles internos de productos que no son míos.
-  const sinDemo =
-    noDemoNote ??
-    "No hay demo pública de este proyecto. Si querés, escribime y te cuento cuál fue mi parte.";
+  const sinDemo = t(
+    noDemoNote ?? {
+      es: "No hay demo pública de este proyecto. Si querés, escribime y te cuento cuál fue mi parte.",
+      en: "There's no public demo for this project. Drop me a line and I'll tell you what I did.",
+    }
+  );
 
   return (
     <main className="h-full overflow-y-auto bg-white px-5 py-4 text-black">
@@ -236,19 +243,19 @@ const ProjectDetail = ({ project }: { project: Project }) => {
           className="h-20 w-28 flex-none rounded border border-slate-300 bg-slate-100 bg-cover bg-center"
           style={{ backgroundImage: `url(${icon})` }}
           role="img"
-          aria-label={`Captura de ${title}`}
+          aria-label={fmt(t("projects.screenshot"), { title })}
         ></div>
         <div className="min-w-0">
           <h2 className="flex flex-wrap items-center gap-2 text-lg font-bold leading-tight">
             {title}
             {badge && (
               <span className="rounded-full border border-slate-300 bg-slate-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-500">
-                {badge}
+                {t(badge)}
               </span>
             )}
           </h2>
           {description && (
-            <p className="mt-1 text-sm text-slate-600">{description}</p>
+            <p className="mt-1 text-sm text-slate-600">{t(description)}</p>
           )}
         </div>
       </div>
@@ -256,11 +263,11 @@ const ProjectDetail = ({ project }: { project: Project }) => {
       {details && details.length > 0 && (
         <ul className="mt-4 space-y-2 border-t border-slate-200 pt-3">
           {details.map((item) => (
-            <li key={item} className="flex gap-2 text-sm leading-relaxed text-slate-700">
+            <li key={t(item)} className="flex gap-2 text-sm leading-relaxed text-slate-700">
               <span aria-hidden className="text-luna-selection">
                 ▸
               </span>
-              <span>{item}</span>
+              <span>{t(item)}</span>
             </li>
           ))}
         </ul>
@@ -269,7 +276,7 @@ const ProjectDetail = ({ project }: { project: Project }) => {
       {stack && stack.length > 0 && (
         <div className="mt-4 border-t border-slate-200 pt-3">
           <div className="mb-1 text-[11px] font-bold uppercase tracking-wide text-window-brand">
-            Stack
+            {t("projects.stack")}
           </div>
           <div className="flex flex-wrap gap-1">
             {stack.map((tech) => (
@@ -292,7 +299,7 @@ const ProjectDetail = ({ project }: { project: Project }) => {
             rel="noreferrer"
             className="inline-block rounded border border-slate-400 bg-gradient-to-b from-white to-slate-200 px-3 py-1 text-sm font-semibold hover:brightness-105"
           >
-            Abrir sitio ↗
+            {t("projects.openSite")}
           </a>
         ) : (
           <p className="rounded border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">

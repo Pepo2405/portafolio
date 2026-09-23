@@ -7,9 +7,12 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && bun run prerender",
+    "prerender": "bun scripts/prerender.tsx",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx"
+    "lint": "eslint . --ext ts,tsx",
+    "test": "bun test",
+    "og-cover": "bun scripts/og-cover.ts"
   },
   "dependencies": {
     "gsap": "^3.12.2",
@@ -20,6 +23,7 @@
     "react-icons": "^4.8.0"
   },
   "devDependencies": {
+    "@types/bun": "^1.4.2",
     "@types/howler": "^2.2.7",
     "@types/node": "18.15.11",
     "@types/react": "18.0.37",
@@ -31,6 +35,7 @@
     "eslint": "8.38.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "postcss": "8.4.22",
+    "sharp": "^0.35.4",
     "tailwindcss": "3.3.1",
     "typescript": "5.0.4",
     "vite": "^5.4.10",

@@ -45,6 +45,11 @@ const RESIZE_DISABLED = {
 // Cascade successive windows so they never spawn perfectly stacked.
 let spawnCounter = 0;
 
+// Reinicia el contador entre páginas al prerenderizar (un solo proceso).
+export function resetWindowSpawn(): void {
+  spawnCounter = 0;
+}
+
 function prefersReducedMotion(): boolean {
   return (
     typeof window !== "undefined" &&

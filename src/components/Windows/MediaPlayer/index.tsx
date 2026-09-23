@@ -5,6 +5,7 @@ import { TbCopy, TbMinus, TbSquare, TbX } from "react-icons/tb";
 import useDragMove, { Pos } from "src/hooks/useDragMove";
 import useIsMobile from "src/hooks/useIsMobile";
 import useWindow from "src/hooks/useWindow";
+import { useT } from "src/i18n";
 import { WINDOW_META } from "src/lists/windows";
 import Controls from "./Controls";
 import NavPanel from "./NavPanel";
@@ -47,6 +48,7 @@ interface Props {
 
 export default function MediaPlayer({ close, hidden }: Props) {
   const t = WMP_TITLE;
+  const tr = useT();
   const isMobile = useIsMobile();
   const { focusWindow, zIndexOf, handleMinimize, focused } = useWindow();
 
@@ -190,7 +192,7 @@ export default function MediaPlayer({ close, hidden }: Props) {
           <div className="flex items-center gap-1">
             <button
               type="button"
-              aria-label="Minimizar"
+              aria-label={tr("titlebar.minimize")}
               onPointerDown={(e) => e.stopPropagation()}
               onClick={() => handleMinimize({ target: { title: t } })}
               className="xp-caption xp-caption-blue flex h-[21px] w-[21px] items-center justify-center text-white"
@@ -200,7 +202,7 @@ export default function MediaPlayer({ close, hidden }: Props) {
             {!isMobile && (
               <button
                 type="button"
-                aria-label={full ? "Restaurar" : "Maximizar"}
+                aria-label={tr(full ? "titlebar.restore" : "titlebar.maximize")}
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setFull((p) => !p)}
                 className="xp-caption xp-caption-blue flex h-[21px] w-[21px] items-center justify-center text-white"
@@ -210,7 +212,7 @@ export default function MediaPlayer({ close, hidden }: Props) {
             )}
             <button
               type="button"
-              aria-label="Cerrar"
+              aria-label={tr("titlebar.close")}
               onPointerDown={(e) => e.stopPropagation()}
               onClick={requestClose}
               className="xp-caption xp-caption-close flex h-[21px] w-[21px] items-center justify-center text-white"
@@ -237,11 +239,11 @@ export default function MediaPlayer({ close, hidden }: Props) {
 
         {dialog && (
           <XpDialog
-            title={dialog === "cd" ? "Copiar desde CD" : "Radio"}
+            title={tr(dialog === "cd" ? "wmp.copyCd" : "wmp.radio")}
             message={
               dialog === "cd"
-                ? "No se detectó ninguna unidad de CD."
-                : "Sin conexión a Internet."
+                ? tr("wmp.cdMsg")
+                : tr("wmp.radioMsg")
             }
             onClose={() => setDialog(null)}
           />

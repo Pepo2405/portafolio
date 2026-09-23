@@ -1,5 +1,7 @@
 // Registro de íconos del escritorio. `id` es la clave de layout/persistencia.
 // Para ventanas, `title` debe coincidir con la clave de WINDOW_META (src/lists/windows.ts).
+import { WINDOW_META } from "src/lists/windows";
+
 export interface Cell {
   col: number;
   row: number;
@@ -13,7 +15,7 @@ export type DesktopIconKind =
 export interface DesktopIconDef {
   id: string;
   icon: string; // url para background-image
-  label: string;
+  label: Bi;
   kind: DesktopIconKind;
   defaultCell: Cell;
 }
@@ -27,56 +29,56 @@ export const DESKTOP_ICONS: DesktopIconDef[] = [
   {
     id: "cv",
     icon: "/static/icons/cv.svg",
-    label: "Curriculum",
+    label: WINDOW_META["Curriculum"].label,
     kind: { type: "open-window", title: "Curriculum" },
     defaultCell: { col: 0, row: 0 },
   },
   {
     id: "Sobre mí",
     icon: "/kirby.webp",
-    label: "Sobre mí",
+    label: WINDOW_META["Sobre mí"].label,
     kind: { type: "open-window", title: "Sobre mí" },
     defaultCell: { col: 0, row: 1 },
   },
   {
     id: "Proyectos",
     icon: "/static/folderIcon.png",
-    label: "Proyectos",
+    label: WINDOW_META["Proyectos"].label,
     kind: { type: "open-window", title: "Proyectos" },
     defaultCell: { col: 0, row: 2 },
   },
   {
     id: "Tecnologías",
     icon: "/static/folderIcon.png",
-    label: "Tecnologías",
+    label: WINDOW_META["Tecnologías"].label,
     kind: { type: "open-window", title: "Tecnologías" },
     defaultCell: { col: 0, row: 3 },
   },
   {
     id: "Sociales",
     icon: "/static/icons/redes.webp",
-    label: "Redes sociales",
+    label: WINDOW_META["Sociales"].label,
     kind: { type: "open-window", title: "Sociales" },
     defaultCell: { col: 0, row: 4 },
   },
   {
     id: "Terminal",
     icon: "/static/icons/terminal.svg",
-    label: "Terminal",
+    label: WINDOW_META["Terminal"].label,
     kind: { type: "open-window", title: "Terminal" },
     defaultCell: { col: 0, row: 5 },
   },
   {
     id: "Reproductor",
     icon: "/static/icons/wmp.svg",
-    label: "Reproductor multimedia",
+    label: WINDOW_META["Reproductor"].label,
     kind: { type: "open-window", title: "Reproductor" },
     defaultCell: { col: 0, row: 6 },
   },
   {
     id: "amongus",
     icon: "/static/icons/amogus.webp",
-    label: "",
+    label: { es: "", en: "" },
     kind: { type: "easter-egg" },
     defaultCell: { col: 0, row: 7 },
   },

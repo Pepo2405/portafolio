@@ -107,3 +107,15 @@ y debería seguir diciendo lo mismo que el CV.
 
 El build es estático (`dist/`) y se sirve desde cualquier host estático
 (Vercel, Cloudflare Pages, etc.). No hay variables de entorno ni backend.
+
+## SEO y bilingüe
+
+- Todo el texto traducible vive en `src/i18n/es.ts` + `src/i18n/en.ts` (y los
+  campos `{ es, en }` de los JSON de `src/lists/`). `tsc` falla si falta una
+  traducción.
+- `bun run build` además prerenderiza las 20 rutas (`scripts/prerender.tsx`),
+  genera `sitemap.xml` y valida que la metadata no se haya roto. Si la
+  validación falla, el build falla.
+- La OG card se regenera con `bun run og-cover` (el PNG queda commiteado).
+- Chequeo post-deploy: Rich Results Test de Google y el validador de OG de
+  LinkedIn sobre `https://www.pepo.ar/`.

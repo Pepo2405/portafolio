@@ -1,4 +1,5 @@
 import { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
+import { useT } from "src/i18n";
 
 type DragHandlers = {
   onPointerDown: (e: ReactPointerEvent) => void;
@@ -28,6 +29,7 @@ const DesktopIcon = ({
   onSelect,
   onOpen,
 }: DesktopIconProps) => {
+  const t = useT();
   return (
     <button
       type="button"
@@ -48,7 +50,7 @@ const DesktopIcon = ({
           onOpen();
         }
       }}
-      aria-label={label || "Ícono del escritorio"}
+      aria-label={label || t("icon.fallback")}
       aria-pressed={selected}
       className={`xp-icon flex w-24 flex-col items-center gap-1 rounded-sm p-2 text-center ${
         selected ? "xp-icon-selected" : ""

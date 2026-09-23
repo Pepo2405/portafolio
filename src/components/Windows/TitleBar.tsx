@@ -1,5 +1,7 @@
 import { PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import { TbCopy, TbMinus, TbSquare, TbX } from "react-icons/tb";
+import { useT } from "src/i18n";
+import { windowLabel } from "src/lists/windows";
 
 type DragHandlers = {
   onPointerDown: (e: ReactPointerEvent) => void;
@@ -59,6 +61,7 @@ export default function TitleBar({
   onToggleFull,
   onClose,
 }: Props) {
+  const t = useT();
   return (
     <div
       {...handlers}
@@ -73,16 +76,16 @@ export default function TitleBar({
       <div className="flex min-w-0 items-center gap-1.5 pl-1">
         {icon && <img src={icon} alt="" width={16} height={16} className="shrink-0" />}
         <span className="truncate text-sm font-bold [text-shadow:1px_1px_1px_rgba(0,0,0,0.4)]">
-          {title}
+          {t(windowLabel(title))}
         </span>
       </div>
       <div className="flex items-center gap-1">
-        <WinBtn label="Minimizar" onClick={onMinimize}>
+        <WinBtn label={t("titlebar.minimize")} onClick={onMinimize}>
           <TbMinus className="h-4 w-4" />
         </WinBtn>
         {showToggle && (
           <WinBtn
-            label={full ? "Restaurar" : "Maximizar"}
+            label={t(full ? "titlebar.restore" : "titlebar.maximize")}
             onClick={onToggleFull}
           >
             {full ? (
@@ -92,7 +95,7 @@ export default function TitleBar({
             )}
           </WinBtn>
         )}
-        <WinBtn label="Cerrar" danger onClick={onClose}>
+        <WinBtn label={t("titlebar.close")} danger onClick={onClose}>
           <TbX className="h-4 w-4" />
         </WinBtn>
       </div>

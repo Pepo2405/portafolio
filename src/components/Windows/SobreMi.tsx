@@ -1,4 +1,5 @@
 import profile from "src/lists/profile.json";
+import { useI18n } from "src/i18n";
 import useWindows from "src/hooks/useWindow";
 
 const { name, role, tagline, location, bio, stack, current, links } = profile;
@@ -8,6 +9,7 @@ const { name, role, tagline, location, bio, stack, current, links } = profile;
  * Los links salen de src/lists/profile.json para no duplicar datos.
  */
 const SobreMi = () => {
+  const { t, alternateHref } = useI18n();
   const { handleOpen } = useWindows();
 
   return (
@@ -23,29 +25,29 @@ const SobreMi = () => {
         <div className="min-w-0">
           <h2 className="text-lg font-bold leading-tight">{name}</h2>
           <p className="text-sm text-window-brand">{role}</p>
-          {tagline && <p className="text-xs text-slate-500">{tagline}</p>}
+          {tagline && <p className="text-xs text-slate-500">{t(tagline)}</p>}
           <p className="text-xs text-slate-500">{location}</p>
         </div>
       </div>
 
       <div className="mt-3 space-y-2 border-t border-slate-200 pt-3">
         {bio.map((paragraph) => (
-          <p key={paragraph} className="text-sm leading-relaxed text-slate-700">
-            {paragraph}
+          <p key={paragraph.en} className="text-sm leading-relaxed text-slate-700">
+            {t(paragraph)}
           </p>
         ))}
       </div>
 
       {current && (
         <p className="mt-3 rounded border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
-          <span className="font-semibold text-slate-800">Ahora mismo: </span>
-          {current}
+          <span className="font-semibold text-slate-800">{t("sobre.now")}</span>
+          {t(current)}
         </p>
       )}
 
       <div className="mt-3">
         <div className="mb-1 text-[11px] font-bold uppercase tracking-wide text-window-brand">
-          Stack principal
+          {t("sobre.stack")}
         </div>
         <div className="flex flex-wrap gap-1">
           {stack.map((tech) => (
@@ -65,24 +67,24 @@ const SobreMi = () => {
           onClick={() => handleOpen({ target: { title: "Proyectos" } })}
           className="rounded border border-slate-400 bg-gradient-to-b from-white to-slate-200 px-3 py-1 text-sm font-semibold hover:brightness-105 active:brightness-95"
         >
-          Ver proyectos
+          {t("sobre.projects")}
         </button>
         <button
           type="button"
           onClick={() => handleOpen({ target: { title: "Curriculum" } })}
           className="rounded border border-slate-400 bg-gradient-to-b from-white to-slate-200 px-3 py-1 text-sm font-semibold hover:brightness-105 active:brightness-95"
         >
-          Ver CV
+          {t("sobre.cv")}
         </button>
       </div>
 
       <div className="mt-4 border-t border-slate-200 pt-3">
         <div className="mb-2 text-[11px] font-bold uppercase tracking-wide text-window-brand">
-          Contacto
+          {t("sobre.contact")}
         </div>
         <ul className="flex flex-wrap gap-x-5 gap-y-2">
           {links.map((link) => (
-            <li key={link.title}>
+            <li key={link.href}>
               <a
                 href={link.href}
                 target="_blank"
@@ -90,10 +92,18 @@ const SobreMi = () => {
                 className="xp-select flex items-center gap-2 rounded-sm px-1 py-0.5 text-sm"
               >
                 <img src={link.icon} alt="" width={20} height={20} />
-                {link.title}
+                {t(link.title)}
               </a>
             </li>
           ))}
+          <li>
+            <a
+              href={alternateHref}
+              className="xp-select flex items-center gap-2 rounded-sm px-1 py-0.5 text-sm"
+            >
+              🌐 {t("sobre.lang")}
+            </a>
+          </li>
         </ul>
       </div>
     </main>

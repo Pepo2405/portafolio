@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useT } from "src/i18n";
 
 interface Props {
   title: string;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export default function XpDialog({ title, message, onClose }: Props) {
+  const t = useT();
   const dialogRef = useRef<HTMLDivElement>(null);
 
   // Escape cierra el diálogo, como en Windows de verdad.
@@ -41,7 +43,7 @@ export default function XpDialog({ title, message, onClose }: Props) {
             onClick={onClose}
             className="min-w-[72px] rounded-sm border border-slate-400 bg-slate-100 px-3 py-1 text-sm hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-luna-selection"
           >
-            Aceptar
+            {t("wmp.ok")}
           </button>
         </div>
       </div>

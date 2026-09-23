@@ -1,3 +1,5 @@
+import { useT } from "src/i18n";
+
 interface Props {
   onDismiss: () => void;
 }
@@ -7,6 +9,7 @@ interface Props {
  * íconos se abren con doble clic, así que la primera visita lo explica.
  */
 const DesktopHint = ({ onDismiss }: Props) => {
+  const t = useT();
   return (
     <div
       role="status"
@@ -20,14 +23,12 @@ const DesktopHint = ({ onDismiss }: Props) => {
       <div className="flex items-start gap-2">
         <img src="/kirby.webp" alt="" width={28} height={28} className="flex-none" />
         <div>
-          <p className="font-bold">¿Cómo se abre esto?</p>
-          <p className="mt-0.5 leading-snug">
-            Doble clic en un ícono para abrirlo. Podés arrastrarlos para
-            acomodarlos.
-          </p>
+          <p className="font-bold">{t("hint.title")}</p>
+          <p className="mt-0.5 leading-snug">{t("hint.dblclick")}</p>
           <p className="mt-1 leading-snug text-slate-600">
-            Si te gustan las terminales, abrí{" "}
-            <span className="font-semibold">Terminal</span> y escribí{" "}
+            {t("hint.terminal.a")}{" "}
+            <span className="font-semibold">Terminal</span>{" "}
+            {t("hint.terminal.b")}{" "}
             <code className="rounded bg-black/10 px-1">help</code>.
           </p>
           <button
@@ -35,7 +36,7 @@ const DesktopHint = ({ onDismiss }: Props) => {
             onClick={onDismiss}
             className="mt-2 rounded border border-[#9a9a9a] bg-gradient-to-b from-white to-[#e3e3d4] px-2 py-0.5 text-xs font-semibold hover:brightness-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#316ac5]"
           >
-            Entendido
+            {t("hint.dismiss")}
           </button>
         </div>
       </div>

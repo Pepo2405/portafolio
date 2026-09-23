@@ -1,4 +1,5 @@
 import { TbPlayerPause, TbPlayerPlay, TbPlayerSkipBack, TbPlayerSkipForward, TbPlayerStop, TbVolume } from "react-icons/tb";
+import { useT } from "src/i18n";
 import type { AudioPlayer } from "./useAudioPlayer";
 
 function fmt(sec: number): string {
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export default function Controls({ player }: Props) {
+  const t = useT();
   const { playing, position, duration, volume } = player;
   const pct = duration > 0 ? (position / duration) * 100 : 0;
 
@@ -28,31 +30,31 @@ export default function Controls({ player }: Props) {
           value={position}
           onChange={(e) => player.seek(Number(e.target.value))}
           className="h-1 flex-1 accent-sky-400"
-          aria-label="Progreso"
+          aria-label={t("wmp.progress")}
           style={{ background: `linear-gradient(90deg, #4a7fd0 ${pct}%, #223 ${pct}%)` }}
         />
-        <span className="tabular-nums" title={duration > 0 ? undefined : "Cargando duración…"}>
+        <span className="tabular-nums" title={duration > 0 ? undefined : t("wmp.loading")}>
           {fmt(position)} / {fmt(duration)}
         </span>
       </div>
 
       {/* blue pod */}
       <div className="wmp-pod mx-auto flex max-w-md items-center justify-center gap-3 px-4 py-2">
-        <button type="button" aria-label="Anterior" onClick={player.prev} className="wmp-btn">
+        <button type="button" aria-label={t("wmp.prev")} onClick={player.prev} className="wmp-btn">
           <TbPlayerSkipBack className="h-5 w-5" />
         </button>
         <button
           type="button"
-          aria-label={playing ? "Pausar" : "Reproducir"}
+          aria-label={t(playing ? "wmp.pause" : "wmp.play")}
           onClick={player.togglePlay}
           className="wmp-btn"
         >
           {playing ? <TbPlayerPause className="h-7 w-7" /> : <TbPlayerPlay className="h-7 w-7" />}
         </button>
-        <button type="button" aria-label="Siguiente" onClick={player.next} className="wmp-btn">
+        <button type="button" aria-label={t("wmp.next")} onClick={player.next} className="wmp-btn">
           <TbPlayerSkipForward className="h-5 w-5" />
         </button>
-        <button type="button" aria-label="Detener" onClick={player.stop} className="wmp-btn">
+        <button type="button" aria-label={t("wmp.stop")} onClick={player.stop} className="wmp-btn">
           <TbPlayerStop className="h-5 w-5" />
         </button>
         <div className="ml-2 flex items-center gap-1">
@@ -65,7 +67,7 @@ export default function Controls({ player }: Props) {
             value={volume}
             onChange={(e) => player.setVolume(Number(e.target.value))}
             className="h-1 w-20 accent-sky-200"
-            aria-label="Volumen"
+            aria-label={t("wmp.volume")}
           />
         </div>
       </div>

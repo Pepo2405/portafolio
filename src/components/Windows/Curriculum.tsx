@@ -1,14 +1,16 @@
 import profile from "src/lists/profile.json";
+import { useT } from "src/i18n";
+import { windowLabel } from "src/lists/windows";
 
-const CVS = [
+const CVS: { lang: Bi; note: Bi; href: string }[] = [
   {
-    lang: "Español",
-    note: "Versión principal",
+    lang: { es: "Español", en: "Spanish" },
+    note: { es: "Versión principal", en: "Main version" },
     href: "/static/Cv Ignacio Iglesias.pdf",
   },
   {
-    lang: "English",
-    note: "English version",
+    lang: { es: "English", en: "English" },
+    note: { es: "English version", en: "English version" },
     href: "/static/Cv Ignacio Iglesias (EN).pdf",
   },
 ];
@@ -18,6 +20,7 @@ const CVS = [
  * a un PDF fijo el ícono abre este selector.
  */
 const Curriculum = () => {
+  const t = useT();
   return (
     <main className="h-full overflow-y-auto bg-white px-5 py-4 text-black">
       <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
@@ -31,13 +34,13 @@ const Curriculum = () => {
       </div>
 
       <p className="mt-3 text-sm leading-relaxed text-slate-700">
-        CV en PDF, formato ATS-friendly. Elegí el idioma:
+        {t("cv.intro")}
       </p>
 
       <div className="mt-3 grid gap-2">
         {CVS.map((cv) => (
           <a
-            key={cv.lang}
+            key={cv.href}
             href={cv.href}
             target="_blank"
             rel="noreferrer"
@@ -45,19 +48,20 @@ const Curriculum = () => {
           >
             <img src="/static/icons/cv.svg" alt="" width={28} height={28} />
             <span className="min-w-0 flex-1">
-              <span className="block text-sm font-semibold">{cv.lang}</span>
-              <span className="block text-xs text-slate-500">{cv.note}</span>
+              <span className="block text-sm font-semibold">{t(cv.lang)}</span>
+              <span className="block text-xs text-slate-500">{t(cv.note)}</span>
             </span>
             <span aria-hidden className="text-xs font-semibold text-luna-selection">
-              Abrir ↗
+              {t("cv.open")}
             </span>
           </a>
         ))}
       </div>
 
       <p className="mt-4 rounded border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
-        ¿Preferís ver el trabajo antes que el PDF? Abrí{" "}
-        <span className="font-semibold">Proyectos</span> en el escritorio.
+        {t("cv.note.a")}{" "}
+        <span className="font-semibold">{t(windowLabel("Proyectos"))}</span>{" "}
+        {t("cv.note.b")}
       </p>
     </main>
   );

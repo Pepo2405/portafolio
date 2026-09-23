@@ -5,15 +5,33 @@
       "type": "link",
       "icon": "/static/icons/huesped-plus.svg",
       "featured": true,
-      "badge": "En PXSOL",
-      "description": "El primer hotel agéntico con IA de Argentina: la PWA del huésped, personalizable por hotel.",
+      "badge": { "es": "En PXSOL", "en": "At PXSOL" },
+      "description": {
+        "es": "El primer hotel agéntico con IA de Argentina: la PWA del huésped, personalizable por hotel.",
+        "en": "Argentina's first agentic hotel: the guest PWA, customized for each hotel."
+      },
       "details": [
-        "Cada hotel la publica con su propio dominio, su marca y su contenido: el mismo producto se ve distinto en cada propiedad, sin un deploy por cliente.",
-        "El huésped hace el check-in y el check-out desde el celular, pide room service, paga in-app y deja la encuesta post-estadía, sin instalar nada.",
-        "El concierge con IA responde 24/7 sobre el hotel —servicios, horarios, políticas, turismo local— y sobre la estadía concreta. Multilingüe, con guardrails anti-alucinación y derivación a recepción cuando no sabe.",
-        "En producción en hoteles reales de Argentina."
+        {
+          "es": "Cada hotel la publica con su propio dominio, su marca y su contenido: el mismo producto se ve distinto en cada propiedad, sin un deploy por cliente.",
+          "en": "Each hotel ships it on its own domain, with its own brand and content: the same product looks different in every property, with no deploy per client."
+        },
+        {
+          "es": "El huésped hace el check-in y el check-out desde el celular, pide room service, paga in-app y deja la encuesta post-estadía, sin instalar nada.",
+          "en": "Guests check in and out from their phone, order room service, pay in-app and fill in the post-stay survey, without installing anything."
+        },
+        {
+          "es": "El concierge con IA responde 24/7 sobre el hotel —servicios, horarios, políticas, turismo local— y sobre la estadía concreta. Multilingüe, con guardrails anti-alucinación y derivación a recepción cuando no sabe.",
+          "en": "The AI concierge answers 24/7 about the hotel —services, hours, policies, local tourism— and about each specific stay. Multilingual, with anti-hallucination guardrails and hand-off to the front desk when it doesn't know."
+        },
+        {
+          "es": "En producción en hoteles reales de Argentina.",
+          "en": "Live in real hotels across Argentina."
+        }
       ],
-      "noDemoNote": "Huésped+ es un producto de PXSOL y no tiene demo pública. Si querés, escribime y te cuento cuál fue mi rol en el equipo.",
+      "noDemoNote": {
+        "es": "Huésped+ es un producto de PXSOL y no tiene demo pública. Si querés, escribime y te cuento cuál fue mi rol en el equipo.",
+        "en": "Huésped+ is a PXSOL product with no public demo. Drop me a line and I'll walk you through what I did on the team."
+      },
       "stack": ["Next.js", "Fastify", "Prisma", "PostgreSQL", "LLM"]
     },
     {
@@ -22,39 +40,77 @@
       "type": "link",
       "icon": "/static/screenshots/gym-admin.webp",
       "featured": true,
-      "description": "SaaS multi-tenant de gestión de gimnasios: clientes, membresías, caja y rutinas.",
+      "description": {
+        "es": "SaaS multi-tenant de gestión de gimnasios: clientes, membresías, caja y rutinas.",
+        "en": "Multi-tenant SaaS for gym management: members, memberships, cash register and workout plans."
+      },
       "details": [
-        "Cada gimnasio entra con su propio dominio y ve solo sus datos: un solo deploy, muchos clientes.",
-        "Cubre el día a día del mostrador: alta de socios, cobros, membresías que vencen, caja y rutinas.",
-        "Es la base sobre la que se apoyan la app móvil y el control de acceso por huella."
+        {
+          "es": "Cada gimnasio entra con su propio dominio y ve solo sus datos: un solo deploy, muchos clientes.",
+          "en": "Each gym gets its own domain and sees only its own data: one deploy, many clients."
+        },
+        {
+          "es": "Cubre el día a día del mostrador: alta de socios, cobros, membresías que vencen, caja y rutinas.",
+          "en": "Covers the front desk's day to day: member sign-ups, payments, expiring memberships, cash register and workout plans."
+        },
+        {
+          "es": "Es la base sobre la que se apoyan la app móvil y el control de acceso por huella.",
+          "en": "It's the backbone the mobile app and the fingerprint access control build on."
+        }
       ],
       "stack": ["Next.js", "Hono", "Prisma"]
     },
     {
       "title": "Gym App Móvil",
+      "titleEn": "Gym Mobile App",
       "type": "link",
       "icon": "/static/screenshots/gym-admin.webp",
       "featured": true,
-      "badge": "Privado",
-      "description": "App white-label del sistema: check-in, ventas y deudas desde el mostrador del gimnasio.",
+      "badge": { "es": "Privado", "en": "Private" },
+      "description": {
+        "es": "App white-label del sistema: check-in, ventas y deudas desde el mostrador del gimnasio.",
+        "en": "The system's white-label app: check-in, sales and debts from the gym's front desk."
+      },
       "details": [
-        "App white-label: cada gimnasio la publica con su propia marca e ícono.",
-        "Resuelve el check-in por DNI, la venta de pases y el cobro de deudas en el momento, sin PC.",
-        "Comparte los contratos de la API con el backend, así que un cambio de esquema rompe el build en vez de romper en producción."
+        {
+          "es": "App white-label: cada gimnasio la publica con su propia marca e ícono.",
+          "en": "White-label app: each gym ships it with its own brand and icon."
+        },
+        {
+          "es": "Resuelve el check-in por DNI, la venta de pases y el cobro de deudas en el momento, sin PC.",
+          "en": "Handles DNI check-in, pass sales and debt collection on the spot, no PC needed."
+        },
+        {
+          "es": "Comparte los contratos de la API con el backend, así que un cambio de esquema rompe el build en vez de romper en producción.",
+          "en": "Shares the API contracts with the backend, so a schema change breaks the build instead of breaking production."
+        }
       ],
       "stack": ["Expo", "React Native", "TanStack Query"]
     },
     {
       "title": "Lector de Huellas",
+      "titleEn": "Fingerprint Reader",
       "type": "link",
       "icon": "/static/icons/task.webp",
       "featured": true,
-      "badge": "Privado",
-      "description": "Control de acceso por huella con lectores ZKTeco, integrado a gym-admin en tiempo real.",
+      "badge": { "es": "Privado", "en": "Private" },
+      "description": {
+        "es": "Control de acceso por huella con lectores ZKTeco, integrado a gym-admin en tiempo real.",
+        "en": "Fingerprint access control with ZKTeco readers, integrated with gym-admin in real time."
+      },
       "details": [
-        "Servicio nativo en Rust + Tauri que habla directo con los lectores ZKTeco de la red local.",
-        "Empuja cada fichaje a gym-admin por WebSocket, así el mostrador lo ve al instante.",
-        "Si se corta la red, encola los eventos en disco y los reintenta cuando vuelve."
+        {
+          "es": "Servicio nativo en Rust + Tauri que habla directo con los lectores ZKTeco de la red local.",
+          "en": "A native Rust + Tauri service that talks directly to the ZKTeco readers on the local network."
+        },
+        {
+          "es": "Empuja cada fichaje a gym-admin por WebSocket, así el mostrador lo ve al instante.",
+          "en": "It pushes every punch to gym-admin over WebSocket, so the front desk sees it instantly."
+        },
+        {
+          "es": "Si se corta la red, encola los eventos en disco y los reintenta cuando vuelve.",
+          "en": "If the network drops, it queues events on disk and retries when it's back."
+        }
       ],
       "stack": ["Tauri", "Rust", "React"]
     },
@@ -63,14 +119,29 @@
       "type": "link",
       "icon": "/static/icons/ytPepo.png",
       "featured": true,
-      "badge": "Proyecto personal",
-      "description": "App de streaming nativa con MPV, addons Stremio, torrents y debrid.",
+      "badge": { "es": "Proyecto personal", "en": "Personal project" },
+      "description": {
+        "es": "App de streaming nativa con MPV, addons Stremio, torrents y debrid.",
+        "en": "A native streaming app with MPV, Stremio addons, torrents and debrid services."
+      },
       "details": [
-        "App de escritorio hecha en Tauri + Rust para ver contenido por streaming.",
-        "Compatible con addons de Stremio, torrents y servicios debrid.",
-        "El playback lo hace MPV embebido: reproduce cualquier códec sin pelear con las limitaciones del navegador."
+        {
+          "es": "App de escritorio hecha en Tauri + Rust para ver contenido por streaming.",
+          "en": "A desktop app built with Tauri + Rust for streaming content."
+        },
+        {
+          "es": "Compatible con addons de Stremio, torrents y servicios debrid.",
+          "en": "Works with Stremio addons, torrents and debrid services."
+        },
+        {
+          "es": "El playback lo hace MPV embebido: reproduce cualquier códec sin pelear con las limitaciones del navegador.",
+          "en": "Playback is handled by an embedded MPV: it plays any codec without fighting browser limitations."
+        }
       ],
-      "noDemoNote": "Es un proyecto personal y todavía no tiene demo pública. Si querés, te muestro cómo está hecho por dentro.",
+      "noDemoNote": {
+        "es": "Es un proyecto personal y todavía no tiene demo pública. Si querés, te muestro cómo está hecho por dentro.",
+        "en": "It's a personal project with no public demo yet. Happy to show you how it's built inside."
+      },
       "stack": ["Tauri", "Rust", "Svelte", "MPV"]
     },
     {
@@ -79,11 +150,23 @@
       "type": "link",
       "icon": "/static/screenshots/slop.webp",
       "featured": true,
-      "description": "Juego de doblaje colaborativo estilo Jackbox: host + celulares por código, sin instalar nada.",
+      "description": {
+        "es": "Juego de doblaje colaborativo estilo Jackbox: host + celulares por código, sin instalar nada.",
+        "en": "A Jackbox-style collaborative dubbing game: one host plus phones via code, nothing to install."
+      },
       "details": [
-        "Un host abre la partida en la compu y el resto se suma desde el celular con un código, sin instalar nada.",
-        "Cada ronda reparte un video y todos le ponen voz; después se vota el mejor doblaje.",
-        "Toda la sincronización en vivo va por WebSockets."
+        {
+          "es": "Un host abre la partida en la compu y el resto se suma desde el celular con un código, sin instalar nada.",
+          "en": "The host starts the game on a computer and everyone joins from their phone with a code, nothing to install."
+        },
+        {
+          "es": "Cada ronda reparte un video y todos le ponen voz; después se vota el mejor doblaje.",
+          "en": "Each round hands out a video and everyone voices it; then everyone votes for the best dub."
+        },
+        {
+          "es": "Toda la sincronización en vivo va por WebSockets.",
+          "en": "All live sync runs over WebSockets."
+        }
       ],
       "stack": ["Bun", "React", "Tailwind"]
     },
@@ -93,25 +176,50 @@
       "type": "link",
       "icon": "/static/screenshots/mecanica.webp",
       "featured": true,
-      "description": "Landing de cliente real: mecánica a domicilio en Pilar, orientada a WhatsApp.",
+      "description": {
+        "es": "Landing de cliente real: mecánica a domicilio en Pilar, orientada a WhatsApp.",
+        "en": "A real client's landing page: mobile mechanics in Pilar, built around WhatsApp."
+      },
       "details": [
-        "Sitio de un mecánico a domicilio en Pilar: el objetivo del negocio es que lo escriban por WhatsApp.",
-        "Cada sección empuja a esa acción —los servicios, la zona de cobertura y la garantía están escritas para responder las dudas antes de que las pregunten.",
-        "En producción y generando consultas reales."
+        {
+          "es": "Sitio de un mecánico a domicilio en Pilar: el objetivo del negocio es que lo escriban por WhatsApp.",
+          "en": "A site for a mobile mechanic in Pilar: the business goal is to get WhatsApp messages."
+        },
+        {
+          "es": "Cada sección empuja a esa acción —los servicios, la zona de cobertura y la garantía están escritas para responder las dudas antes de que las pregunten.",
+          "en": "Every section pushes toward that action —services, coverage area and warranty are written to answer questions before they're asked."
+        },
+        {
+          "es": "En producción y generando consultas reales.",
+          "en": "In production and generating real leads."
+        }
       ],
       "stack": ["React", "Vite", "Tailwind"]
     },
     {
       "title": "Scrappers de precios",
+      "titleEn": "Price Scrapers",
       "type": "link",
       "icon": "/static/icons/dollar.webp",
       "featured": true,
-      "badge": "Privado",
-      "description": "Seguimiento de precios con scrapers de Día/VTEX y Mercado Libre, sin navegador headless.",
+      "badge": { "es": "Privado", "en": "Private" },
+      "description": {
+        "es": "Seguimiento de precios con scrapers de Día/VTEX y Mercado Libre, sin navegador headless.",
+        "en": "Price tracking with scrapers for Día/VTEX and Mercado Libre, no headless browser."
+      },
       "details": [
-        "Los scrapers pegan directo contra las APIs internas de Día/VTEX y Mercado Libre, sin abrir un navegador headless.",
-        "Guarda el histórico en SQLite para ver cómo evoluciona cada precio en el tiempo.",
-        "Un front en React muestra los productos que seguís y te avisa cuando se mueven."
+        {
+          "es": "Los scrapers pegan directo contra las APIs internas de Día/VTEX y Mercado Libre, sin abrir un navegador headless.",
+          "en": "The scrapers hit the internal Día/VTEX and Mercado Libre APIs directly, no headless browser involved."
+        },
+        {
+          "es": "Guarda el histórico en SQLite para ver cómo evoluciona cada precio en el tiempo.",
+          "en": "It keeps price history in SQLite to see how each price moves over time."
+        },
+        {
+          "es": "Un front en React muestra los productos que seguís y te avisa cuando se mueven.",
+          "en": "A React front shows the products you follow and alerts you when they move."
+        }
       ],
       "stack": ["Bun", "Hono", "SQLite", "React"]
     },
@@ -121,11 +229,23 @@
       "type": "link",
       "icon": "/static/screenshots/bonitas.webp",
       "featured": true,
-      "description": "Turnos online para un estudio de belleza en Garín: servicios, profesionales y seña.",
+      "description": {
+        "es": "Turnos online para un estudio de belleza en Garín: servicios, profesionales y seña.",
+        "en": "Online booking for a beauty salon in Garín: services, staff and deposits."
+      },
       "details": [
-        "Los turnos se reservan 100% online: la clienta elige el servicio, suma varios al mismo turno, elige profesional, día y horario.",
-        "Cobra la seña en el momento de reservar y manda la confirmación al instante.",
-        "También resuelve el alquiler de equipos con requisitos y combos de insumos para profesionales."
+        {
+          "es": "Los turnos se reservan 100% online: la clienta elige el servicio, suma varios al mismo turno, elige profesional, día y horario.",
+          "en": "Bookings are 100% online: the client picks the service, adds several to the same slot, and chooses staff, day and time."
+        },
+        {
+          "es": "Cobra la seña en el momento de reservar y manda la confirmación al instante.",
+          "en": "It charges the deposit at booking time and sends the confirmation instantly."
+        },
+        {
+          "es": "También resuelve el alquiler de equipos con requisitos y combos de insumos para profesionales.",
+          "en": "It also handles equipment rental with requirements and supply combos for professionals."
+        }
       ],
       "stack": ["React", "Vercel"]
     },

@@ -4,6 +4,7 @@ import list from "src/lists/taskList.json";
 import DateTime from "./dateTime";
 import useWindow from "src/hooks/useWindow";
 import useFocusTrap from "src/hooks/useFocusTrap";
+import { useT } from "src/i18n";
 import { WINDOW_META, windowIcon, windowLabel } from "src/lists/windows";
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const TaskBar = ({ onLogOff, onShutdown }: Props) => {
+  const t = useT();
   const { items: Tasks } = list;
   const {
     visibleItems,
@@ -82,17 +84,17 @@ const TaskBar = ({ onLogOff, onShutdown }: Props) => {
             <img
               width={20}
               height={20}
-              alt="Inicio"
+              alt={t("taskbar.start")}
               src={xpLogoIcon}
               className="min-w-fit shadow-xl"
             />{" "}
-            <span className="font-bold italic">Inicio</span>
+            <span className="font-bold italic">{t("taskbar.start")}</span>
           </button>
 
           {startOpen && (
             <div
               role="dialog"
-              aria-label="Menú Inicio"
+              aria-label={t("taskbar.startMenu")}
               className="xp-startmenu absolute bottom-full left-0 w-[380px] overflow-hidden bg-white shadow-2xl"
             >
               <header className="xp-startmenu-header flex items-center gap-3 px-4 py-2 text-white">
@@ -121,7 +123,7 @@ const TaskBar = ({ onLogOff, onShutdown }: Props) => {
                       className="xp-select flex items-center gap-3 px-3 py-2 text-left text-black"
                     >
                       <img src={meta.icon} alt="" width={24} height={24} />
-                      <span className="text-sm font-bold">{meta.label}</span>
+                      <span className="text-sm font-bold">{t(meta.label)}</span>
                     </button>
                   ))}
                   <button
@@ -133,14 +135,14 @@ const TaskBar = ({ onLogOff, onShutdown }: Props) => {
                     className="xp-select flex items-center gap-3 px-3 py-2 text-left text-black"
                   >
                     <img src="/static/icons/cv.svg" alt="" width={24} height={24} />
-                    <span className="text-sm font-bold">Curriculum</span>
+                    <span className="text-sm font-bold">{t(windowLabel("Curriculum"))}</span>
                   </button>
                 </div>
 
                 <div className="flex w-1/2 flex-col bg-luna-menuRight py-2">
                   {Tasks.map(({ title, href, icon }) => (
                     <a
-                      key={title}
+                      key={href}
                       href={href}
                       target="_blank"
                       rel="noreferrer"
@@ -148,7 +150,7 @@ const TaskBar = ({ onLogOff, onShutdown }: Props) => {
                       className="xp-select flex items-center gap-3 px-3 py-2 text-left text-black"
                     >
                       <img src={icon} alt="" width={22} height={22} />
-                      <span className="text-sm">{title}</span>
+                      <span className="text-sm">{t(title)}</span>
                     </a>
                   ))}
                 </div>
@@ -163,7 +165,7 @@ const TaskBar = ({ onLogOff, onShutdown }: Props) => {
                   }}
                   className="flex items-center gap-2 text-sm font-semibold hover:brightness-110"
                 >
-                  <span aria-hidden>🔑</span> Cerrar sesión
+                  <span aria-hidden>🔑</span> {t("taskbar.logOff")}
                 </button>
                 <button
                   type="button"
@@ -173,7 +175,7 @@ const TaskBar = ({ onLogOff, onShutdown }: Props) => {
                   }}
                   className="flex items-center gap-2 text-sm font-semibold hover:brightness-110"
                 >
-                  <span aria-hidden>⏻</span> Apagar
+                  <span aria-hidden>⏻</span> {t("taskbar.shutdown")}
                 </button>
               </footer>
             </div>
@@ -188,8 +190,8 @@ const TaskBar = ({ onLogOff, onShutdown }: Props) => {
               <button
                 type="button"
                 key={title}
-                title={title}
-                aria-label={title}
+                title={t(windowLabel(title))}
+                aria-label={t(windowLabel(title))}
                 aria-pressed={active}
                 onClick={() => onTaskClick(title)}
                 className={`shadowText relative z-50 flex h-full w-auto shrink-0 items-center justify-center gap-2 px-3 text-sm text-white transition-colors md:w-40 md:max-w-[40vw] md:justify-start ${
@@ -199,7 +201,7 @@ const TaskBar = ({ onLogOff, onShutdown }: Props) => {
                 {icon && (
                   <img alt="" width={18} height={18} src={icon} className="shrink-0" />
                 )}
-                <span className="hidden truncate md:block">{windowLabel(title)}</span>
+                <span className="hidden truncate md:block">{t(windowLabel(title))}</span>
               </button>
             );
           })}

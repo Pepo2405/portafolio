@@ -1,3 +1,4 @@
+import { useT } from "src/i18n";
 import type { AudioPlayer } from "../useAudioPlayer";
 
 interface Props {
@@ -5,10 +6,11 @@ interface Props {
 }
 
 export default function Library({ player }: Props) {
+  const t = useT();
   return (
     <div className="h-full overflow-y-auto p-3 text-white">
       <div className="mb-2 border-b border-white/15 pb-1 text-[11px] font-bold uppercase tracking-wide text-white/60">
-        Biblioteca multimedia
+        {t("wmp.library")}
       </div>
       <ul className="text-sm">
         {player.tracks.map((tr, i) => {

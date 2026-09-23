@@ -1,9 +1,10 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Amongus from "src/components/Amongus";
 import DesktopIcon from "src/components/DesktopIcon";
 import DesktopContextMenu from "src/components/DesktopContextMenu";
 import DesktopHint from "src/components/DesktopHint";
 import FullScreenButton from "src/components/FullScreenButton";
+import SeoContent from "src/components/SeoContent";
 import ShutdownScreen from "src/components/ShutdownScreen";
 import TaskBar from "src/components/TaskBar";
 import MediaPlayer from "src/components/Windows/MediaPlayer";
@@ -12,6 +13,7 @@ import useDesktopIcons from "src/hooks/useDesktopIcons";
 import useWindow from "src/hooks/useWindow";
 import { DESKTOP_ICONS, DesktopIconDef } from "src/lists/desktopIcons";
 import { BG } from "src/images";
+import { useT } from "src/i18n";
 
 const HINT_KEY = "xp-hint-seen@1";
 
@@ -24,13 +26,19 @@ function readHintSeen(): boolean {
 }
 
 export default function App() {
+  const t = useT();
   const { handleOpen, visibleItems, minimizedItems, handleClose, closeAll } =
     useWindow();
   const containerRef = useRef<HTMLElement>(null);
   const desktop = useDesktopIcons(containerRef);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const [poweredOff, setPoweredOff] = useState(false);
-  const [hintSeen, setHintSeen] = useState(readHintSeen);
+  // El hint arranca oculto en el HTML prerenderizado y se decide tras el mount
+  // (localStorage): nadie ve un flash del globo, ni siquiera quien ya lo vio.
+  const [hintSeen, setHintSeen] = useState(true);
+  useEffect(() => {
+    setHintSeen(readHintSeen());
+  }, []);
 
   const dismissHint = useCallback(() => {
     setHintSeen(true);
@@ -101,7 +109,7 @@ export default function App() {
             <DesktopIcon
               key={def.id}
               icon={def.icon}
-              label={def.label}
+              label={t(def.label)}
               selected={desktop.selected === def.id}
               dragging={dragging}
               style={style}
@@ -124,10 +132,11 @@ export default function App() {
              text-white text-2xl
              "
         >
-          Iglesias Ignacio
+          Ignacio Iglesias
         </h1>
         <FullScreenButton />
         <WindowsContainer />
+        <SeoContent />
         {(visibleItems["Reproductor"] || minimizedItems["Reproductor"]) && (
           <MediaPlayer
             close={handleClose}
@@ -145,12 +154,12 @@ export default function App() {
           y={menu.y}
           onClose={() => setMenu(null)}
           items={[
-            { type: "disabled", label: "Ver" },
+            { type: "disabled", label: t("menu.view") },
             { type: "separator" },
-            { type: "action", label: "Organizar íconos", onSelect: desktop.resetLayout },
-            { type: "action", label: "Actualizar", onSelect: desktop.clearSelection },
+            { type: "action", label: t("menu.organize"), onSelect: desktop.resetLayout },
+            { type: "action", label: t("menu.refresh"), onSelect: desktop.clearSelection },
             { type: "separator" },
-            { type: "disabled", label: "Propiedades" },
+            { type: "disabled", label: t("menu.properties") },
           ]}
         />
       )}

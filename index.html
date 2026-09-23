@@ -1,41 +1,18 @@
 <!doctype html>
-<html lang="es">
+<html lang="{{SEO_LANG}}">
   <head>
     <meta charset="UTF-8" />
     <link rel="shortcut icon" href="/kirby.webp" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ignacio Iglesias — Desarrollador Full Stack</title>
-    <meta
-      name="description"
-      content="Portafolio de Ignacio Iglesias, desarrollador full stack. Productos web y de escritorio con TypeScript, React, Bun y Rust."
-    />
     <meta name="author" content="Ignacio Iglesias" />
     <meta name="theme-color" content="#235cdc" />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Ignacio Iglesias — Desarrollador Full Stack" />
-    <meta
-      property="og:description"
-      content="Un escritorio de Windows XP para explorar mis proyectos. Sí, se abre con doble clic."
-    />
-    <meta property="og:image" content="/static/background.webp" />
-    <meta property="og:locale" content="es_AR" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Ignacio Iglesias — Desarrollador Full Stack" />
-    <meta
-      name="twitter:description"
-      content="Un escritorio de Windows XP para explorar mis proyectos."
-    />
-    <meta name="twitter:image" content="/static/background.webp" />
+    <link rel="preload" as="image" href="/static/background.webp" fetchpriority="high" />
+    <!--SEO_HEAD-->
   </head>
   <body>
-    <div id="root"></div>
-    <noscript>
-      Este portafolio necesita JavaScript. Mientras tanto: GitHub
-      https://github.com/pepo2405 · LinkedIn
-      https://www.linkedin.com/in/ignacioniglesias2405/
-    </noscript>
+    <div id="root"><!--SEO_APP--></div>
+    <!--SEO_NOSCRIPT-->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

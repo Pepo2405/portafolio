@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useT } from "src/i18n";
 
 export type MenuItem =
   | { type: "action"; label: string; onSelect: () => void }
@@ -16,6 +17,7 @@ const MENU_W = 190;
 const ITEM_H = 24;
 
 export default function DesktopContextMenu({ x, y, items, onClose }: Props) {
+  const t = useT();
   const ref = useRef<HTMLDivElement>(null);
   const firstItemRef = useRef<HTMLButtonElement>(null);
 
@@ -50,7 +52,7 @@ export default function DesktopContextMenu({ x, y, items, onClose }: Props) {
     <div
       ref={ref}
       role="menu"
-      aria-label="Menú del escritorio"
+      aria-label={t("menu.title")}
       className="xp-menu"
       style={{ position: "fixed", left, top, width: MENU_W, zIndex: 1000 }}
     >

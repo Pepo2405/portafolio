@@ -2,12 +2,21 @@
   "name": "Ignacio Iglesias",
   "handle": "pepo2405",
   "role": "Senior Full-Stack Engineer",
-  "tagline": "Web · Mobile · Desktop nativo · IA",
+  "tagline": { "es": "Web · Mobile · Desktop nativo · IA", "en": "Web · Mobile · Native desktop · AI" },
   "location": "Garín, Buenos Aires · Argentina",
   "bio": [
-    "Ingeniero full-stack senior con ownership end-to-end de productos: diseño de sistemas, arquitectura de datos, frontend, app mobile nativa, integración con hardware y deploy en producción.",
-    "Construí Huésped+, el primer hotel agéntico con IA de Argentina —la PWA del huésped con check-in digital, pagos in-app y un concierge LLM que responde sobre el hotel y sobre la propia estadía.",
-    "Amplitud poco común —React/Next.js, React Native/Expo, Rust/Tauri, backends en Node/Bun— con fuerte especialización en ingeniería asistida por IA: servidores MCP propios, agentes y LLMs en producción con guardrails."
+    {
+      "es": "Ingeniero full-stack senior con ownership end-to-end de productos: diseño de sistemas, arquitectura de datos, frontend, app mobile nativa, integración con hardware y deploy en producción.",
+      "en": "Senior full-stack engineer with end-to-end product ownership: system design, data architecture, frontend, native mobile apps, hardware integration and production deploys."
+    },
+    {
+      "es": "Construí Huésped+, el primer hotel agéntico con IA de Argentina —la PWA del huésped con check-in digital, pagos in-app y un concierge LLM que responde sobre el hotel y sobre la propia estadía.",
+      "en": "I built Huésped+, Argentina's first agentic hotel —the guest PWA with digital check-in, in-app payments and an LLM concierge that answers about the hotel and about each stay."
+    },
+    {
+      "es": "Amplitud poco común —React/Next.js, React Native/Expo, Rust/Tauri, backends en Node/Bun— con fuerte especialización en ingeniería asistida por IA: servidores MCP propios, agentes y LLMs en producción con guardrails.",
+      "en": "Unusual breadth —React/Next.js, React Native/Expo, Rust/Tauri, Node/Bun backends— with a strong focus on AI-assisted engineering: custom MCP servers, agents and LLMs in production with guardrails."
+    }
   ],
   "stack": [
     "TypeScript",
@@ -24,20 +33,23 @@
     "Docker",
     "MCP / LLMs"
   ],
-  "current": "Huésped+ en producción con hoteles reales, y GymAdmin —mi SaaS para gimnasios en LATAM— de punta a punta.",
+  "current": {
+    "es": "Huésped+ en producción con hoteles reales, y GymAdmin —mi SaaS para gimnasios en LATAM— de punta a punta.",
+    "en": "Huésped+ in production with real hotels, and GymAdmin —my SaaS for gyms in Latin America— end to end."
+  },
   "links": [
     {
-      "title": "Github",
+      "title": { "es": "Github", "en": "Github" },
       "href": "https://github.com/pepo2405",
       "icon": "/static/icons/github.svg"
     },
     {
-      "title": "Linkedin",
+      "title": { "es": "Linkedin", "en": "Linkedin" },
       "href": "https://www.linkedin.com/in/ignacioniglesias2405/",
       "icon": "/static/icons/linkedin.svg"
     },
     {
-      "title": "Correo",
+      "title": { "es": "Correo", "en": "Email" },
       "href": "https://mail.google.com/mail/?view=cm&fs=1&to=ignacioniglesias@gmail.com&su=Contacto",
       "icon": "/static/icons/gmail.svg"
     }

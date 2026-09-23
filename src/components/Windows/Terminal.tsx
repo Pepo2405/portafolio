@@ -2,6 +2,7 @@ import { KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
 import proyectsData from "src/lists/proyects.json";
 import profile from "src/lists/profile.json";
 import useWindows from "src/hooks/useWindow";
+import { fmt, useI18n } from "src/i18n";
 
 type LineKind = "input" | "output" | "error" | "accent";
 
@@ -17,35 +18,6 @@ const PROYECTS = proyectsData.proyects as {
   featured?: boolean;
   stack?: string[];
 }[];
-
-const BANNER = [
-  "portfolio.sh — escribí 'help' para ver los comandos disponibles.",
-];
-
-const HELP: string[] = [
-  "COMANDOS",
-  "  whoami              quién soy",
-  "  ls                  lista los proyectos",
-  "  ls destacados       solo los destacados",
-  "  open <nombre>       abre un proyecto (ej: open goblin)",
-  "  stack               tecnologías que uso",
-  "  contact             cómo contactarme",
-  "  cv                  abre el CV (ES / EN)",
-  "  proyectos           abre la ventana de Proyectos",
-  "  clear               limpia la pantalla",
-  "  exit                cierra la terminal",
-];
-
-const NEOFETCH = [
-  "        .-.        ignacio@portfolio",
-  "       |   |       -----------------",
-  "       |___|       OS: PepOS XP 1.0",
-  "      /     \\      Rol: Full Stack Dev",
-  "     | () () |     Stack: TS · React · Bun",
-  "      \\  ^  /      Base: Pilar, Argentina",
-  "       |||||       Uptime: desde siempre",
-  "       |||||",
-];
 
 function normalize(value: string): string {
   return value
@@ -75,14 +47,15 @@ interface Props {
  */
 const Terminal = ({ onClose }: Props) => {
   const { handleOpen } = useWindows();
-  const [lines, setLines] = useState<Line[]>(() =>
-    BANNER.map((text, i) => ({ id: i, kind: "output" as LineKind, text }))
-  );
+  const { t } = useI18n();
+  const [lines, setLines] = useState<Line[]>(() => [
+    { id: 0, kind: "output" as LineKind, text: t("term.banner") },
+  ]);
   const [value, setValue] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number | null>(null);
 
-  const idRef = useRef(BANNER.length);
+  const idRef = useRef(1);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -105,68 +78,77 @@ const Terminal = ({ onClose }: Props) => {
 
   const commands = useMemo(
     () => ({
-      help: (): Line[] => HELP.map((t) => push("output", t)),
-      "?": (): Line[] => HELP.map((t) => push("output", t)),
+      help: (): Line[] =>
+        t("term.help")
+          .split("\n")
+          .map((l) => push("output", l)),
+      "?": (): Line[] =>
+        t("term.help")
+          .split("\n")
+          .map((l) => push("output", l)),
       whoami: (): Line[] => [
         push("accent", profile.name),
-        push("output", `${profile.role} · ${profile.tagline ?? ""}`.trim()),
+        push("output", `${profile.role} · ${t(profile.tagline)}`.trim()),
         push("output", profile.location),
-        ...profile.bio.map((t) => push("output", t)),
+        ...profile.bio.map((p) => push("output", t(p))),
       ],
-      neofetch: (): Line[] => NEOFETCH.map((t) => push("accent", t)),
+      neofetch: (): Line[] =>
+        t("term.neofetch")
+          .split("\n")
+          .map((l) => push("accent", l)),
       stack: (): Line[] => [
         push("output", profile.stack.join("  ·  ")),
         push("output", ""),
-        push("output", `Ahora mismo: ${profile.current}`),
+        push("output", fmt(t("term.stackNow"), { current: t(profile.current) })),
       ],
       contact: (): Line[] => [
-        push("output", "¿Hablamos?"),
-        ...profile.links.map((l) => push("accent", `  ${l.title.padEnd(10)} ${l.href}`)),
+        push("output", t("term.contact")),
+        ...profile.links.map((l) => push("accent", `  ${t(l.title).padEnd(10)} ${l.href}`)),
       ],
       cv: (): Line[] => {
         handleOpen({ target: { title: "Curriculum" } });
-        return [push("output", "Abriendo el CV (español / inglés)…")];
+        return [push("output", t("term.openCv"))];
       },
       proyectos: (): Line[] => {
         handleOpen({ target: { title: "Proyectos" } });
-        return [push("output", "Abriendo Proyectos…")];
+        return [push("output", t("term.openProjects"))];
       },
       exit: (): Line[] => {
         onClose();
         return [];
       },
       sudo: (): Line[] => [
-        push("error", "ignacio no está en el archivo de sudoers. Esto va a quedar registrado."),
+        push("error", t("term.sudo")),
       ],
       clear: (): Line[] => [],
     }),
     // push/handleOpen/onClose son estables dentro de una ejecución de comando.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [handleOpen, onClose]
+    [handleOpen, onClose, t]
   );
 
   const runLs = (arg: string): Line[] => {
     const featuredOnly = normalize(arg).startsWith("destacado");
     const list = featuredOnly ? PROYECTS.filter((p) => p.featured) : PROYECTS;
-    if (list.length === 0) return [push("output", "No hay nada acá.")];
+    if (list.length === 0) return [push("output", t("term.empty"))];
     return list.map((p) =>
       push(
         "output",
-        `${p.featured ? "★" : " "} ${p.title.padEnd(22)} ${p.url ?? "(detalle en el escritorio)"}`
+        `${p.featured ? "★" : " "} ${p.title.padEnd(22)} ${p.url ?? t("term.noUrl")}`
       )
     );
   };
 
   const runOpen = (arg: string): Line[] => {
-    if (!arg) return [push("error", "Uso: open <nombre>. Probá 'ls' para ver la lista.")];
+    if (!arg) return [push("error", t("term.useOpen"))];
     const project = findProject(arg);
-    if (!project) return [push("error", `No encontré ningún proyecto que matchee "${arg}".`)];
+    if (!project) return [push("error", fmt(t("term.noMatch"), { q: arg }))];
     if (project.url) {
       window.open(project.url, "_blank", "noreferrer");
-      return [push("output", `Abriendo ${project.title} → ${project.url}`)];
+      return [push("output", fmt(t("term.openingUrl"), { title: project.title, url: project.url }))];
     }
     handleOpen({ target: { title: project.title } });
-    return [push("output", `Abriendo la ficha de ${project.title}…`)];
+    return [push("output", fmt(t("term.openingDetail"), { title: project.title }))];
   };
 
   const execute = (raw: string): Line[] => {
@@ -183,8 +165,8 @@ const Terminal = ({ onClose }: Props) => {
     const handler = commands[cmd as keyof typeof commands];
     if (!handler) {
       return [
-        push("error", `command not found: ${command}`),
-        push("output", "Escribí 'help' para ver qué hay."),
+        push("error", fmt(t("term.notFound"), { cmd: command })),
+        push("output", t("term.helpHint")),
       ];
     }
     return handler();
@@ -272,7 +254,7 @@ const Terminal = ({ onClose }: Props) => {
             onKeyDown={onKeyDown}
             spellCheck={false}
             autoComplete="off"
-            aria-label="Entrada de comandos de la terminal"
+            aria-label={t("term.inputAria")}
             className="ml-1 min-w-0 flex-1 bg-transparent text-white caret-emerald-400 outline-none"
           />
         </div>

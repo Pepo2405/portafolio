@@ -63,7 +63,7 @@ export interface DesktopIconsApi {
 export default function useDesktopIcons(
   containerRef: RefObject<HTMLElement>
 ): DesktopIconsApi {
-  const [layout, setLayout] = useState<Layout>(hydrate);
+  const [layout, setLayout] = useState<Layout>(defaultLayout);
   const [selected, setSelected] = useState<string | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
   const [offset, setOffset] = useState<{ dx: number; dy: number }>({
@@ -79,8 +79,20 @@ export default function useDesktopIcons(
   } | null>(null);
   const moved = useRef(false);
 
-  // Persistir en cada cambio de layout.
+  // localStorage se lee después del mount: el primer render debe coincidir con
+  // el HTML prerenderizado (hidratación).
   useEffect(() => {
+    setLayout(hydrate());
+  }, []);
+
+  // Persistir en cada cambio de layout (salvo el primero: antes de aplicar el
+  // layout guardado no hay nada nuevo que persistir).
+  const persisted = useRef(false);
+  useEffect(() => {
+    if (!persisted.current) {
+      persisted.current = true;
+      return;
+    }
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(layout));
     } catch {

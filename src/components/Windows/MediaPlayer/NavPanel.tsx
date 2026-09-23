@@ -1,3 +1,5 @@
+import type { StringKey } from "src/i18n/es";
+import { useT } from "src/i18n";
 import { View } from "./index";
 
 type Dialog = "cd" | "radio";
@@ -9,26 +11,27 @@ interface Props {
 }
 
 type Item =
-  | { kind: "view"; view: View; label: string }
-  | { kind: "dialog"; dialog: Dialog; label: string };
+  | { kind: "view"; view: View; label: StringKey }
+  | { kind: "dialog"; dialog: Dialog; label: StringKey };
 
 const ITEMS: Item[] = [
-  { kind: "view", view: "nowplaying", label: "Reproducción en curso" },
-  { kind: "view", view: "guide", label: "Guía multimedia" },
-  { kind: "view", view: "library", label: "Biblioteca multimedia" },
-  { kind: "dialog", dialog: "cd", label: "Copiar desde CD" },
-  { kind: "dialog", dialog: "radio", label: "Radio" },
-  { kind: "view", view: "visualizations", label: "Visualizaciones" },
+  { kind: "view", view: "nowplaying", label: "wmp.now" },
+  { kind: "view", view: "guide", label: "wmp.guide" },
+  { kind: "view", view: "library", label: "wmp.library" },
+  { kind: "dialog", dialog: "cd", label: "wmp.copyCd" },
+  { kind: "dialog", dialog: "radio", label: "wmp.radio" },
+  { kind: "view", view: "visualizations", label: "wmp.visualizations" },
 ];
 
 export default function NavPanel({ view, onSelectView, onOpenDialog }: Props) {
+  const t = useT();
   return (
     <nav className="wmp-nav flex w-40 shrink-0 flex-col overflow-y-auto py-1 text-[13px]">
       {ITEMS.map((item) => {
         const active = item.kind === "view" && item.view === view;
         return (
           <button
-            key={item.label}
+            key={item.kind === "view" ? item.view : item.dialog}
             type="button"
             onClick={() =>
               item.kind === "view"
@@ -39,7 +42,7 @@ export default function NavPanel({ view, onSelectView, onOpenDialog }: Props) {
               active ? "wmp-nav-item--active" : ""
             }`}
           >
-            {item.label}
+            {t(item.label)}
           </button>
         );
       })}
